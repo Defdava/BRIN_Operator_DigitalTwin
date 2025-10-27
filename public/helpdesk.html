@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>BRIN Helpdesk</title>
+    <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(to bottom, rgba(32, 178, 170, 0.8), rgba(219, 112, 147, 0.8));
+            --header-gradient: linear-gradient(to right, lightseagreen, palevioletred);
+            --text-color: darkslategrey;
+            --white-transparent: rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            overflow-x: hidden;
+            font-size: 16px;
+            touch-action: manipulation;
+        }
+
+        video#bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0.4;
+        }
+
+        header {
+            background-image: var(--header-gradient);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .logo span {
+            margin-left: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            margin-right: 30px;
+        }
+
+        .header-right span {
+            font-size: 18px;
+        }
+
+        .toolbar {
+            position: fixed;
+            top: 70px;
+            left: -240px;
+            width: 240px;
+            height: calc(100vh - 70px);
+            background-image: var(--header-gradient);
+            padding: 15px 20px;
+            z-index: 999;
+            overflow-y: auto;
+            transition: left 0.3s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        .toolbar.active {
+            left: 0;
+        }
+
+        .toolbar .feature-box {
+            background-color: var(--white-transparent);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .toolbar .feature-box h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .toolbar .feature-box button {
+            width: 100%;
+            padding: 8px;
+            background-color: lightseagreen;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .toolbar .feature-box button:hover {
+            background-color: palevioletred;
+        }
+
+        .toolbar .user-info {
+            text-align: center;
+            background-color: var(--white-transparent);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .toolbar .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .toolbar .user-info span {
+            display: block;
+            margin: 6px 0;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .main-content {
+            padding: 90px 30px 30px;
+            min-height: 100vh;
+            margin-left: 0;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .main-content.with-toolbar {
+            margin-left: 260px;
+        }
+
+        .helpdesk-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .contact-form, .faq, .contact-info {
+            background-image: var(--primary-gradient);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid palevioletred;
+            min-height: 300px;
+            color: white;
+        }
+
+        .contact-form h2, .faq h2, .contact-info h2 {
+            margin: 0 0 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+        }
+
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            background-color: var(--white-transparent);
+            color: var(--text-color);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .contact-form button {
+            padding: 8px 12px;
+            background-color: lightseagreen;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .contact-form button:hover {
+            background-color: palevioletred;
+        }
+
+        .faq .faq-item {
+            margin-bottom: 15px;
+            background-color: var(--white-transparent);
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .faq .faq-item h3 {
+            font-size: 16px;
+            color: var(--text-color);
+            margin: 0 0 10px;
+            cursor: pointer;
+        }
+
+        .faq .faq-item p {
+            font-size: 14px;
+            color: var(--text-color);
+            margin: 0;
+            display: none;
+        }
+
+        .faq .faq-item.active p {
+            display: block;
+        }
+
+        .contact-info .contact-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .contact-info .contact-list li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 14px;
+            color: white;
+        }
+
+        .contact-info .contact-list li span.icon {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        #error-message {
+            position: fixed;
+            top: 90px;
+            right: 30px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            z-index: 1001;
+            display: none;
+            max-width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #success-message {
+            position: fixed;
+            top: 90px;
+            right: 30px;
+            background: rgba(40, 167, 69, 0.8);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            z-index: 1001;
+            display: none;
+            max-width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tour-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            pointer-events: none;
+        }
+
+        .tour-tooltip {
+            position: absolute;
+            background-image: var(--primary-gradient);
+            border: 2px solid palevioletred;
+            border-radius: 8px;
+            padding: 15px;
+            max-width: 300px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            pointer-events: auto;
+            animation: fadeIn 0.3s ease-in-out;
+            z-index: 2001;
+        }
+
+        .tour-tooltip h3 {
+            color: var(--white-transparent);
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .tour-tooltip p {
+            font-size: 14px;
+            color: var(--white-transparent);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .tour-tooltip .tour-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .tour-tooltip button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .tour-tooltip .next-btn {
+            background-color: lightseagreen;
+            color: white;
+        }
+
+        .tour-tooltip .next-btn:hover {
+            background-color: palevioletred;
+        }
+
+        .tour-tooltip .close-btn {
+            background-color: palevioletred;
+            color: white;
+        }
+
+        .tour-tooltip .close-btn:hover {
+            background-color: #c82333;
+        }
+
+        .tour-tooltip:after {
+            content: "";
+            position: absolute;
+            border: 10px solid transparent;
+            pointer-events: none;
+        }
+
+        .tour-tooltip.right:after {
+            border-right-color: palevioletred;
+            border-right-width: 10px;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .tour-tooltip.left:after {
+            border-left-color: palevioletred;
+            border-left-width: 10px;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .tour-tooltip.top:after {
+            border-top-color: palevioletred;
+            border-top-width: 10px;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tour-tooltip.bottom:after {
+            border-bottom-color: palevioletred;
+            border-bottom-width: 10px;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tour-tooltip.center:after {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 9px;
+            }
+
+            header {
+                padding: 4px 6px;
+                position: fixed;
+                width: 100%;
+                z-index: 1000;
+            }
+
+            .logo img {
+                height: 25px;
+            }
+
+            .logo span {
+                font-size: 10px;
+                margin-left: 4px;
+            }
+
+            .header-right span {
+                font-size: 9px;
+            }
+
+            .toolbar {
+                width: 100%;
+                left: -100%;
+                padding: 20px;
+                top: 70px;
+                height: calc(100vh - 70px);
+                z-index: 999;
+                box-sizing: border-box;
+            }
+
+            .toolbar.active {
+                left: 0;
+            }
+
+            .toolbar .feature-box {
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+
+            .toolbar .feature-box h3 {
+                font-size: 12px;
+                margin-bottom: 8px;
+            }
+
+            .toolbar .feature-box button {
+                padding: 6px;
+                font-size: 10px;
+                border-radius: 5px;
+            }
+
+            .toolbar .user-info {
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+
+            .toolbar .user-info img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .toolbar .user-info span {
+                font-size: 10px;
+            }
+
+            .main-content {
+                padding: 49px 6px 6px;
+                overflow-x: auto;
+                transition: margin-left 0.3s ease-in-out;
+            }
+
+            .main-content.with-toolbar {
+                margin-left: 0;
+            }
+
+            .helpdesk-content {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .contact-form h2, .faq h2, .contact-info h2 {
+                font-size: 9px;
+            }
+
+            .contact-form input,
+            .contact-form textarea {
+                font-size: 9px;
+                padding: 6px;
+            }
+
+            .contact-form button {
+                font-size: 9px;
+                padding: 6px;
+            }
+
+            .faq .faq-item h3 {
+                font-size: 9px;
+            }
+
+            .faq .faq-item p {
+                font-size: 8px;
+            }
+
+            .contact-info .contact-list li {
+                font-size: 9px;
+            }
+
+            .contact-info .contact-list li span.icon {
+                font-size: 9px;
+            }
+
+            #error-message, #success-message {
+                top: 49px;
+                right: 6px;
+                padding: 6px 10px;
+                font-size: 9px;
+                max-width: 70%;
+            }
+
+            .tour-tooltip {
+                max-width: 70%;
+                padding: 3px;
+            }
+
+            .tour-tooltip h3 {
+                font-size: 8px;
+            }
+
+            .tour-tooltip p {
+                font-size: 7px;
+            }
+
+            .tour-tooltip button {
+                padding: 2px 3px;
+                font-size: 7px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .toolbar {
+                width: 100%;
+            }
+
+            .main-content.with-toolbar {
+                margin-left: 0;
+            }
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <video id="bg-video" autoplay muted loop>
+        <source src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/wave.mp4?raw=true" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <header>
+        <div class="logo" id="toggleToolbar">
+            <img src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/Logo_BRIN.png?raw=true" alt="BRIN Logo">
+            <span>BRIN</span>
+            <span>Badan Riset Nasional</span>
+        </div>
+        <div class="header-right">
+            <span>Parking Management System</span>
+        </div>
+    </header>
+    <aside class="toolbar" id="toolbar">
+        <div class="feature-box user-info" id="userInfo">
+            <h3>Operator</h3>
+            <img id="profilePic" src="/assets/user.JPG" alt="Pengguna">
+            <span>Welcome Back!</span>
+            <span id="userName"></span>
+            <button class="profile" onclick="window.location.href='/profile.html'">Profil</button>
+            <button class="logout">Logout</button>
+        </div>
+        <div class="feature-box">
+            <h3>Parking Management System</h3>
+            <button class="live-overview" onclick="window.location.href='/index.html'">Live Overview</button>
+            <button class="prev-analysis" onclick="window.location.href='/previous-analysis.html'">Previous Analysis</button>
+            <button class="export-data" onclick="window.location.href='/exportdata.html'">Export Data</button>
+            <button class="helpdesk" onclick="window.location.href='/helpdesk.html'">Helpdesk</button>
+            <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">Parking Analysis</button>
+        </div>
+    </aside>
+    <main class="main-content" id="mainContent">
+        <div id="error-message"></div>
+        <div id="success-message"></div>
+        <div class="helpdesk-content">
+            <div class="contact-form">
+                <h2>Hubungi Kami</h2>
+                <form id="contactForm">
+                    <input type="text" id="name" placeholder="Nama Anda" required>
+                    <input type="email" id="email" placeholder="Email Anda" required>
+                    <textarea id="message" placeholder="Pesan Anda" rows="5" required></textarea>
+                    <button type="submit">Kirim</button>
+                </form>
+            </div>
+            <div class="faq">
+                <h2>Pertanyaan yang Sering Diajukan</h2>
+                <div class="faq-item">
+                    <h3>Bagaimana cara melihat status parkir secara real-time?</h3>
+                    <p>Pada halaman "Ikhtisar Langsung", Anda dapat melihat jumlah slot parkir yang terisi dan kosong, waktu terkini, serta visualisasi 2D dan 3D kondisi parkir.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Bagaimana cara memfilter riwayat slot parkir?</h3>
+                    <p>Di halaman "Ikhtisar Langsung" bagian "Riwayat Slot", gunakan filter untuk mencari berdasarkan nomor slot, tanggal, atau status (terisi/kosong).</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Bagaimana cara melihat visualisasi 3D area parkir?</h3>
+                    <p>Pada halaman "Ikhtisar Langsung", klik tombol "Click to Expand" di bagian "Kondisi Parkir (3D)" untuk melihat model 3D interaktif dengan kontrol kamera.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Bagaimana cara mengunduh data parkir?</h3>
+                    <p>Klik tombol "Ekspor Data" pada toolbar untuk mengunduh data parkir dalam format CSV dari halaman "Ekspor Data".</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Apa yang harus dilakukan jika data parkir tidak diperbarui?</h3>
+                    <p>Pastikan koneksi internet stabil dan cek akses ke database Firebase. Jika masalah berlanjut, hubungi tim dukungan melalui formulir "Hubungi Kami".</p>
+                </div>
+            </div>
+        </div>
+        <div class="contact-info">
+            <h2>Informasi Kontak</h2>
+            <ul class="contact-list">
+                <li><span class="icon">📧</span> <strong>Email:</strong> dukungan@brin.go.id</li>
+                <li><span class="icon">📞</span> <strong>Telepon:</strong> +62 21 1234 5678</li>
+                <li><span class="icon">🏢</span> <strong>Alamat:</strong> Kawasan LIPI Bandung (BRIN Bandung-Cisitu)-Samaun Samadikun, Indonesia</li>
+                <li><span class="icon">⏰</span> <strong>Jam Operasional:</strong> Senin - Jumat, 08:00 - 16:00 WIB</li>
+            </ul>
+        </div>
+        <div class="tour-overlay" id="tourOverlay"></div>
+        <div class="tour-tooltip" id="tourTooltip" style="display: none;">
+            <h3 id="tooltipTitle"></h3>
+            <p id="tooltipText"></p>
+            <div class="tour-buttons">
+                <button class="next-btn" id="tourNextBtn">Next</button>
+                <button class="close-btn" id="tourCloseBtn">Close</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        class User {
+            constructor(username, email, password, idWorker, profilePic = '/assets/user.JPG') {
+                this.username = username;
+                this.email = email;
+                this.password = password;
+                this.idWorker = idWorker;
+                this.profilePic = profilePic;
+            }
+        }
+
+        class AuthSystem {
+            constructor() {
+                this.users = JSON.parse(localStorage.getItem('users')) || [];
+            }
+
+            register(username, email, password, idWorker, profilePic) {
+                const userExists = this.users.some(user => user.email === email);
+                if (userExists) {
+                    throw new Error('Pengguna sudah terdaftar!');
+                }
+                const user = new User(username, email, password, idWorker, profilePic);
+                this.users.push(user);
+                localStorage.setItem('users', JSON.stringify(this.users));
+                return user;
+            }
+
+            login(email, password) {
+                const user = this.users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    return user;
+                }
+                throw new Error('Email atau kata sandi salah!');
+            }
+        }
+
+        const auth = new AuthSystem();
+        const firebaseConfig = {
+            apiKey: "AIzaSyAef3SJwvVVTunr6CWki79aenfpXlgYc0s",
+            authDomain: "digitaltwinparkingbrin.firebaseapp.com",
+            databaseURL: "https://digitaltwinparkingbrin-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "digitaltwinparkingbrin",
+            storageBucket: "digitaltwinparkingbrin.appspot.com",
+            messagingSenderId: "608462498913",
+            appId: "1:608462498913:web:73695d8c91f923e2db8e20",
+            measurementId: "G-F1TRY65RTG"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const dbRef = firebase.database().ref("parkir_message_helpdesk");
+
+        // Tour Steps Configuration
+        const tourSteps = [
+            {
+                element: 'header',
+                title: "Petunjuk Website",
+                text: "Klik logo BRIN untuk membuka toolbar samping yang berisi fitur seperti Profil, Logout, Live Overview, Previous Analysis, Export Data, Helpdesk, dan Parking Analysis.",
+                position: 'bottom'
+            },
+            {
+                element: '.helpdesk-content',
+                title: "Konten Helpdesk",
+                text: "Bagian ini berisi formulir untuk menghubungi tim dukungan dan daftar pertanyaan yang sering diajukan (FAQ) untuk membantu menjawab pertanyaan umum.",
+                position: 'center'
+            },
+            {
+                element: '.contact-form',
+                title: "Formulir Kontak",
+                text: "Isi formulir ini dengan nama, email, dan pesan Anda untuk menghubungi tim dukungan. Pastikan semua kolom diisi sebelum mengirim.",
+                position: 'right'
+            },
+            {
+                element: '.faq',
+                title: "Pertanyaan yang Sering Diajukan",
+                text: "Klik pada setiap pertanyaan untuk melihat jawabannya. FAQ berisi informasi tentang cara menggunakan fitur-fitur sistem parkir.",
+                position: 'left'
+            },
+            {
+                element: '.contact-info',
+                title: "Informasi Kontak",
+                text: "Temukan detail kontak seperti email, telepon, alamat, dan jam operasional untuk menghubungi tim dukungan secara langsung.",
+                position: 'center'
+            }
+        ];
+
+        let currentTourStep = 0;
+
+        function startTour() {
+            document.getElementById('tourOverlay').style.display = 'block';
+            showTooltip(currentTourStep);
+        }
+
+        function showTooltip(step) {
+            const tooltip = document.getElementById('tourTooltip');
+            const title = document.getElementById('tooltipTitle');
+            const text = document.getElementById('tooltipText');
+            const nextBtn = document.getElementById('tourNextBtn');
+
+            const targetElement = document.querySelector(tourSteps[step].element);
+            if (!targetElement) {
+                console.error(`Element ${tourSteps[step].element} not found!`);
+                endTour();
+                return;
+            }
+
+            title.textContent = tourSteps[step].title;
+            text.textContent = tourSteps[step].text;
+            tooltip.style.display = 'block';
+            tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
+
+            const rect = targetElement.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            const isMobile = window.innerWidth <= 768;
+            let left, top;
+
+            if (isMobile) {
+                left = (window.innerWidth - tooltipRect.width) / 2;
+                top = rect.bottom + 10;
+                tooltip.className = 'tour-tooltip bottom';
+            } else {
+                switch (tourSteps[step].position) {
+                    case 'center':
+                        left = (window.innerWidth - tooltipRect.width) / 2;
+                        top = (window.innerHeight - tooltipRect.height) / 2;
+                        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
+                        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
+                        break;
+                    case 'right':
+                        left = rect.right + 10;
+                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+                        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
+                        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
+                        break;
+                    case 'left':
+                        left = rect.left - tooltipRect.width - 10;
+                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+                        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
+                        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
+                        break;
+                    case 'top':
+                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                        top = rect.top - tooltipRect.height - 10;
+                        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
+                        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
+                        break;
+                    case 'bottom':
+                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                        top = rect.bottom + 10;
+                        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
+                        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
+                        break;
+                }
+            }
+
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
+
+            nextBtn.textContent = step === tourSteps.length - 1 ? 'Finish' : 'Next';
+        }
+
+        function endTour() {
+            document.getElementById('tourOverlay').style.display = 'none';
+            document.getElementById('tourTooltip').style.display = 'none';
+            currentTourStep = 0;
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => { errorElement.style.display = 'none'; }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successElement = document.getElementById('success-message');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            setTimeout(() => { successElement.style.display = 'none'; }, 5000);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userInfo = document.getElementById('userInfo');
+            const userName = document.getElementById('userName');
+            const profilePic = document.getElementById('profilePic');
+            if (!currentUser) {
+                alert('Silakan login terlebih dahulu!');
+                window.location.replace('/login.html');
+                return;
+            } else {
+                userName.textContent = currentUser.username;
+                profilePic.src = currentUser.profilePic || '/assets/user.JPG';
+            }
+
+            document.querySelector('.logout').addEventListener('click', () => {
+                localStorage.removeItem('currentUser');
+                alert('Berhasil keluar!');
+                window.location.replace('/login.html');
+            });
+
+            const toggleToolbar = document.getElementById('toggleToolbar');
+            const toolbar = document.getElementById('toolbar');
+            const mainContent = document.getElementById('mainContent');
+            toggleToolbar.addEventListener('click', () => {
+                const isActive = toolbar.classList.toggle('active');
+                if (window.innerWidth > 768) {
+                    mainContent.classList.toggle('with-toolbar', isActive);
+                } else {
+                    mainContent.classList.toggle('with-toolbar', isActive);
+                }
+            });
+
+            const faqItems = document.querySelectorAll('.faq-item h3');
+            faqItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const faqItem = item.parentElement;
+                    faqItem.classList.toggle('active');
+                });
+            });
+
+            const contactForm = document.getElementById('contactForm');
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const message = document.getElementById('message').value.trim();
+
+                if (!name || !email || !message) {
+                    showError('Harap isi semua kolom.');
+                    return;
+                }
+
+                const timestamp = new Date().toISOString();
+                const messageData = {
+                    name,
+                    email,
+                    message,
+                    timestamp,
+                    userId: currentUser.idWorker || 'anonim'
+                };
+
+                dbRef.push(messageData)
+                    .then(() => {
+                        showSuccess('Pesan berhasil dikirim!');
+                        contactForm.reset();
+                    })
+                    .catch((error) => {
+                        console.error('Gagal mengirim pesan:', error);
+                        showError('Gagal mengirim pesan. Silakan coba lagi.');
+                    });
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if ((event.ctrlKey || event.metaKey) && (event.key === 'z' || event.key === 'y' || event.key === 'Z' || event.key === 'Y')) {
+                    event.preventDefault();
+                    console.log('Fungsi undo/redo dinonaktifkan');
+                }
+            });
+
+            window.addEventListener('popstate', (event) => {
+                event.preventDefault();
+                if (!localStorage.getItem('currentUser')) {
+                    window.location.replace('/login.html');
+                } else {
+                    history.replaceState(null, null, window.location.href);
+                }
+            });
+
+            document.getElementById('tourNextBtn').addEventListener('click', () => {
+                currentTourStep++;
+                if (currentTourStep < tourSteps.length) {
+                    showTooltip(currentTourStep);
+                } else {
+                    endTour();
+                }
+            });
+
+            document.getElementById('tourCloseBtn').addEventListener('click', endTour);
+
+            if (localStorage.getItem('tourCompleted') !== 'true') {
+                startTour();
+                localStorage.setItem('tourCompleted', 'true');
+            }
+        });
+    </script>
+</body>
+</html>

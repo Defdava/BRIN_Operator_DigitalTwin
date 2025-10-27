@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Previous Analysis - BRIN Parking Management</title>
+    <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(to bottom, rgba(32, 178, 170, 0.8), rgba(219, 112, 147, 0.8));
+            --header-gradient: linear-gradient(to right, lightseagreen, palevioletred);
+            --text-color: darkslategrey;
+            --white-transparent: rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        video#bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0.4;
+        }
+
+        header {
+            background-image: var(--header-gradient);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .logo span {
+            margin-left: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            margin-right: 30px;
+        }
+
+        .header-right span {
+            font-size: 18px;
+        }
+
+        .toolbar {
+            position: fixed;
+            top: 70px;
+            left: -400px;
+            width: 240px;
+            height: 100%;
+            background-image: var(--header-gradient);
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            overflow-y: auto;
+            transition: left 0.3s ease-in-out;
+        }
+
+        .toolbar.active {
+            left: 0;
+        }
+
+        .toolbar .feature-box {
+            background-color: var(--white-transparent);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .toolbar .feature-box h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+
+        .toolbar .feature-box button {
+            width: 100%;
+            padding: 8px;
+            background-color: lightseagreen;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .toolbar .feature-box button:hover {
+            background-color: palevioletred;
+        }
+
+        .toolbar .user-info {
+            text-align: center;
+        }
+
+        .toolbar .user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .toolbar .user-info span {
+            display: block;
+            margin: 6px 0;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .main-content {
+            padding: 90px 30px 30px;
+            min-height: 100vh;
+            margin-left: 0;
+            transition: margin-left 0.3s ease-in-out;
+        }
+
+        .main-content.with-toolbar {
+            margin-left: 260px;
+        }
+
+        .history {
+            background-image: var(--primary-gradient);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid palevioletred;
+            min-height: 150px;
+            color: white;
+        }
+
+        .history h2 {
+            margin: 0 0 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+        }
+
+        .history-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .history-filters input,
+        .history-filters select {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            background-color: var(--white-transparent);
+            color: var(--text-color);
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .history-table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 8px;
+            background-color: var(--white-transparent);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            table-layout: fixed;
+        }
+
+        .history-table th,
+        .history-table td {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .history-table th {
+            background-color: var(--white-transparent);
+            color: var(--text-color);
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .history-table td {
+            background-color: transparent;
+        }
+
+        .history-table tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        .history-table tbody tr:hover {
+            background-color: rgba(245, 245, 245, 0.7);
+        }
+
+        .status.in {
+            color: green;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 6px;
+            background-color: rgba(40, 167, 69, 0.2);
+        }
+
+        .status.out {
+            color: red;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 6px;
+            background-color: rgba(220, 53, 69, 0.2);
+        }
+
+        .customers {
+            background-image: var(--primary-gradient);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid palevioletred;
+            min-height: 150px;
+            color: white;
+        }
+
+        .customers h2 {
+            margin: 0 0 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+        }
+
+        .sort-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .sort-controls select,
+        .sort-controls button {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            background-color: var(--white-transparent);
+            color: var(--text-color);
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .sort-controls button {
+            background-color: lightseagreen;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sort-controls button:hover {
+            background-color: palevioletred;
+        }
+
+        .history-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 8px;
+            background-color: var(--white-transparent);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        .customer-item {
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            background-color: transparent;
+            transition: background-color 0.2s;
+        }
+
+        .customer-item:hover {
+            background-color: rgba(245, 245, 245, 0.7);
+        }
+
+        .customer-item strong {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text-color);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .customer-item span {
+            display: block;
+            font-size: 14px;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .customer-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .customer-item button.edit-btn,
+        .customer-item button.delete-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .customer-item button.edit-btn {
+            background-color: lightseagreen;
+            color: white;
+        }
+
+        .customer-item button.edit-btn:hover {
+            background-color: palevioletred;
+        }
+
+        .customer-item button.delete-btn {
+            background-color: palevioletred;
+            color: white;
+        }
+
+        .customer-item button.delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .edit-form {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px;
+            background-color: var(--white-transparent);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .edit-form input {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            background-color: var(--white-transparent);
+            color: var(--text-color);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .edit-form button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .edit-form button.save-btn {
+            background-color: lightseagreen;
+            color: white;
+        }
+
+        .edit-form button.save-btn:hover {
+            background-color: palevioletred;
+        }
+
+        .edit-form button.cancel-btn {
+            background-color: palevioletred;
+            color: white;
+        }
+
+        .edit-form button.cancel-btn:hover {
+            background-color: #c82333;
+        }
+
+        .delete-confirmation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .delete-confirmation-box {
+            background: var(--white-transparent);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: var(--text-color);
+            border: 2px solid palevioletred;
+        }
+
+        .delete-confirmation-box h3 {
+            color: palevioletred;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .delete-confirmation-box p {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .delete-confirmation-box button {
+            padding: 8px 16px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .delete-confirmation-box .confirm-delete {
+            background-color: palevioletred;
+            color: white;
+        }
+
+        .delete-confirmation-box .confirm-delete:hover {
+            background-color: #c82333;
+        }
+
+        .delete-confirmation-box .cancel-delete {
+            background-color: lightseagreen;
+            color: white;
+        }
+
+        .delete-confirmation-box .cancel-delete:hover {
+            background-color: palevioletred;
+        }
+
+        #error-message {
+            position: fixed;
+            top: 90px;
+            right: 30px;
+            background: rgba(255, 0, 0, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            z-index: 1001;
+            display: none;
+            max-width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #success-message {
+            position: fixed;
+            top: 90px;
+            right: 30px;
+            background: rgba(40, 167, 69, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            z-index: 1001;
+            display: none;
+            max-width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tour-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            pointer-events: none;
+        }
+
+        .tour-tooltip {
+            position: fixed;
+            background-image: var(--primary-gradient);
+            border: 2px solid palevioletred;
+            border-radius: 8px;
+            padding: 15px;
+            max-width: 300px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            pointer-events: auto;
+            animation: fadeIn 0.3s ease-in-out;
+            z-index: 2001;
+            margin: 20px;
+            box-sizing: border-box;
+        }
+
+        .tour-tooltip h3 {
+            color: var(--white-transparent);
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .tour-tooltip p {
+            font-size: 14px;
+            color: var(--white-transparent);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .tour-tooltip .tour-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .tour-tooltip button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .tour-tooltip .next-btn {
+            background-color: lightseagreen;
+            color: white;
+        }
+
+        .tour-tooltip .next-btn:hover {
+            background-color: palevioletred;
+        }
+
+        .tour-tooltip .close-btn {
+            background-color: palevioletred;
+            color: white;
+        }
+
+        .tour-tooltip .close-btn:hover {
+            background-color: #c82333;
+        }
+
+        .tour-tooltip.right:after,
+        .tour-tooltip.left:after,
+        .tour-tooltip.top:after,
+        .tour-tooltip.bottom:after {
+            content: "";
+            position: absolute;
+            border: 10px solid transparent;
+            pointer-events: none;
+        }
+
+        .tour-tooltip.right:after {
+            border-right-color: palevioletred;
+            border-right-width: 10px;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .tour-tooltip.left:after {
+            border-left-color: palevioletred;
+            border-left-width: 10px;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .tour-tooltip.top:after {
+            border-top-color: palevioletred;
+            border-top-width: 10px;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tour-tooltip.bottom:after {
+            border-bottom-color: palevioletred;
+            border-bottom-width: 10px;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tour-tooltip.center:after {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .main-content.with-toolbar {
+                margin-left: 0;
+            }
+
+            .toolbar {
+                width: 100%;
+                left: -100%;
+            }
+
+            .toolbar.active {
+                left: 0;
+            }
+
+            .history-filters {
+                flex-direction: column;
+            }
+
+            .history-filters input,
+            .history-filters select {
+                min-width: 100%;
+            }
+
+            .sort-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .sort-controls select,
+            .sort-controls button {
+                min-width: 100%;
+            }
+
+            .tour-tooltip {
+                max-width: 80%;
+                margin: 10px;
+                font-size: 12px;
+            }
+
+            .tour-tooltip h3 {
+                font-size: 14px;
+            }
+
+            .tour-tooltip p {
+                font-size: 12px;
+            }
+
+            .tour-tooltip button {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+        }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+    <video id="bg-video" autoplay muted loop>
+        <source src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/wave.mp4?raw=true" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <header>
+        <div class="logo" id="toggleToolbar">
+            <img src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/Logo_BRIN.png?raw=true" alt="BRIN Logo">
+            <span>BRIN</span>
+            <span>Badan Riset Nasional</span>
+        </div>
+        <div class="header-right">
+            <span>Parking Management System</span>
+        </div>
+    </header>
+    <aside class="toolbar" id="toolbar">
+        <div class="feature-box user-info" id="userInfo">
+            <h3>User</h3>
+            <img id="profilePic" src="/assets/user.JPG" alt="User">
+            <span>Welcome Back</span>
+            <span id="userName"></span>
+            <button class="profile" onclick="window.location.href='/profile.html'">Profile</button>
+            <button class="logout">Log Out</button>
+        </div>
+        <div class="feature-box">
+            <h3>Parking Management System</h3>
+            <button class="live-overview" onclick="window.location.href='/index.html'">Live Overview</button>
+            <button class="prev-analysis" onclick="window.location.href='/previous-analysis.html'">Previous Analysis</button>
+            <button class="export-data" onclick="window.location.href='/exportdata.html'">Export Data</button>
+            <button class="helpdesk" onclick="window.location.href='/helpdesk.html'">Helpdesk</button>
+            <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">Parking Analysis</button>
+        </div>
+    </aside>
+    <main class="main-content" id="mainContent">
+        <div class="history">
+            <h2>Slot History</h2>
+            <div class="history-filters">
+                <input type="text" id="filter-slot" placeholder="Filter by Slot (e.g. 18)">
+                <input type="date" id="filter-date">
+                <select id="filter-status">
+                    <option value="">All Status</option>
+                    <option value="terisi">Terisi</option>
+                    <option value="kosong">Kosong</option>
+                </select>
+            </div>
+            <div class="history-table-container">
+                <table class="history-table" id="slotHistoryTable">
+                    <thead>
+                        <tr>
+                            <th>Slot</th>
+                            <th>Timestamp</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="customers">
+            <h2>Customer Messages</h2>
+            <div class="sort-controls">
+                <select id="sortBy">
+                    <option value="slot">Slot Number</option>
+                    <option value="date">Date</option>
+                    <option value="user">User</option>
+                    <option value="plate">Plate</option>
+                </select>
+                <select id="sortOrder">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+                <button onclick="applySorting()">Apply Sort</button>
+                <button onclick="resetSorting()">Reset</button>
+            </div>
+            <div id="customersMessageList" class="history-list"></div>
+        </div>
+        <div id="error-message"></div>
+        <div id="success-message"></div>
+        <div id="deleteConfirmation" class="delete-confirmation">
+            <div class="delete-confirmation-box">
+                <h3>Confirm Deletion</h3>
+                <p id="deleteMessage"></p>
+                <button id="confirmDelete" class="confirm-delete">Delete</button>
+                <button id="cancelDelete" class="cancel-delete">Cancel</button>
+            </div>
+        </div>
+        <div class="tour-overlay" id="tourOverlay"></div>
+        <div class="tour-tooltip" id="tourTooltip" style="display: none;">
+            <h3 id="tooltipTitle"></h3>
+            <p id="tooltipText"></p>
+            <div class="tour-buttons">
+                <button class="next-btn" id="tourNextBtn">Next</button>
+                <button class="close-btn" id="tourCloseBtn">Close</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        class User {
+            constructor(username, email, password, idWorker, profilePic = '/assets/user.JPG') {
+                this.username = username;
+                this.email = email;
+                this.password = password;
+                this.idWorker = idWorker;
+                this.profilePic = profilePic;
+            }
+        }
+
+        class AuthSystem {
+            constructor() {
+                this.users = JSON.parse(localStorage.getItem('users')) || [];
+            }
+
+            login(email, password) {
+                const user = this.users.find(u => u.email === email && u.password === password);
+                if (user) return user;
+                throw new Error('Invalid email or password!');
+            }
+        }
+
+        const auth = new AuthSystem();
+        const firebaseConfig = {
+            apiKey: "AIzaSyAef3SJwvVVTunr6CWki79aenfpXlgYc0s",
+            authDomain: "digitaltwinparkingbrin.firebaseapp.com",
+            databaseURL: "https://digitaltwinparkingbrin-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "digitaltwinparkingbrin",
+            storageBucket: "digitaltwinparkingbrin.appspot.com",
+            messagingSenderId: "608462498913",
+            appId: "1:608462498913:web:73695d8c91f923e2db8e20",
+            measurementId: "G-F1TRY65RTG"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const slotHistoryRef = firebase.database().ref("slot_history");
+        const messagesRef = firebase.database().ref("slot_message_user");
+
+        let messagesData = [];
+        let slotHistoryData = [];
+        let currentSortBy = 'slot';
+        let currentSortOrder = 'asc';
+
+        function showError(message) {
+            const errorElement = document.getElementById('error-message');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            setTimeout(() => { errorElement.style.display = 'none'; }, 5000);
+            console.error('Error:', message);
+        }
+
+        function showSuccess(message) {
+            const successElement = document.getElementById('success-message');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            setTimeout(() => { successElement.style.display = 'none'; }, 5000);
+            console.log('Success:', message);
+        }
+
+        function parseDate(dateStr) {
+            if (!dateStr) return new Date(0);
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                const date = new Date(dateStr);
+                if (!isNaN(date)) return date;
+            }
+            if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
+                const [day, month, year] = dateStr.split('-').map(Number);
+                const date = new Date(year, month - 1, day);
+                if (!isNaN(date)) return date;
+            }
+            console.warn(`Invalid date format: ${dateStr}`);
+            return new Date(0);
+        }
+
+        function renderHistoryTable() {
+            const slotHistoryTable = document.getElementById("slotHistoryTable").getElementsByTagName('tbody')[0];
+            slotHistoryTable.innerHTML = "";
+
+            const filterSlot = document.getElementById('filter-slot').value.trim();
+            const filterDate = document.getElementById('filter-date').value;
+            const filterStatus = document.getElementById('filter-status').value;
+
+            slotHistoryData.forEach((entry) => {
+                const entryDate = entry.timestamp.split(' ')[0];
+                if (filterSlot && entry.slot !== filterSlot) return;
+                if (filterDate && entryDate !== filterDate) return;
+                if (filterStatus && entry.status !== filterStatus) return;
+
+                const row = slotHistoryTable.insertRow();
+                row.insertCell(0).textContent = entry.slot;
+                row.insertCell(1).textContent = entry.timestamp;
+                row.insertCell(2).textContent = entry.status;
+
+                if (entry.status === 'terisi') {
+                    row.cells[2].className = 'status in';
+                } else if (entry.status === 'kosong') {
+                    row.cells[2].className = 'status out';
+                }
+            });
+
+            if (slotHistoryTable.rows.length === 0) {
+                showError("No data matches the current filters.");
+            }
+        }
+
+        window.applySorting = function() {
+            currentSortBy = document.getElementById('sortBy').value;
+            currentSortOrder = document.getElementById('sortOrder').value;
+            updateCustomersMessage();
+        };
+
+        window.resetSorting = function() {
+            currentSortBy = 'slot';
+            currentSortOrder = 'asc';
+            document.getElementById('sortBy').value = currentSortBy;
+            document.getElementById('sortOrder').value = currentSortOrder;
+            updateCustomersMessage();
+        };
+
+        function sortMessages(messages) {
+            return messages.sort((a, b) => {
+                let valueA, valueB;
+                switch (currentSortBy) {
+                    case 'slot':
+                        valueA = parseInt(a.slot.split('_')[1]) || 999;
+                        valueB = parseInt(b.slot.split('_')[1]) || 999;
+                        break;
+                    case 'date':
+                        valueA = parseDate(a.message.date);
+                        valueB = parseDate(b.message.date);
+                        break;
+                    case 'user':
+                        valueA = (a.message.user || '').toLowerCase();
+                        valueB = (b.message.user || '').toLowerCase();
+                        break;
+                    case 'plate':
+                        valueA = (a.message.plate || '').toLowerCase();
+                        valueB = (b.message.plate || '').toLowerCase();
+                        break;
+                    default:
+                        valueA = parseInt(a.slot.split('_')[1]) || 999;
+                        valueB = parseInt(b.slot.split('_')[1]) || 999;
+                }
+                return currentSortOrder === 'desc' ? (valueA < valueB ? 1 : -1) : (valueA > valueB ? 1 : -1);
+            });
+        }
+
+        function showEditForm(slot, message) {
+            const formId = `edit-form-${slot}`;
+            const existingForm = document.getElementById(formId);
+            if (existingForm) {
+                existingForm.style.display = existingForm.style.display === 'none' ? 'flex' : 'none';
+                return existingForm;
+            }
+
+            const form = document.createElement('div');
+            form.className = 'edit-form';
+            form.id = formId;
+            const dateValue = message.date ? (message.date.includes('-') && !message.date.startsWith('20') ? message.date : message.date.split('T')[0]) : '';
+            form.innerHTML = `
+                <input type="text" id="edit-slot-${slot}" value="${slot}" placeholder="Slot (e.g., slot_10)">
+                <input type="text" id="edit-contactNumber-${slot}" value="${message.contactNumber || ''}" placeholder="Contact Number">
+                <input type="text" id="edit-idWorker-${slot}" value="${message.idWorker || ''}" placeholder="ID Worker">
+                <input type="text" id="edit-lastAction-${slot}" value="${message.lastAction || ''}" placeholder="Last Action">
+                <input type="text" id="edit-parkingNotes-${slot}" value="${message.parkingNotes || ''}" placeholder="Parking Notes">
+                <input type="text" id="edit-plate-${slot}" value="${message.plate || ''}" placeholder="Plate">
+                <input type="text" id="edit-timestamp-${slot}" value="${message.timestamp || ''}" placeholder="Timestamp (HH:MM:SS)">
+                <input type="text" id="edit-user-${slot}" value="${message.user || ''}" placeholder="User">
+                <input type="date" id="edit-date-${slot}" value="${dateValue}" placeholder="Date">
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="save-btn" onclick="saveMessage('${slot}')">Save</button>
+                    <button class="cancel-btn" onclick="document.getElementById('${formId}').style.display = 'none'">Cancel</button>
+                </div>
+            `;
+            return form;
+        }
+
+        window.saveMessage = function(oldSlot) {
+            const newSlot = document.getElementById(`edit-slot-${oldSlot}`).value.trim() || oldSlot;
+            if (!newSlot.match(/^slot_\d+$/)) {
+                showError('Invalid slot format. Use "slot_X" (e.g., slot_10)');
+                return;
+            }
+            let dateInput = document.getElementById(`edit-date-${oldSlot}`).value;
+            if (/^\d{2}-\d{2}-\d{4}$/.test(dateInput)) {
+                const [day, month, year] = dateInput.split('-');
+                dateInput = `${year}-${month}-${day}`;
+            }
+            const updatedMessage = {
+                contactNumber: document.getElementById(`edit-contactNumber-${oldSlot}`).value || null,
+                idWorker: document.getElementById(`edit-idWorker-${oldSlot}`).value || null,
+                lastAction: document.getElementById(`edit-lastAction-${oldSlot}`).value || null,
+                parkingNotes: document.getElementById(`edit-parkingNotes-${oldSlot}`).value || null,
+                plate: document.getElementById(`edit-plate-${oldSlot}`).value || null,
+                timestamp: document.getElementById(`edit-timestamp-${oldSlot}`).value || null,
+                user: document.getElementById(`edit-user-${oldSlot}`).value || null,
+                date: dateInput || null
+            };
+
+            messagesRef.child(newSlot).once('value', (snapshot) => {
+                if (snapshot.exists() && newSlot !== oldSlot) {
+                    showError(`Slot ${newSlot} already exists. Choose a different slot.`);
+                    return;
+                }
+                messagesRef.child(newSlot).set(updatedMessage)
+                    .then(() => {
+                        if (newSlot !== oldSlot) {
+                            return messagesRef.child(oldSlot).remove();
+                        }
+                    })
+                    .then(() => {
+                        showSuccess(`Message ${newSlot === oldSlot ? 'updated' : 'moved to new slot'} successfully`);
+                        document.getElementById(`edit-form-${oldSlot}`).style.display = 'none';
+                    })
+                    .catch((error) => {
+                        showError(`Failed to update message: ${error.message}`);
+                    });
+            });
+        };
+
+        window.deleteMessage = function(slot) {
+            const deleteModal = document.getElementById('deleteConfirmation');
+            const deleteMessage = document.getElementById('deleteMessage');
+            const confirmButton = document.getElementById('confirmDelete');
+            const cancelButton = document.getElementById('cancelDelete');
+
+            deleteMessage.textContent = `Are you sure you want to permanently delete the message for ${slot.replace('_', ' ').toUpperCase()}? This action cannot be undone.`;
+            deleteModal.style.display = 'flex';
+
+            const newConfirmButton = confirmButton.cloneNode(true);
+            const newCancelButton = cancelButton.cloneNode(true);
+            confirmButton.parentNode.replaceChild(newConfirmButton, confirmButton);
+            cancelButton.parentNode.replaceChild(newCancelButton, cancelButton);
+
+            newConfirmButton.addEventListener('click', function() {
+                performDelete(slot);
+                deleteModal.style.display = 'none';
+            });
+
+            newCancelButton.addEventListener('click', function() {
+                deleteModal.style.display = 'none';
+            });
+
+            deleteModal.addEventListener('click', function(e) {
+                if (e.target === deleteModal) {
+                    deleteModal.style.display = 'none';
+                }
+            });
+        };
+
+        function performDelete(slot) {
+            messagesRef.child(slot).once('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                    showError(`Message for ${slot.replace('_', ' ').toUpperCase()} does not exist in Firebase`);
+                    return;
+                }
+                messagesRef.child(slot).remove()
+                    .then(() => {
+                        showSuccess(`Message for ${slot.replace('_', ' ').toUpperCase()} deleted successfully`);
+                        messagesData = messagesData.filter(item => item.slot !== slot);
+                        updateCustomersMessage();
+                    })
+                    .catch((error) => {
+                        showError(`Failed to delete message: ${error.message}`);
+                    });
+            });
+        }
+
+        function updateCustomersMessage() {
+            const customersMessageList = document.getElementById("customersMessageList");
+            customersMessageList.innerHTML = '';
+            if (!messagesData.length) {
+                customersMessageList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-color);">No messages available</div>';
+                return;
+            }
+
+            let sortedMessages = sortMessages([...messagesData]);
+            sortedMessages.forEach(({ slot, message }) => {
+                const { contactNumber, idWorker, lastAction, parkingNotes, plate, timestamp, user, date } = message;
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'customer-item';
+                itemDiv.innerHTML = `
+                    <strong>${slot.replace('_', ' ').toUpperCase()}</strong>
+                    <span><strong>Contact:</strong> ${contactNumber || 'N/A'}</span>
+                    <span><strong>ID Worker:</strong> ${idWorker || 'N/A'}</span>
+                    <span><strong>Last Action:</strong> ${lastAction || 'N/A'}</span>
+                    <span><strong>Parking Notes:</strong> ${parkingNotes || 'N/A'}</span>
+                    <span><strong>Plate:</strong> ${plate || 'N/A'}</span>
+                    <span><strong>Timestamp:</strong> ${timestamp || 'N/A'}</span>
+                    <span><strong>User:</strong> ${user || 'N/A'}</span>
+                    <span><strong>Date:</strong> ${date || 'N/A'}</span>
+                    <div class="customer-actions">
+                        <button class="edit-btn" onclick="toggleEditForm('${slot}')">Edit</button>
+                        <button class="delete-btn" onclick="deleteMessage('${slot}')">Delete</button>
+                    </div>
+                `;
+                itemDiv.appendChild(showEditForm(slot, message));
+                customersMessageList.appendChild(itemDiv);
+            });
+        }
+
+        window.toggleEditForm = function(slot) {
+            const form = document.getElementById(`edit-form-${slot}`);
+            if (form) {
+                form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+            }
+        };
+
+        const tourSteps = [
+            {
+                element: 'header',
+                title: "Website Tutorial",
+                text: "Click the BRIN logo to open the sidebar toolbar, which contains features like Profile, Log Out, Live Overview, Previous Analysis, Export Data, Helpdesk, and Parking Analysis.",
+                position: 'bottom'
+            },
+            {
+                element: '.history',
+                title: "Slot History Section",
+                text: "This section displays the history of parking slot activities, including filters and a data table for slot number, timestamp, and status.",
+                position: 'center'
+            },
+            {
+                element: '.history-filters',
+                title: "History Filters",
+                text: "Use these filters to narrow down the slot history by slot number, date, or status (filled or empty).",
+                position: 'top'
+            },
+            {
+                element: '.customers',
+                title: "Customer Messages Section",
+                text: "This section shows customer messages related to parking slots, including details like contact number, plate, and parking notes.",
+                position: 'center'
+            },
+            {
+                element: '.sort-controls',
+                title: "Sort Controls",
+                text: "Sort customer messages by slot number, date, user, or plate. Select ascending or descending order, then click 'Apply Sort'. Use 'Reset' to revert to default sorting.",
+                position: 'top'
+            },
+            {
+                element: '.customer-item',
+                title: "Edit and Delete Actions",
+                text: "Each customer message has 'Edit' and 'Delete' buttons to modify or remove the message. Save changes after editing.",
+                position: 'right'
+            }
+        ];
+
+        let currentTourStep = 0;
+
+        function startTour() {
+            document.getElementById('tourOverlay').style.display = 'block';
+            showTooltip(currentTourStep);
+        }
+
+        function showTooltip(step) {
+            const tooltip = document.getElementById('tourTooltip');
+            const title = document.getElementById('tooltipTitle');
+            const text = document.getElementById('tooltipText');
+            const nextBtn = document.getElementById('tourNextBtn');
+
+            const targetElement = document.querySelector(tourSteps[step].element);
+            if (!targetElement) {
+                console.error(`Element ${tourSteps[step].element} not found!`);
+                endTour();
+                return;
+            }
+
+            title.textContent = tourSteps[step].title;
+            text.textContent = tourSteps[step].text;
+            tooltip.style.display = 'block';
+            tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
+
+            const rect = targetElement.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            const margin = 20;
+            let left, top;
+
+            if (tourSteps[step].position === 'center') {
+                left = (viewportWidth - tooltipRect.width) / 2;
+                top = (viewportHeight - tooltipRect.height) / 2;
+                left = Math.max(margin, Math.min(left, viewportWidth - tooltipRect.width - margin));
+                top = Math.max(margin, Math.min(top, viewportHeight - tooltipRect.height - margin));
+            } else {
+                switch (tourSteps[step].position) {
+                    case 'right':
+                        left = rect.right + 10;
+                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+                        left = Math.max(margin, Math.min(left, viewportWidth - tooltipRect.width - margin));
+                        top = Math.max(margin, Math.min(top, viewportHeight - tooltipRect.height - margin));
+                        break;
+                    case 'left':
+                        left = rect.left - tooltipRect.width - 10;
+                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+                        left = Math.max(margin, Math.min(left, viewportWidth - tooltipRect.width - margin));
+                        top = Math.max(margin, Math.min(top, viewportHeight - tooltipRect.height - margin));
+                        break;
+                    case 'top':
+                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                        top = rect.top - tooltipRect.height - 10;
+                        left = Math.max(margin, Math.min(left, viewportWidth - tooltipRect.width - margin));
+                        top = Math.max(margin, Math.min(top, viewportHeight - tooltipRect.height - margin));
+                        break;
+                    case 'bottom':
+                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+                        top = rect.bottom + 10;
+                        left = Math.max(margin, Math.min(left, viewportWidth - tooltipRect.width - margin));
+                        top = Math.max(margin, Math.min(top, viewportHeight - tooltipRect.height - margin));
+                        break;
+                }
+            }
+
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
+
+            nextBtn.textContent = step === tourSteps.length - 1 ? 'Finish' : 'Next';
+        }
+
+        function endTour() {
+            document.getElementById('tourOverlay').style.display = 'none';
+            document.getElementById('tourTooltip').style.display = 'none';
+            currentTourStep = 0;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userInfo = document.getElementById('userInfo');
+            const userName = document.getElementById('userName');
+            const profilePic = document.getElementById('profilePic');
+            if (!currentUser) {
+                alert('Silakan login terlebih dahulu!');
+                window.location.replace('/login.html');
+                return;
+            } else {
+                userName.textContent = currentUser.username;
+                profilePic.src = currentUser.profilePic || '/assets/user.JPG';
+            }
+
+            document.querySelector('.logout').addEventListener('click', () => {
+                localStorage.removeItem('currentUser');
+                alert('Berhasil logout!');
+                window.location.replace('/login.html');
+            });
+
+            const toggleToolbar = document.getElementById('toggleToolbar');
+            const toolbar = document.getElementById('toolbar');
+            toggleToolbar.addEventListener('click', () => {
+                toolbar.classList.toggle('active');
+                document.getElementById('mainContent').classList.toggle('with-toolbar');
+            });
+
+            slotHistoryRef.on("value", (snapshot) => {
+                const historyData = snapshot.val();
+                slotHistoryData = [];
+
+                if (!historyData) {
+                    console.warn("No slot history data available.");
+                    renderHistoryTable();
+                    showError("No slot history data available.");
+                    return;
+                }
+
+                Object.keys(historyData).forEach((slotKey) => {
+                    const slotLogs = historyData[slotKey];
+                    Object.entries(slotLogs).forEach(([timestamp, entry]) => {
+                        const status = entry.status === true || entry.status === 'terisi' ? 'terisi' : 'kosong';
+                        const slotNumber = slotKey.split("_")[1];
+                        slotHistoryData.push({
+                            slot: slotNumber,
+                            timestamp: timestamp,
+                            status: status
+                        });
+                    });
+                });
+
+                slotHistoryData.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+                renderHistoryTable();
+            }, (error) => {
+                console.error("Error fetching slot history:", error);
+                showError("Failed to fetch slot history data.");
+            });
+
+            messagesRef.on("value", (snapshot) => {
+                const data = snapshot.val();
+                messagesData = [];
+                if (data) {
+                    for (const slot in data) {
+                        messagesData.push({ slot, message: data[slot] });
+                    }
+                    updateCustomersMessage();
+                } else {
+                    document.getElementById('customersMessageList').innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-color);">No messages available</div>';
+                }
+            }, (error) => {
+                showError(`Failed to fetch customer messages: ${error.message}`);
+            });
+
+            document.getElementById('filter-slot').addEventListener('input', renderHistoryTable);
+            document.getElementById('filter-date').addEventListener('change', renderHistoryTable);
+            document.getElementById('filter-status').addEventListener('change', renderHistoryTable);
+
+            document.getElementById('tourNextBtn').addEventListener('click', () => {
+                currentTourStep++;
+                if (currentTourStep < tourSteps.length) {
+                    showTooltip(currentTourStep);
+                } else {
+                    endTour();
+                }
+            });
+
+            document.getElementById('tourCloseBtn').addEventListener('click', endTour);
+
+            document.addEventListener('keydown', (event) => {
+                if ((event.ctrlKey || event.metaKey) && (event.key === 'z' || event.key === 'y' || event.key === 'Z' || event.key === 'Y')) {
+                    event.preventDefault();
+                    console.log('Undo/Redo is disabled');
+                }
+            });
+
+            window.addEventListener('popstate', (event) => {
+                event.preventDefault();
+                if (!localStorage.getItem('currentUser')) {
+                    window.location.replace('/login.html');
+                } else {
+                    history.replaceState(null, null, window.location.href);
+                }
+            });
+
+            // Mulai tur secara otomatis saat halaman dimuat
+            startTour();
+        });
+    </script>
+</body>
+</html>
