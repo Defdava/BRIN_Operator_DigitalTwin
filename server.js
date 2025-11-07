@@ -7,7 +7,7 @@ import admin from "firebase-admin";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 9999;
+const port = process.env.PORT || 1219;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
