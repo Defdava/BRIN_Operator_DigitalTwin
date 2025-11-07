@@ -12,5 +12,16 @@
     "dotenv": "^17.2.3",
     "express": "^4.18.2",
     "firebase-admin": "^11.10.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Defdava/BRIN_Operator_DigitalTwin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Defdava/BRIN_Operator_DigitalTwin/issues"
+  },
+  "homepage": "https://github.com/Defdava/BRIN_Operator_DigitalTwin#readme"
 }

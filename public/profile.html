@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -10,10 +10,15 @@
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
     <style>
         :root {
-            --primary-gradient: linear-gradient(to bottom, rgba(32, 178, 170, 0.8), rgba(219, 112, 147, 0.8));
-            --header-gradient: linear-gradient(to right, lightseagreen, palevioletred);
-            --text-color: darkslategrey;
-            --white-transparent: rgba(255, 255, 255, 0.9);
+            --primary-blue: #1D3354;
+            --accent-red: #D64045;
+            --text-color: #FFFFFF;
+            --white-bg: #E9FFF9;
+            --slot-empty: #9ED8DB;
+            --slot-occupied: #467599;
+            --car-small: #0000FF;
+            --car-medium: #FFA500;
+            --car-big: #FF0000;
         }
 
         body {
@@ -23,6 +28,8 @@
             color: var(--text-color);
             overflow-x: hidden;
             font-size: 16px;
+            touch-action: manipulation;
+            background-color: var(--white-bg);
         }
 
         video#bg-video {
@@ -33,11 +40,11 @@
             height: 100%;
             object-fit: cover;
             z-index: -2;
-            opacity: 0.4;
+            opacity: 0.2;
         }
 
         header {
-            background-image: var(--header-gradient);
+            background-color: var(--primary-blue);
             color: white;
             padding: 15px 30px;
             display: flex;
@@ -47,7 +54,7 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
@@ -66,6 +73,13 @@
             font-weight: bold;
         }
 
+        .header-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            margin-right: 30px;
+        }
+
         .header-right span {
             font-size: 18px;
         }
@@ -73,15 +87,16 @@
         .toolbar {
             position: fixed;
             top: 70px;
-            left: -400px;
+            left: -240px;
             width: 240px;
-            height: 100%;
-            background-image: var(--header-gradient);
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            height: calc(100vh - 70px);
+            background-color: var(--primary-blue);
+            padding: 15px 20px;
             z-index: 999;
             overflow-y: auto;
             transition: left 0.3s ease-in-out;
+            box-sizing: border-box;
+            color: white;
         }
 
         .toolbar.active {
@@ -89,7 +104,8 @@
         }
 
         .toolbar .feature-box {
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--accent-red);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
@@ -99,28 +115,35 @@
         .toolbar .feature-box h3 {
             margin: 0 0 10px;
             font-size: 18px;
-            color: var(--text-color);
+            color: white;
+            text-align: center;
         }
 
         .toolbar .feature-box button {
             width: 100%;
-            padding: 8px;
-            background-color: lightseagreen;
+            padding: 10px;
+            background-color: var(--accent-red);
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             transition: background-color 0.3s;
+            font-weight: bold;
         }
 
         .toolbar .feature-box button:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .toolbar .user-info {
             text-align: center;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--accent-red);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
         }
 
         .toolbar .user-info img {
@@ -128,22 +151,23 @@
             height: 50px;
             border-radius: 50%;
             margin-bottom: 10px;
+            border: 2px solid white;
         }
 
         .toolbar .user-info span {
             display: block;
             margin: 6px 0;
             font-size: 14px;
-            color: var(--text-color);
+            color: white;
         }
 
         .main-content {
-            margin-left: 0;
             padding: 90px 30px 30px;
             min-height: 100vh;
+            margin-left: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             transition: margin-left 0.3s ease-in-out;
         }
 
@@ -152,20 +176,21 @@
         }
 
         .profile-container {
-            background-image: var(--primary-gradient);
+            background-color: var(--slot-occupied);
             padding: 30px;
             border-radius: 10px;
             width: 450px;
+            max-width: 90%;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            border: 2px solid palevioletred;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border: 2px solid var(--accent-red);
             color: white;
         }
 
         .profile-container h2 {
-            margin-top: 0;
-            font-size: 20px;
-            margin-bottom: 25px;
+            margin: 0 0 25px;
+            font-size: 22px;
+            font-weight: bold;
         }
 
         .profile-picture-section {
@@ -178,9 +203,8 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            margin-bottom: 10px;
             object-fit: cover;
-            border: 4px solid palevioletred;
+            border: 4px solid var(--accent-red);
             transition: transform 0.3s ease;
         }
 
@@ -195,7 +219,7 @@
             width: 35px;
             height: 35px;
             border-radius: 50%;
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
             border: none;
             cursor: pointer;
@@ -207,7 +231,7 @@
         }
 
         .change-photo-btn:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .form-group {
@@ -217,7 +241,7 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             font-weight: bold;
             font-size: 14px;
             color: white;
@@ -228,21 +252,23 @@
         .profile-container input[type="password"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--accent-red);
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 14px;
-            background-color: var(--white-transparent);
-            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        .profile-container input[type="text"]:focus,
-        .profile-container input[type="email"]:focus,
-        .profile-container input[type="password"]:focus {
-            border-color: palevioletred;
-            box-shadow: 0 0 0 3px rgba(219, 112, 147, 0.2);
+        .profile-container input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .profile-container input:focus {
             outline: none;
+            border-color: white;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
         .profile-container input[type="file"] {
@@ -252,18 +278,19 @@
         .profile-container button {
             width: 100%;
             padding: 12px;
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: bold;
             margin-top: 10px;
             transition: background-color 0.3s, transform 0.2s;
         }
 
         .profile-container button:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
             transform: translateY(-1px);
         }
 
@@ -272,7 +299,7 @@
         }
 
         .auto-save-indicator {
-            background-color: lightseagreen;
+            background-color: rgba(40, 167, 69, 0.9);
             color: white;
             padding: 8px 16px;
             border-radius: 20px;
@@ -288,41 +315,44 @@
             opacity: 1;
         }
 
-        #error-message {
-            color: white;
-            font-size: 12px;
-            margin-top: 10px;
-            display: none;
-            background-color: rgba(220, 53, 69, 0.8);
-            border: 1px solid palevioletred;
+        #error-message, #success-message {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 16px;
             border-radius: 6px;
-            padding: 10px;
+            font-size: 14px;
+            z-index: 102;
+            display: none;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        #error-message {
+            background: rgba(214, 64, 69, 0.9);
+            color: white;
         }
 
         #success-message {
+            background: rgba(40, 167, 69, 0.9);
             color: white;
-            font-size: 12px;
-            margin-top: 10px;
-            display: none;
-            background-color: rgba(40, 167, 69, 0.8);
-            border: 1px solid palevioletred;
-            border-radius: 6px;
-            padding: 10px;
         }
 
         .password-section {
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.1);
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
-            border: 1px solid palevioletred;
+            border: 1px solid var(--accent-red);
         }
 
         .password-section h3 {
-            margin-top: 0;
+            margin: 0 0 15px;
             font-size: 18px;
             text-align: center;
-            color: var(--text-color);
+            color: white;
+            font-weight: bold;
         }
 
         .loading-spinner {
@@ -330,7 +360,7 @@
             width: 20px;
             height: 20px;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid palevioletred;
+            border-top: 2px solid white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 10px auto;
@@ -340,6 +370,119 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        .tour-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            pointer-events: none;
+        }
+
+        .tour-tooltip {
+            position: absolute;
+            background-color: var(--primary-blue);
+            border: 2px solid var(--accent-red);
+            border-radius: 8px;
+            padding: 15px;
+            max-width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            pointer-events: auto;
+            animation: fadeIn 0.3s ease-in-out;
+            z-index: 2001;
+        }
+
+        .tour-tooltip h3 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .tour-tooltip p {
+            font-size: 14px;
+            color: white;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .tour-tooltip .tour-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .tour-tooltip button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .tour-tooltip .next-btn {
+            background-color: var(--accent-red);
+            color: white;
+        }
+
+        .tour-tooltip .next-btn:hover {
+            background-color: #b8323a;
+        }
+
+        .tour-tooltip .close-btn {
+            background-color: #b8323a;
+            color: white;
+        }
+
+        .tour-tooltip .close-btn:hover {
+            background-color: #c82333;
+        }
+
+        .tour-tooltip:after {
+            content: "";
+            position: absolute;
+            border: 10px solid transparent;
+            pointer-events: none;
+        }
+
+        .tour-tooltip.right:after { border-right-color: var(--accent-red); left: -20px; top: 50%; transform: translateY(-50%); }
+        .tour-tooltip.left:after { border-left-color: var(--accent-red); right: -20px; top: 50%; transform: translateY(-50%); }
+        .tour-tooltip.top:after { border-top-color: var(--accent-red); bottom: -20px; left: 50%; transform: translateX(-50%); }
+        .tour-tooltip.bottom:after { border-bottom-color: var(--accent-red); top: -20px; left: 50%; transform: translateX(-50%); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            body { font-size: 9px; }
+            header { padding: 4px 6px; }
+            .logo img { height: 25px; }
+            .logo span { font-size: 10px; margin-left: 4px; }
+            .header-right span { font-size: 9px; }
+            .toolbar { width: 100%; left: -100%; top: 70px; }
+            .main-content { padding: 49px 6px 6px; justify-content: center; }
+            .main-content.with-toolbar { margin-left: 0; }
+            .profile-container { padding: 15px; width: 100%; }
+            .profile-container h2 { font-size: 14px; }
+            .profile-container img { width: 80px; height: 80px; }
+            .change-photo-btn { width: 28px; height: 28px; font-size: 12px; }
+            .form-group label { font-size: 10px; }
+            .profile-container input { padding: 8px; font-size: 10px; }
+            .profile-container button { padding: 8px; font-size: 12px; }
+            .password-section h3 { font-size: 12px; }
+            #error-message, #success-message { top: 49px; padding: 6px 10px; font-size: 9px; }
+            .tour-tooltip { max-width: 70%; padding: 8px; }
+            .tour-tooltip h3 { font-size: 10px; }
+            .tour-tooltip p { font-size: 8px; }
+            .tour-tooltip button { padding: 4px 6px; font-size: 8px; }
+        }
     </style>
 </head>
 <body>
@@ -347,16 +490,18 @@
         <source src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/wave.mp4?raw=true" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+
     <header>
         <div class="logo" id="toggleToolbar">
-            <img src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/Logo_BRIN.png?raw=true" alt="BRIN Logo">
+            <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/main/public/brin_logo.png?raw=true" alt="BRIN Logo">
             <span>BRIN</span>
-            <span>Badan Riset Nasional</span>
+            <span>Badan Riset dan Inovasi Nasional</span>
         </div>
         <div class="header-right">
             <span>Parking Management System</span>
         </div>
     </header>
+
     <aside class="toolbar" id="toolbar">
         <div class="feature-box user-info" id="userInfo">
             <h3>User</h3>
@@ -375,17 +520,21 @@
             <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">Parking Analysis</button>
         </div>
     </aside>
-    <main class="main-content">
+
+    <main class="main-content" id="mainContent">
+        <div id="error-message"></div>
+        <div id="success-message"></div>
+
         <div class="profile-container">
             <h2>Profile Settings</h2>
-            
+
             <div class="profile-picture-section">
                 <img id="previewPic" src="/assets/user.JPG" alt="Profile Picture">
-                <button class="change-photo-btn" id="changePhotoBtn" type="button">📷</button>
+                <button class="change-photo-btn" id="changePhotoBtn" type="button">Camera</button>
                 <input type="file" id="profilePicture" accept="image/*">
             </div>
 
-            <div class="auto-save-indicator" id="autoSaveIndicator">✅ Auto-saved!</div>
+            <div class="auto-save-indicator" id="autoSaveIndicator">Auto-saved!</div>
             <div class="loading-spinner" id="loadingSpinner"></div>
 
             <div class="form-group">
@@ -411,91 +560,144 @@
             </div>
 
             <button id="saveProfile">Save All Changes</button>
-            <div id="error-message"></div>
-            <div id="success-message"></div>
+        </div>
+
+        <div class="tour-overlay" id="tourOverlay"></div>
+        <div class="tour-tooltip" id="tourTooltip" style="display: none;">
+            <h3 id="tooltipTitle"></h3>
+            <p id="tooltipText"></p>
+            <div class="tour-buttons">
+                <button class="next-btn" id="tourNextBtn">Next</button>
+                <button class="close-btn" id="tourCloseBtn">Close</button>
+            </div>
         </div>
     </main>
+
     <script>
-        // Authentication System
+        // === AUTH SYSTEM ===
         class User {
             constructor(username, email, password, idWorker, profilePic = '/assets/user.JPG') {
-                this.username = username;
-                this.email = email;
-                this.password = password;
-                this.idWorker = idWorker;
-                this.profilePic = profilePic;
+                this.username = username; this.email = email; this.password = password;
+                this.idWorker = idWorker; this.profilePic = profilePic;
             }
         }
-
         class AuthSystem {
-            constructor() {
-                this.users = JSON.parse(localStorage.getItem('users')) || [];
-            }
-
+            constructor() { this.users = JSON.parse(localStorage.getItem('users')) || []; }
             updateUser(originalEmail, updatedData) {
-                const userIndex = this.users.findIndex(user => user.email === originalEmail);
-                if (userIndex !== -1) {
-                    // Check if email is being changed and if new email already exists
-                    if (updatedData.email && updatedData.email !== originalEmail) {
-                        const emailExists = this.users.find(user => user.email === updatedData.email);
-                        if (emailExists) {
-                            throw new Error('Email address already exists!');
-                        }
-                    }
-                    
-                    this.users[userIndex] = { ...this.users[userIndex], ...updatedData };
-                    localStorage.setItem('users', JSON.stringify(this.users));
-                    return this.users[userIndex];
-                }
-                throw new Error('User not found!');
+                const idx = this.users.findIndex(u => u.email === originalEmail);
+                if (idx === -1) throw new Error('User not found!');
+                if (updatedData.email && updatedData.email !== originalEmail && this.users.some(u => u.email === updatedData.email))
+                    throw new Error('Email already exists!');
+                this.users[idx] = { ...this.users[idx], ...updatedData };
+                localStorage.setItem('users', JSON.stringify(this.users));
+                return this.users[idx];
             }
-
-            validateEmail(email) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRegex.test(email);
-            }
+            validateEmail(email) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
         }
-
         const auth = new AuthSystem();
         let autoSaveTimeout;
 
-        document.addEventListener("DOMContentLoaded", () => {
-            // Authentication Check
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const userInfo = document.getElementById('userInfo');
-            const userName = document.getElementById('userName');
-            const profilePic = document.getElementById('profilePic');
-            const previewPic = document.getElementById('previewPic');
-            const usernameInput = document.getElementById('username');
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            const confirmPasswordInput = document.getElementById('confirmPassword');
-            const profilePictureInput = document.getElementById('profilePicture');
-            const changePhotoBtn = document.getElementById('changePhotoBtn');
-            const saveProfileBtn = document.getElementById('saveProfile');
-            const errorMessage = document.getElementById('error-message');
-            const successMessage = document.getElementById('success-message');
-            const autoSaveIndicator = document.getElementById('autoSaveIndicator');
-            const loadingSpinner = document.getElementById('loadingSpinner');
+        // === MESSAGES ===
+        function showError(msg) {
+            const el = document.getElementById('error-message');
+            el.textContent = msg; el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 5000);
+        }
+        function showSuccess(msg) {
+            const el = document.getElementById('success-message');
+            el.textContent = msg; el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 3000);
+        }
+        function showLoading() { document.getElementById('loadingSpinner').style.display = 'block'; }
+        function hideLoading() { document.getElementById('loadingSpinner').style.display = 'none'; }
+        function showAutoSave() {
+            const el = document.getElementById('autoSaveIndicator');
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 2000);
+        }
 
+        // === TOUR ===
+        const tourSteps = [
+            { element: 'header', title: "Petunjuk Website", text: "Klik logo BRIN untuk membuka toolbar samping...", position: 'bottom' },
+            { element: '.profile-picture-section', title: "Foto Profil", text: "Klik ikon kamera untuk mengganti foto profil.", position: 'right' },
+            { element: '#username', title: "Username", text: "Perubahan otomatis tersimpan setelah 1.5 detik.", position: 'top' },
+            { element: '#email', title: "Email", text: "Klik di luar kolom untuk menyimpan email baru.", position: 'top' },
+            { element: '.password-section', title: "Ganti Password", text: "Masukkan password baru dan klik ' Save All Changes '.", position: 'left' }
+        ];
+        let currentTourStep = 0;
+        let hasSeenTour = false;
+
+        function startTour() {
+            if (hasSeenTour) return;
+            document.getElementById('tourOverlay').style.display = 'block';
+            showTooltip(currentTourStep);
+        }
+        function showTooltip(step) {
+            const tooltip = document.getElementById('tourTooltip');
+            const title = document.getElementById('tooltipTitle');
+            const text = document.getElementById('tooltipText');
+            const nextBtn = document.getElementById('tourNextBtn');
+            const target = document.querySelector(tourSteps[step].element);
+            if (!target) { endTour(); return; }
+
+            title.textContent = tourSteps[step].title;
+            text.textContent = tourSteps[step].text;
+            tooltip.style.display = 'block';
+            tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
+
+            const rect = target.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            let left, top;
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                left = (window.innerWidth - tooltipRect.width) / 2;
+                top = rect.bottom + 10;
+                tooltip.className = 'tour-tooltip bottom';
+            } else {
+                switch (tourSteps[step].position) {
+                    case 'right': left = rect.right + 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
+                    case 'left': left = rect.left - tooltipRect.width - 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
+                    case 'top': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.top - tooltipRect.height - 10; break;
+                    case 'bottom': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.bottom + 10; break;
+                }
+            }
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
+            nextBtn.textContent = step === tourSteps.length - 1 ? 'Finish' : 'Next';
+        }
+        function endTour() {
+            document.getElementById('tourOverlay').style.display = 'none';
+            document.getElementById('tourTooltip').style.display = 'none';
+            currentTourStep = 0;
+            hasSeenTour = true;
+            localStorage.setItem('tourCompleted_profile', 'true');
+        }
+
+        // === DOM LOADED ===
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu!');
                 window.location.replace('/login.html');
                 return;
-            } else {
-                userName.textContent = currentUser.username;
-                profilePic.src = currentUser.profilePic || '/assets/user.JPG';
-                previewPic.src = currentUser.profilePic || '/assets/user.JPG';
-                usernameInput.value = currentUser.username;
-                emailInput.value = currentUser.email;
             }
 
-            // Toggle Toolbar
-            const toggleToolbar = document.getElementById('toggleToolbar');
-            const toolbar = document.getElementById('toolbar');
-            toggleToolbar.addEventListener('click', () => {
+            hasSeenTour = localStorage.getItem('tourCompleted_profile') === 'true';
+
+            // UI Setup
+            document.getElementById('userName').textContent = currentUser.username;
+            document.getElementById('profilePic').src = currentUser.profilePic || '/assets/user.JPG';
+            document.getElementById('previewPic').src = currentUser.profilePic || '/assets/user.JPG';
+            document.getElementById('username').value = currentUser.username;
+            document.getElementById('email').value = currentUser.email;
+
+            // Toolbar Toggle
+            document.getElementById('toggleToolbar').addEventListener('click', () => {
+                const toolbar = document.getElementById('toolbar');
+                const main = document.getElementById('mainContent');
                 toolbar.classList.toggle('active');
-                document.querySelector('.main-content').classList.toggle('with-toolbar');
+                main.classList.toggle('with-toolbar');
             });
 
             // Logout
@@ -505,252 +707,122 @@
                 window.location.replace('/login.html');
             });
 
-            // Change Photo Button
-            changePhotoBtn.addEventListener('click', () => {
-                profilePictureInput.click();
+            // Change Photo
+            document.getElementById('changePhotoBtn').addEventListener('click', () => {
+                document.getElementById('profilePicture').click();
             });
 
-            // Auto-save functionality
-            function showAutoSaveIndicator() {
-                autoSaveIndicator.classList.add('show');
-                setTimeout(() => {
-                    autoSaveIndicator.classList.remove('show');
-                }, 2000);
-            }
+            // Auto-save Profile Picture
+            document.getElementById('profilePicture').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) return showError('File size must be < 5MB!');
+                if (!file.type.startsWith('image/')) return showError('Invalid image file!');
 
-            function showLoading() {
-                loadingSpinner.style.display = 'block';
-            }
-
-            function hideLoading() {
-                loadingSpinner.style.display = 'none';
-            }
-
-            function showError(message) {
-                errorMessage.textContent = message;
-                errorMessage.style.display = 'block';
-                successMessage.style.display = 'none';
-                setTimeout(() => {
-                    errorMessage.style.display = 'none';
-                }, 5000);
-            }
-
-            function showSuccess(message) {
-                successMessage.textContent = message;
-                successMessage.style.display = 'block';
-                errorMessage.style.display = 'none';
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                }, 3000);
-            }
-
-            // Auto-save for profile picture
-            profilePictureInput.addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    // Validate file size (max 5MB)
-                    if (file.size > 5 * 1024 * 1024) {
-                        showError('File size must be less than 5MB!');
-                        return;
-                    }
-
-                    // Validate file type
-                    if (!file.type.startsWith('image/')) {
-                        showError('Please select a valid image file!');
-                        return;
-                    }
-
-                    showLoading();
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const newProfilePic = e.target.result;
-                        previewPic.src = newProfilePic;
-                        
-                        // Auto-save profile picture
-                        try {
-                            const updatedUser = auth.updateUser(currentUser.email, { 
-                                profilePic: newProfilePic 
-                            });
-                            
-                            // Update current user data
-                            currentUser.profilePic = newProfilePic;
-                            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-                            
-                            // Update UI
-                            profilePic.src = newProfilePic;
-                            
-                            hideLoading();
-                            showAutoSaveIndicator();
-                            showSuccess('Profile picture updated successfully!');
-                        } catch (error) {
-                            hideLoading();
-                            showError(error.message);
-                            // Revert preview
-                            previewPic.src = currentUser.profilePic || '/assets/user.JPG';
-                        }
-                    };
-                    reader.onerror = () => {
+                showLoading();
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    const newPic = ev.target.result;
+                    try {
+                        const updated = auth.updateUser(currentUser.email, { profilePic: newPic });
+                        currentUser.profilePic = newPic;
+                        localStorage.setItem('currentUser', JSON.stringify(updated));
+                        document.getElementById('profilePic').src = newPic;
+                        document.getElementById('previewPic').src = newPic;
                         hideLoading();
-                        showError('Error reading file!');
-                    };
-                    reader.readAsDataURL(file);
-                }
+                        showAutoSave();
+                        showSuccess('Profile picture updated!');
+                    } catch (err) {
+                        hideLoading();
+                        showError(err.message);
+                        document.getElementById('previewPic').src = currentUser.profilePic;
+                    }
+                };
+                reader.readAsDataURL(file);
             });
 
-            // Auto-save for email changes
-            emailInput.addEventListener('blur', () => {
-                const newEmail = emailInput.value.trim();
+            // Auto-save Email
+            document.getElementById('email').addEventListener('blur', () => {
+                const newEmail = document.getElementById('email').value.trim();
                 if (newEmail && newEmail !== currentUser.email) {
-                    if (!auth.validateEmail(newEmail)) {
-                        showError('Please enter a valid email address!');
-                        emailInput.focus();
-                        return;
-                    }
-
+                    if (!auth.validateEmail(newEmail)) return showError('Invalid email!');
                     showLoading();
                     try {
-                        const updatedUser = auth.updateUser(currentUser.email, { 
-                            email: newEmail 
-                        });
-                        
-                        // Update current user data
+                        const updated = auth.updateUser(currentUser.email, { email: newEmail });
                         currentUser.email = newEmail;
-                        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-                        
+                        localStorage.setItem('currentUser', JSON.stringify(updated));
                         hideLoading();
-                        showAutoSaveIndicator();
-                        showSuccess('Email updated successfully!');
-                    } catch (error) {
+                        showAutoSave();
+                        showSuccess('Email updated!');
+                    } catch (err) {
                         hideLoading();
-                        showError(error.message);
-                        // Revert email
-                        emailInput.value = currentUser.email;
+                        showError(err.message);
+                        document.getElementById('email').value = currentUser.email;
                     }
                 }
             });
 
-            // Auto-save for username changes (with debounce)
-            usernameInput.addEventListener('input', () => {
+            // Auto-save Username (debounced)
+            document.getElementById('username').addEventListener('input', () => {
                 clearTimeout(autoSaveTimeout);
                 autoSaveTimeout = setTimeout(() => {
-                    const newUsername = usernameInput.value.trim();
-                    if (newUsername && newUsername !== currentUser.username) {
-                        if (newUsername.length < 3) {
-                            showError('Username must be at least 3 characters long!');
-                            return;
-                        }
-
+                    const newName = document.getElementById('username').value.trim();
+                    if (newName && newName !== currentUser.username && newName.length >= 3) {
                         showLoading();
                         try {
-                            const updatedUser = auth.updateUser(currentUser.email, { 
-                                username: newUsername 
-                            });
-                            
-                            // Update current user data
-                            currentUser.username = newUsername;
-                            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-                            
-                            // Update UI
-                            userName.textContent = newUsername;
-                            
+                            const updated = auth.updateUser(currentUser.email, { username: newName });
+                            currentUser.username = newName;
+                            localStorage.setItem('currentUser', JSON.stringify(updated));
+                            document.getElementById('userName').textContent = newName;
                             hideLoading();
-                            showAutoSaveIndicator();
-                            showSuccess('Username updated successfully!');
-                        } catch (error) {
+                            showAutoSave();
+                            showSuccess('Username updated!');
+                        } catch (err) {
                             hideLoading();
-                            showError(error.message);
-                            // Revert username
-                            usernameInput.value = currentUser.username;
+                            showError(err.message);
+                            document.getElementById('username').value = currentUser.username;
                         }
                     }
-                }, 1500); // 1.5 second debounce
+                }, 1500);
             });
 
-            // Save Profile Changes (for password and manual save)
-            saveProfileBtn.addEventListener('click', () => {
-                const newUsername = usernameInput.value.trim();
-                const newEmail = emailInput.value.trim();
-                const newPassword = passwordInput.value;
-                const confirmPassword = confirmPasswordInput.value;
+            // Save All (Password + Manual)
+            document.getElementById('saveProfile').addEventListener('click', () => {
+                const newName = document.getElementById('username').value.trim();
+                const newEmail = document.getElementById('email').value.trim();
+                const newPass = document.getElementById('password').value;
+                const confirmPass = document.getElementById('confirmPassword').value;
 
-                errorMessage.style.display = 'none';
-                successMessage.style.display = 'none';
-
-                if (!newUsername) {
-                    showError('Username cannot be empty!');
-                    return;
-                }
-
-                if (!newEmail) {
-                    showError('Email cannot be empty!');
-                    return;
-                }
-
-                if (!auth.validateEmail(newEmail)) {
-                    showError('Please enter a valid email address!');
-                    return;
-                }
-
-                if (newPassword && newPassword.length < 6) {
-                    showError('Password must be at least 6 characters long!');
-                    return;
-                }
-
-                if (newPassword && newPassword !== confirmPassword) {
-                    showError('Passwords do not match!');
-                    return;
-                }
+                if (!newName || !newEmail || !auth.validateEmail(newEmail)) return showError('Invalid username or email!');
+                if (newPass && (newPass.length < 6 || newPass !== confirmPass)) return showError('Password mismatch or too short!');
 
                 showLoading();
                 try {
-                    let updatedData = { 
-                        username: newUsername,
-                        email: newEmail
-                    };
-                    
-                    if (newPassword) {
-                        updatedData.password = newPassword;
-                    }
-
-                    const updatedUser = auth.updateUser(currentUser.email, updatedData);
-                    
-                    // Update current user data
-                    Object.assign(currentUser, updatedData);
-                    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-                    
-                    // Update UI
-                    userName.textContent = updatedUser.username;
-                    
-                    // Clear password fields
-                    passwordInput.value = '';
-                    confirmPasswordInput.value = '';
-                    
+                    const data = { username: newName, email: newEmail };
+                    if (newPass) data.password = newPass;
+                    const updated = auth.updateUser(currentUser.email, data);
+                    Object.assign(currentUser, data);
+                    localStorage.setItem('currentUser', JSON.stringify(updated));
+                    document.getElementById('userName').textContent = newName;
+                    document.getElementById('password').value = '';
+                    document.getElementById('confirmPassword').value = '';
                     hideLoading();
-                    showSuccess('All changes saved successfully!');
-                } catch (error) {
+                    showSuccess('All changes saved!');
+                } catch (err) {
                     hideLoading();
-                    showError(error.message);
+                    showError(err.message);
                 }
             });
 
-            // Prevent Undo/Redo and Navigation
-            document.addEventListener('keydown', (event) => {
-                if ((event.ctrlKey || event.metaKey) && (event.key === 'z' || event.key === 'y' || event.key === 'Z' || event.key === 'Y')) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    console.log('Undo/Redo is disabled');
-                }
+            // Tour Events
+            document.getElementById('tourNextBtn').addEventListener('click', () => {
+                currentTourStep++;
+                if (currentTourStep < tourSteps.length) showTooltip(currentTourStep);
+                else endTour();
             });
+            document.getElementById('tourCloseBtn').addEventListener('click', endTour);
 
-            window.addEventListener('popstate', (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                if (!localStorage.getItem('currentUser')) {
-                    window.location.replace('/login.html');
-                } else {
-                    history.replaceState(null, null, window.location.href);
-                }
-            });
+            if (!hasSeenTour) setTimeout(startTour, 800);
         });
     </script>
 </body>

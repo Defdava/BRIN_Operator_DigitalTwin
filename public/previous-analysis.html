@@ -10,34 +10,61 @@
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
     <style>
         :root {
-            --primary-gradient: linear-gradient(to bottom, rgba(32, 178, 170, 0.8), rgba(219, 112, 147, 0.8));
-            --header-gradient: linear-gradient(to right, lightseagreen, palevioletred);
-            --text-color: darkslategrey;
-            --white-transparent: rgba(255, 255, 255, 0.9);
+            --primary-blue: #1D3354;
+            --accent-red: #D64045;
+            --text-color: #FFFFFF;
+            --white-bg: #E9FFF9;
+            --slot-empty: #9ED8DB;
+            --slot-occupied: #467599;
+            --toolbar-bg: rgba(29, 51, 84, 0.95);
         }
 
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            color: var(--text-color);
+            color: #333;
             overflow-x: hidden;
             font-size: 16px;
+            background: #d3d3d3;
         }
 
-        video#bg-video {
+        /* === ANIMASI FOTO LATAR BELAKANG (100% TIDAK DIUBAH) === */
+        body::before {
+            content: "";
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
             z-index: -2;
+            animation: slideshow 20s infinite;
             opacity: 0.4;
         }
 
+        @keyframes slideshow {
+            0% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.4; }
+            15% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.4; }
+            20% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0; }
+            20.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
+            35% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0.4; }
+            40% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
+            40.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
+            55% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0.4; }
+            60% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
+            60.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
+            75% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0.4; }
+            80% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
+            80.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
+            95% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0.4; }
+            100% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
+        }
+
         header {
-            background-image: var(--header-gradient);
+            background-color: var(--primary-blue);
             color: white;
             padding: 15px 30px;
             display: flex;
@@ -47,7 +74,7 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
@@ -82,13 +109,14 @@
             top: 70px;
             left: -400px;
             width: 240px;
-            height: 100%;
-            background-image: var(--header-gradient);
+            height: calc(100vh - 70px);
+            background: var(--toolbar-bg);
             padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
             z-index: 999;
             overflow-y: auto;
             transition: left 0.3s ease-in-out;
+            border-right: 2px solid var(--accent-red);
         }
 
         .toolbar.active {
@@ -96,34 +124,36 @@
         }
 
         .toolbar .feature-box {
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.15);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
-            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .toolbar .feature-box h3 {
-            margin: 0 0 10px;
+            margin: 0 0 12px;
             font-size: 18px;
-            color: var(--text-color);
+            color: white;
+            font-weight: bold;
         }
 
         .toolbar .feature-box button {
             width: 100%;
-            padding: 8px;
-            background-color: lightseagreen;
+            padding: 10px;
+            background-color: var(--accent-red);
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            font-weight: bold;
             transition: background-color 0.3s;
         }
 
         .toolbar .feature-box button:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .toolbar .user-info {
@@ -131,17 +161,18 @@
         }
 
         .toolbar .user-info img {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            border: 2px solid white;
         }
 
         .toolbar .user-info span {
             display: block;
             margin: 6px 0;
             font-size: 14px;
-            color: var(--text-color);
+            color: white;
         }
 
         .main-content {
@@ -155,48 +186,73 @@
             margin-left: 260px;
         }
 
-        .history {
-            background-image: var(--primary-gradient);
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid palevioletred;
-            min-height: 150px;
+        .history, .customers {
+            background: rgba(29, 51, 84, 0.9);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid var(--accent-red);
+            margin-bottom: 30px;
             color: white;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
 
-        .history h2 {
-            margin: 0 0 15px;
-            font-size: 20px;
+        .history h2, .customers h2 {
+            margin: 0 0 20px;
+            font-size: 22px;
             font-weight: bold;
             text-align: center;
             color: white;
         }
 
-        .history-filters {
+        .history-filters, .sort-controls {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             justify-content: center;
         }
 
         .history-filters input,
-        .history-filters select {
-            padding: 8px;
+        .history-filters select,
+        .sort-controls select,
+        .sort-controls button {
+            padding: 10px;
             font-size: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--accent-red);
             border-radius: 6px;
-            background-color: var(--white-transparent);
-            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
             flex: 1;
             min-width: 120px;
+            transition: all 0.3s;
         }
 
-        .history-table-container {
+        .history-filters input::placeholder,
+        .sort-controls input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .history-filters input:focus,
+        .sort-controls input:focus {
+            outline: none;
+            border-color: white;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        .sort-controls button {
+            background-color: var(--accent-red);
+            font-weight: bold;
+        }
+
+        .sort-controls button:hover {
+            background-color: #b8323a;
+        }
+
+        .history-table-container, .history-list {
             max-height: 400px;
             overflow-y: auto;
             border-radius: 8px;
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.1);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 10px;
         }
@@ -204,8 +260,6 @@
         .history-table {
             width: 100%;
             border-collapse: collapse;
-            border-radius: 8px;
-            overflow: hidden;
             table-layout: fixed;
         }
 
@@ -215,32 +269,23 @@
             padding: 12px;
             text-align: center;
             font-size: 14px;
-            color: var(--text-color);
+            color: white;
         }
 
         .history-table th {
-            background-color: var(--white-transparent);
-            color: var(--text-color);
+            background-color: var(--accent-red);
             font-weight: bold;
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
-        .history-table td {
-            background-color: transparent;
-        }
-
-        .history-table tbody tr {
-            transition: background-color 0.2s;
-        }
-
         .history-table tbody tr:hover {
-            background-color: rgba(245, 245, 245, 0.7);
+            background-color: rgba(255, 255, 255, 0.15);
         }
 
         .status.in {
-            color: green;
+            color: #28a745;
             font-weight: bold;
             padding: 5px 10px;
             border-radius: 6px;
@@ -248,88 +293,31 @@
         }
 
         .status.out {
-            color: red;
+            color: #dc3545;
             font-weight: bold;
             padding: 5px 10px;
             border-radius: 6px;
             background-color: rgba(220, 53, 69, 0.2);
         }
 
-        .customers {
-            background-image: var(--primary-gradient);
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid palevioletred;
-            min-height: 150px;
-            color: white;
-        }
-
-        .customers h2 {
-            margin: 0 0 15px;
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-            color: white;
-        }
-
-        .sort-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 15px;
-            justify-content: center;
-        }
-
-        .sort-controls select,
-        .sort-controls button {
-            padding: 8px;
-            font-size: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 6px;
-            background-color: var(--white-transparent);
-            color: var(--text-color);
-            flex: 1;
-            min-width: 120px;
-        }
-
-        .sort-controls button {
-            background-color: lightseagreen;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .sort-controls button:hover {
-            background-color: palevioletred;
-        }
-
-        .history-list {
-            max-height: 400px;
-            overflow-y: auto;
-            border-radius: 8px;
-            background-color: var(--white-transparent);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 10px;
-        }
-
         .customer-item {
             padding: 15px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            margin-bottom: 10px;
-            background-color: transparent;
-            transition: background-color 0.2s;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
         }
 
         .customer-item:hover {
-            background-color: rgba(245, 245, 245, 0.7);
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
         }
 
         .customer-item strong {
             font-size: 16px;
             font-weight: bold;
-            color: var(--text-color);
+            color: white;
             display: block;
             margin-bottom: 8px;
         }
@@ -337,37 +325,38 @@
         .customer-item span {
             display: block;
             font-size: 14px;
-            color: var(--text-color);
+            color: white;
             margin-bottom: 5px;
+            opacity: 0.9;
         }
 
         .customer-actions {
             display: flex;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
-        .customer-item button.edit-btn,
-        .customer-item button.delete-btn {
+        .customer-item button {
             padding: 8px 12px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s;
+            font-weight: bold;
+            transition: all 0.3s;
         }
 
         .customer-item button.edit-btn {
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
         }
 
         .customer-item button.edit-btn:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .customer-item button.delete-btn {
-            background-color: palevioletred;
+            background-color: #dc3545;
             color: white;
         }
 
@@ -379,8 +368,8 @@
             display: none;
             flex-direction: column;
             gap: 8px;
-            padding: 10px;
-            background-color: var(--white-transparent);
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 6px;
             margin-top: 10px;
@@ -391,10 +380,14 @@
             font-size: 14px;
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 6px;
-            background-color: var(--white-transparent);
-            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
             width: 100%;
             box-sizing: border-box;
+        }
+
+        .edit-form input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .edit-form button {
@@ -404,24 +397,25 @@
             cursor: pointer;
             font-size: 14px;
             margin-top: 5px;
+            font-weight: bold;
         }
 
         .edit-form button.save-btn {
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
         }
 
         .edit-form button.save-btn:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .edit-form button.cancel-btn {
-            background-color: palevioletred;
+            background-color: #6c757d;
             color: white;
         }
 
         .edit-form button.cancel-btn:hover {
-            background-color: #c82333;
+            background-color: #5a6268;
         }
 
         .delete-confirmation {
@@ -430,7 +424,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.7);
             display: none;
             justify-content: center;
             align-items: center;
@@ -438,39 +432,41 @@
         }
 
         .delete-confirmation-box {
-            background: var(--white-transparent);
-            padding: 20px;
-            border-radius: 8px;
+            background: rgba(29, 51, 84, 0.95);
+            padding: 25px;
+            border-radius: 12px;
             text-align: center;
             max-width: 400px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            color: var(--text-color);
-            border: 2px solid palevioletred;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            color: white;
+            border: 2px solid var(--accent-red);
         }
 
         .delete-confirmation-box h3 {
-            color: palevioletred;
+            color: var(--accent-red);
             margin-bottom: 15px;
-            font-size: 18px;
+            font-size: 20px;
+            font-weight: bold;
         }
 
         .delete-confirmation-box p {
             margin-bottom: 20px;
-            font-size: 14px;
-            color: var(--text-color);
+            font-size: 15px;
+            opacity: 0.9;
         }
 
         .delete-confirmation-box button {
-            padding: 8px 16px;
-            margin: 0 5px;
+            padding: 10px 18px;
+            margin: 0 8px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: bold;
         }
 
         .delete-confirmation-box .confirm-delete {
-            background-color: palevioletred;
+            background-color: #dc3545;
             color: white;
         }
 
@@ -479,42 +475,36 @@
         }
 
         .delete-confirmation-box .cancel-delete {
-            background-color: lightseagreen;
+            background-color: #6c757d;
             color: white;
         }
 
         .delete-confirmation-box .cancel-delete:hover {
-            background-color: palevioletred;
+            background-color: #5a6268;
+        }
+
+        #error-message, #success-message {
+            position: fixed;
+            top: 90px;
+            right: 30px;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            z-index: 1001;
+            display: none;
+            max-width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
         }
 
         #error-message {
-            position: fixed;
-            top: 90px;
-            right: 30px;
-            background: rgba(255, 0, 0, 0.9);
+            background: rgba(214, 64, 69, 0.9);
             color: white;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            z-index: 1001;
-            display: none;
-            max-width: 300px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         #success-message {
-            position: fixed;
-            top: 90px;
-            right: 30px;
             background: rgba(40, 167, 69, 0.9);
             color: white;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            z-index: 1001;
-            display: none;
-            max-width: 300px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .tour-overlay {
@@ -530,24 +520,21 @@
         }
 
         .tour-tooltip {
-            position: fixed;
-            background-image: var(--primary-gradient);
-            border: 2px solid palevioletred;
+            position: absolute;
+            background-color: var(--primary-blue);
+            border: 2px solid var(--accent-red);
             border-radius: 8px;
             padding: 15px;
             max-width: 300px;
             text-align: center;
-            font-family: Arial, sans-serif;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             pointer-events: auto;
             animation: fadeIn 0.3s ease-in-out;
             z-index: 2001;
-            margin: 20px;
-            box-sizing: border-box;
         }
 
         .tour-tooltip h3 {
-            color: var(--white-transparent);
+            color: white;
             font-size: 16px;
             margin-bottom: 10px;
             font-weight: bold;
@@ -555,7 +542,7 @@
 
         .tour-tooltip p {
             font-size: 14px;
-            color: var(--white-transparent);
+            color: white;
             margin-bottom: 15px;
             line-height: 1.5;
         }
@@ -573,71 +560,39 @@
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s;
+            font-weight: bold;
         }
 
         .tour-tooltip .next-btn {
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
         }
 
         .tour-tooltip .next-btn:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .tour-tooltip .close-btn {
-            background-color: palevioletred;
+            background-color: #6c757d;
             color: white;
         }
 
         .tour-tooltip .close-btn:hover {
-            background-color: #c82333;
+            background-color: #5a6268;
         }
 
-        .tour-tooltip.right:after,
-        .tour-tooltip.left:after,
-        .tour-tooltip.top:after,
-        .tour-tooltip.bottom:after {
+        .tour-tooltip:after {
             content: "";
             position: absolute;
             border: 10px solid transparent;
             pointer-events: none;
         }
 
-        .tour-tooltip.right:after {
-            border-right-color: palevioletred;
-            border-right-width: 10px;
-            left: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .tour-tooltip.left:after {
-            border-left-color: palevioletred;
-            border-left-width: 10px;
-            right: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .tour-tooltip.top:after {
-            border-top-color: palevioletred;
-            border-top-width: 10px;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .tour-tooltip.bottom:after {
-            border-bottom-color: palevioletred;
-            border-bottom-width: 10px;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .tour-tooltip.center:after {
-            display: none;
-        }
+        .tour-tooltip.right:after { border-right-color: var(--accent-red); left: -20px; top: 50%; transform: translateY(-50%); }
+        .tour-tooltip.left:after { border-left-color: var(--accent-red); right: -20px; top: 50%; transform: translateY(-50%); }
+        .tour-tooltip.top:after { border-top-color: var(--accent-red); bottom: -20px; left: 50%; transform: translateX(-50%); }
+        .tour-tooltip.bottom:after { border-bottom-color: var(--accent-red); top: -20px; left: 50%; transform: translateX(-50%); }
+        .tour-tooltip.center:after { display: none; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.9); }
@@ -645,76 +600,43 @@
         }
 
         @media (max-width: 768px) {
-            .main-content.with-toolbar {
-                margin-left: 0;
-            }
+            body { font-size: 9px; }
+            header { padding: 4px 6px; }
+            .logo img { height: 25px; }
+            .logo span { font-size: 10px; margin-left: 4px; }
+            .header-right span { font-size: 9px; }
+            .main-content.with-toolbar { margin-left: 0; }
+            .toolbar { width: 100%; left: -100%; }
+            .toolbar.active { left: 0; }
+            .history-filters, .sort-controls { flex-direction: column; }
+            .history-filters input, .history-filters select,
+            .sort-controls select, .sort-controls button { min-width: 100%; }
+            .tour-tooltip { max-width: 80%; padding: 10px; }
+            .tour-tooltip h3 { font-size: 11px; }
+            .tour-tooltip p { font-size: 9px; }
+            .tour-tooltip button { padding: 5px 8px; font-size: 9px; }
+        }
 
-            .toolbar {
-                width: 100%;
-                left: -100%;
-            }
-
-            .toolbar.active {
-                left: 0;
-            }
-
-            .history-filters {
-                flex-direction: column;
-            }
-
-            .history-filters input,
-            .history-filters select {
-                min-width: 100%;
-            }
-
-            .sort-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .sort-controls select,
-            .sort-controls button {
-                min-width: 100%;
-            }
-
-            .tour-tooltip {
-                max-width: 80%;
-                margin: 10px;
-                font-size: 12px;
-            }
-
-            .tour-tooltip h3 {
-                font-size: 14px;
-            }
-
-            .tour-tooltip p {
-                font-size: 12px;
-            }
-
-            .tour-tooltip button {
-                font-size: 12px;
-                padding: 6px 10px;
-            }
+        @media (max-width: 480px) {
+            .main-content { padding: 70px 15px 15px; }
+            .history, .customers { padding: 15px; }
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
-    <video id="bg-video" autoplay muted loop>
-        <source src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/wave.mp4?raw=true" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
     <header>
         <div class="logo" id="toggleToolbar">
-            <img src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/Logo_BRIN.png?raw=true" alt="BRIN Logo">
+            <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/main/public/brin_logo.png?raw=true" alt="BRIN Logo">
             <span>BRIN</span>
-            <span>Badan Riset Nasional</span>
+            <span>Badan Riset dan Inovasi Nasional</span>
         </div>
         <div class="header-right">
             <span>Parking Management System</span>
         </div>
     </header>
+
     <aside class="toolbar" id="toolbar">
         <div class="feature-box user-info" id="userInfo">
             <h3>User</h3>
@@ -733,6 +655,7 @@
             <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">Parking Analysis</button>
         </div>
     </aside>
+
     <main class="main-content" id="mainContent">
         <div class="history">
             <h2>Slot History</h2>
@@ -758,6 +681,7 @@
                 </table>
             </div>
         </div>
+
         <div class="customers">
             <h2>Customer Messages</h2>
             <div class="sort-controls">
@@ -776,8 +700,10 @@
             </div>
             <div id="customersMessageList" class="history-list"></div>
         </div>
+
         <div id="error-message"></div>
         <div id="success-message"></div>
+
         <div id="deleteConfirmation" class="delete-confirmation">
             <div class="delete-confirmation-box">
                 <h3>Confirm Deletion</h3>
@@ -786,6 +712,7 @@
                 <button id="cancelDelete" class="cancel-delete">Cancel</button>
             </div>
         </div>
+
         <div class="tour-overlay" id="tourOverlay"></div>
         <div class="tour-tooltip" id="tourTooltip" style="display: none;">
             <h3 id="tooltipTitle"></h3>
@@ -796,30 +723,9 @@
             </div>
         </div>
     </main>
+
     <script>
-        class User {
-            constructor(username, email, password, idWorker, profilePic = '/assets/user.JPG') {
-                this.username = username;
-                this.email = email;
-                this.password = password;
-                this.idWorker = idWorker;
-                this.profilePic = profilePic;
-            }
-        }
-
-        class AuthSystem {
-            constructor() {
-                this.users = JSON.parse(localStorage.getItem('users')) || [];
-            }
-
-            login(email, password) {
-                const user = this.users.find(u => u.email === email && u.password === password);
-                if (user) return user;
-                throw new Error('Invalid email or password!');
-            }
-        }
-
-        const auth = new AuthSystem();
+        // === Firebase Config ===
         const firebaseConfig = {
             apiKey: "AIzaSyAef3SJwvVVTunr6CWki79aenfpXlgYc0s",
             authDomain: "digitaltwinparkingbrin.firebaseapp.com",
@@ -840,152 +746,120 @@
         let currentSortBy = 'slot';
         let currentSortOrder = 'asc';
 
+        // === Utility Functions ===
         function showError(message) {
-            const errorElement = document.getElementById('error-message');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            setTimeout(() => { errorElement.style.display = 'none'; }, 5000);
-            console.error('Error:', message);
+            const el = document.getElementById('error-message');
+            el.textContent = message;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 5000);
         }
 
         function showSuccess(message) {
-            const successElement = document.getElementById('success-message');
-            successElement.textContent = message;
-            successElement.style.display = 'block';
-            setTimeout(() => { successElement.style.display = 'none'; }, 5000);
-            console.log('Success:', message);
+            const el = document.getElementById('success-message');
+            el.textContent = message;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 5000);
         }
 
         function parseDate(dateStr) {
             if (!dateStr) return new Date(0);
-            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-                const date = new Date(dateStr);
-                if (!isNaN(date)) return date;
-            }
-            if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
-                const [day, month, year] = dateStr.split('-').map(Number);
-                const date = new Date(year, month - 1, day);
-                if (!isNaN(date)) return date;
-            }
-            console.warn(`Invalid date format: ${dateStr}`);
-            return new Date(0);
+            const parts = dateStr.includes('-') ? dateStr.split('-') : dateStr.split('/');
+            if (parts.length !== 3) return new Date(0);
+            const [d, m, y] = parts.map(Number);
+            return new Date(y, m - 1, d);
         }
 
+        // === Render Functions ===
         function renderHistoryTable() {
-            const slotHistoryTable = document.getElementById("slotHistoryTable").getElementsByTagName('tbody')[0];
-            slotHistoryTable.innerHTML = "";
+            const tbody = document.querySelector("#slotHistoryTable tbody");
+            tbody.innerHTML = "";
 
             const filterSlot = document.getElementById('filter-slot').value.trim();
             const filterDate = document.getElementById('filter-date').value;
             const filterStatus = document.getElementById('filter-status').value;
 
-            slotHistoryData.forEach((entry) => {
-                const entryDate = entry.timestamp.split(' ')[0];
-                if (filterSlot && entry.slot !== filterSlot) return;
-                if (filterDate && entryDate !== filterDate) return;
-                if (filterStatus && entry.status !== filterStatus) return;
-
-                const row = slotHistoryTable.insertRow();
-                row.insertCell(0).textContent = entry.slot;
-                row.insertCell(1).textContent = entry.timestamp;
-                row.insertCell(2).textContent = entry.status;
-
-                if (entry.status === 'terisi') {
-                    row.cells[2].className = 'status in';
-                } else if (entry.status === 'kosong') {
-                    row.cells[2].className = 'status out';
-                }
+            const filtered = slotHistoryData.filter(entry => {
+                if (filterSlot && entry.slot !== filterSlot) return false;
+                if (filterDate && !entry.timestamp.startsWith(filterDate)) return false;
+                if (filterStatus && entry.status !== filterStatus) return false;
+                return true;
             });
 
-            if (slotHistoryTable.rows.length === 0) {
-                showError("No data matches the current filters.");
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:white;">No data matches filters.</td></tr>`;
+                return;
             }
+
+            filtered.forEach(entry => {
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = entry.slot;
+                row.insertCell(1).textContent = entry.timestamp;
+                const statusCell = row.insertCell(2);
+                statusCell.textContent = entry.status;
+                statusCell.className = `status ${entry.status === 'terisi' ? 'in' : 'out'}`;
+            });
         }
 
-        window.applySorting = function() {
+        window.applySorting = () => {
             currentSortBy = document.getElementById('sortBy').value;
             currentSortOrder = document.getElementById('sortOrder').value;
             updateCustomersMessage();
         };
 
-        window.resetSorting = function() {
+        window.resetSorting = () => {
             currentSortBy = 'slot';
             currentSortOrder = 'asc';
-            document.getElementById('sortBy').value = currentSortBy;
-            document.getElementById('sortOrder').value = currentSortOrder;
+            document.getElementById('sortBy').value = 'slot';
+            document.getElementById('sortOrder').value = 'asc';
             updateCustomersMessage();
         };
 
-        function sortMessages(messages) {
-            return messages.sort((a, b) => {
-                let valueA, valueB;
+        function sortMessages(arr) {
+            return arr.sort((a, b) => {
+                let A, B;
                 switch (currentSortBy) {
-                    case 'slot':
-                        valueA = parseInt(a.slot.split('_')[1]) || 999;
-                        valueB = parseInt(b.slot.split('_')[1]) || 999;
-                        break;
-                    case 'date':
-                        valueA = parseDate(a.message.date);
-                        valueB = parseDate(b.message.date);
-                        break;
-                    case 'user':
-                        valueA = (a.message.user || '').toLowerCase();
-                        valueB = (b.message.user || '').toLowerCase();
-                        break;
-                    case 'plate':
-                        valueA = (a.message.plate || '').toLowerCase();
-                        valueB = (b.message.plate || '').toLowerCase();
-                        break;
-                    default:
-                        valueA = parseInt(a.slot.split('_')[1]) || 999;
-                        valueB = parseInt(b.slot.split('_')[1]) || 999;
+                    case 'slot': A = parseInt(a.slot.split('_')[1]); B = parseInt(b.slot.split('_')[1]); break;
+                    case 'date': A = parseDate(a.message.date); B = parseDate(b.message.date); break;
+                    case 'user': A = (a.message.user || '').toLowerCase(); B = (b.message.user || '').toLowerCase(); break;
+                    case 'plate': A = (a.message.plate || '').toLowerCase(); B = (b.message.plate || '').toLowerCase(); break;
+                    default: A = parseInt(a.slot.split('_')[1]); B = parseInt(b.slot.split('_')[1]);
                 }
-                return currentSortOrder === 'desc' ? (valueA < valueB ? 1 : -1) : (valueA > valueB ? 1 : -1);
+                return currentSortOrder === 'desc' ? (A < B ? 1 : -1) : (A > B ? 1 : -1);
             });
         }
 
         function showEditForm(slot, message) {
-            const formId = `edit-form-${slot}`;
-            const existingForm = document.getElementById(formId);
-            if (existingForm) {
-                existingForm.style.display = existingForm.style.display === 'none' ? 'flex' : 'none';
-                return existingForm;
-            }
+            const id = `edit-form-${slot}`;
+            let form = document.getElementById(id);
+            if (form) { form.style.display = form.style.display === 'none' ? 'flex' : 'none'; return form; }
 
-            const form = document.createElement('div');
+            form = document.createElement('div');
             form.className = 'edit-form';
-            form.id = formId;
-            const dateValue = message.date ? (message.date.includes('-') && !message.date.startsWith('20') ? message.date : message.date.split('T')[0]) : '';
+            form.id = id;
+            const dateVal = message.date && message.date.includes('-') && !message.date.startsWith('20') ? message.date.split('T')[0] : message.date || '';
             form.innerHTML = `
-                <input type="text" id="edit-slot-${slot}" value="${slot}" placeholder="Slot (e.g., slot_10)">
-                <input type="text" id="edit-contactNumber-${slot}" value="${message.contactNumber || ''}" placeholder="Contact Number">
+                <input type="text" id="edit-slot-${slot}" value="${slot}" placeholder="Slot">
+                <input type="text" id="edit-contactNumber-${slot}" value="${message.contactNumber || ''}" placeholder="Contact">
                 <input type="text" id="edit-idWorker-${slot}" value="${message.idWorker || ''}" placeholder="ID Worker">
                 <input type="text" id="edit-lastAction-${slot}" value="${message.lastAction || ''}" placeholder="Last Action">
-                <input type="text" id="edit-parkingNotes-${slot}" value="${message.parkingNotes || ''}" placeholder="Parking Notes">
+                <input type="text" id="edit-parkingNotes-${slot}" value="${message.parkingNotes || ''}" placeholder="Notes">
                 <input type="text" id="edit-plate-${slot}" value="${message.plate || ''}" placeholder="Plate">
-                <input type="text" id="edit-timestamp-${slot}" value="${message.timestamp || ''}" placeholder="Timestamp (HH:MM:SS)">
+                <input type="text" id="edit-timestamp-${slot}" value="${message.timestamp || ''}" placeholder="Timestamp">
                 <input type="text" id="edit-user-${slot}" value="${message.user || ''}" placeholder="User">
-                <input type="date" id="edit-date-${slot}" value="${dateValue}" placeholder="Date">
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <input type="date" id="edit-date-${slot}" value="${dateVal}">
+                <div style="display:flex; gap:8px; margin-top:8px;">
                     <button class="save-btn" onclick="saveMessage('${slot}')">Save</button>
-                    <button class="cancel-btn" onclick="document.getElementById('${formId}').style.display = 'none'">Cancel</button>
+                    <button class="cancel-btn" onclick="document.getElementById('${id}').style.display='none'">Cancel</button>
                 </div>
             `;
             return form;
         }
 
-        window.saveMessage = function(oldSlot) {
+        window.saveMessage = (oldSlot) => {
             const newSlot = document.getElementById(`edit-slot-${oldSlot}`).value.trim() || oldSlot;
-            if (!newSlot.match(/^slot_\d+$/)) {
-                showError('Invalid slot format. Use "slot_X" (e.g., slot_10)');
-                return;
-            }
-            let dateInput = document.getElementById(`edit-date-${oldSlot}`).value;
-            if (/^\d{2}-\d{2}-\d{4}$/.test(dateInput)) {
-                const [day, month, year] = dateInput.split('-');
-                dateInput = `${year}-${month}-${day}`;
-            }
-            const updatedMessage = {
+            if (!/^slot_\d+$/.test(newSlot)) return showError('Invalid slot format. Use "slot_X"');
+
+            const updated = {
                 contactNumber: document.getElementById(`edit-contactNumber-${oldSlot}`).value || null,
                 idWorker: document.getElementById(`edit-idWorker-${oldSlot}`).value || null,
                 lastAction: document.getElementById(`edit-lastAction-${oldSlot}`).value || null,
@@ -993,155 +867,90 @@
                 plate: document.getElementById(`edit-plate-${oldSlot}`).value || null,
                 timestamp: document.getElementById(`edit-timestamp-${oldSlot}`).value || null,
                 user: document.getElementById(`edit-user-${oldSlot}`).value || null,
-                date: dateInput || null
+                date: document.getElementById(`edit-date-${oldSlot}`).value || null
             };
 
-            messagesRef.child(newSlot).once('value', (snapshot) => {
-                if (snapshot.exists() && newSlot !== oldSlot) {
-                    showError(`Slot ${newSlot} already exists. Choose a different slot.`);
-                    return;
-                }
-                messagesRef.child(newSlot).set(updatedMessage)
-                    .then(() => {
-                        if (newSlot !== oldSlot) {
-                            return messagesRef.child(oldSlot).remove();
-                        }
-                    })
-                    .then(() => {
-                        showSuccess(`Message ${newSlot === oldSlot ? 'updated' : 'moved to new slot'} successfully`);
-                        document.getElementById(`edit-form-${oldSlot}`).style.display = 'none';
-                    })
-                    .catch((error) => {
-                        showError(`Failed to update message: ${error.message}`);
-                    });
+            messagesRef.child(newSlot).once('value').then(snap => {
+                if (snap.exists() && newSlot !== oldSlot) return showError(`Slot ${newSlot} already exists.`);
+                messagesRef.child(newSlot).set(updated).then(() => {
+                    if (newSlot !== oldSlot) return messagesRef.child(oldSlot).remove();
+                }).then(() => {
+                    showSuccess(`Message ${newSlot === oldSlot ? 'updated' : 'moved'} successfully`);
+                    document.getElementById(`edit-form-${oldSlot}`).style.display = 'none';
+                }).catch(err => showError('Update failed: ' + err.message));
             });
         };
 
-        window.deleteMessage = function(slot) {
-            const deleteModal = document.getElementById('deleteConfirmation');
-            const deleteMessage = document.getElementById('deleteMessage');
-            const confirmButton = document.getElementById('confirmDelete');
-            const cancelButton = document.getElementById('cancelDelete');
+        window.deleteMessage = (slot) => {
+            const modal = document.getElementById('deleteConfirmation');
+            document.getElementById('deleteMessage').textContent = `Delete message for ${slot.toUpperCase()}? This cannot be undone.`;
+            modal.style.display = 'flex';
 
-            deleteMessage.textContent = `Are you sure you want to permanently delete the message for ${slot.replace('_', ' ').toUpperCase()}? This action cannot be undone.`;
-            deleteModal.style.display = 'flex';
+            const confirmBtn = document.getElementById('confirmDelete');
+            const cancelBtn = document.getElementById('cancelDelete');
 
-            const newConfirmButton = confirmButton.cloneNode(true);
-            const newCancelButton = cancelButton.cloneNode(true);
-            confirmButton.parentNode.replaceChild(newConfirmButton, confirmButton);
-            cancelButton.parentNode.replaceChild(newCancelButton, cancelButton);
+            const newConfirm = confirmBtn.cloneNode(true);
+            const newCancel = cancelBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirm, confirmBtn);
+            cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
 
-            newConfirmButton.addEventListener('click', function() {
-                performDelete(slot);
-                deleteModal.style.display = 'none';
-            });
-
-            newCancelButton.addEventListener('click', function() {
-                deleteModal.style.display = 'none';
-            });
-
-            deleteModal.addEventListener('click', function(e) {
-                if (e.target === deleteModal) {
-                    deleteModal.style.display = 'none';
-                }
-            });
+            newConfirm.onclick = () => { performDelete(slot); modal.style.display = 'none'; };
+            newCancel.onclick = () => modal.style.display = 'none';
+            modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
         };
 
         function performDelete(slot) {
-            messagesRef.child(slot).once('value', (snapshot) => {
-                if (!snapshot.exists()) {
-                    showError(`Message for ${slot.replace('_', ' ').toUpperCase()} does not exist in Firebase`);
-                    return;
-                }
-                messagesRef.child(slot).remove()
-                    .then(() => {
-                        showSuccess(`Message for ${slot.replace('_', ' ').toUpperCase()} deleted successfully`);
-                        messagesData = messagesData.filter(item => item.slot !== slot);
-                        updateCustomersMessage();
-                    })
-                    .catch((error) => {
-                        showError(`Failed to delete message: ${error.message}`);
-                    });
-            });
+            messagesRef.child(slot).remove().then(() => {
+                showSuccess(`Message for ${slot.toUpperCase()} deleted`);
+                messagesData = messagesData.filter(m => m.slot !== slot);
+                updateCustomersMessage();
+            }).catch(err => showError('Delete failed: ' + err.message));
         }
 
         function updateCustomersMessage() {
-            const customersMessageList = document.getElementById("customersMessageList");
-            customersMessageList.innerHTML = '';
+            const list = document.getElementById('customersMessageList');
+            list.innerHTML = '';
             if (!messagesData.length) {
-                customersMessageList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-color);">No messages available</div>';
+                list.innerHTML = '<div style="padding:20px;text-align:center;color:white;">No messages available</div>';
                 return;
             }
 
-            let sortedMessages = sortMessages([...messagesData]);
-            sortedMessages.forEach(({ slot, message }) => {
-                const { contactNumber, idWorker, lastAction, parkingNotes, plate, timestamp, user, date } = message;
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'customer-item';
-                itemDiv.innerHTML = `
+            sortMessages([...messagesData]).forEach(({ slot, message }) => {
+                const div = document.createElement('div');
+                div.className = 'customer-item';
+                div.innerHTML = `
                     <strong>${slot.replace('_', ' ').toUpperCase()}</strong>
-                    <span><strong>Contact:</strong> ${contactNumber || 'N/A'}</span>
-                    <span><strong>ID Worker:</strong> ${idWorker || 'N/A'}</span>
-                    <span><strong>Last Action:</strong> ${lastAction || 'N/A'}</span>
-                    <span><strong>Parking Notes:</strong> ${parkingNotes || 'N/A'}</span>
-                    <span><strong>Plate:</strong> ${plate || 'N/A'}</span>
-                    <span><strong>Timestamp:</strong> ${timestamp || 'N/A'}</span>
-                    <span><strong>User:</strong> ${user || 'N/A'}</span>
-                    <span><strong>Date:</strong> ${date || 'N/A'}</span>
+                    <span><strong>Contact:</strong> ${message.contactNumber || 'N/A'}</span>
+                    <span><strong>ID Worker:</strong> ${message.idWorker || 'N/A'}</span>
+                    <span><strong>Last Action:</strong> ${message.lastAction || 'N/A'}</span>
+                    <span><strong>Notes:</strong> ${message.parkingNotes || 'N/A'}</span>
+                    <span><strong>Plate:</strong> ${message.plate || 'N/A'}</span>
+                    <span><strong>Time:</strong> ${message.timestamp || 'N/A'}</span>
+                    <span><strong>User:</strong> ${message.user || 'N/A'}</span>
+                    <span><strong>Date:</strong> ${message.date || 'N/A'}</span>
                     <div class="customer-actions">
                         <button class="edit-btn" onclick="toggleEditForm('${slot}')">Edit</button>
                         <button class="delete-btn" onclick="deleteMessage('${slot}')">Delete</button>
                     </div>
                 `;
-                itemDiv.appendChild(showEditForm(slot, message));
-                customersMessageList.appendChild(itemDiv);
+                div.appendChild(showEditForm(slot, message));
+                list.appendChild(div);
             });
         }
 
-        window.toggleEditForm = function(slot) {
+        window.toggleEditForm = (slot) => {
             const form = document.getElementById(`edit-form-${slot}`);
-            if (form) {
-                form.style.display = form.style.display === 'none' ? 'flex' : 'none';
-            }
+            if (form) form.style.display = form.style.display === 'none' ? 'flex' : 'none';
         };
 
+        // === Tour Guide ===
         const tourSteps = [
-            {
-                element: 'header',
-                title: "Website Tutorial",
-                text: "Click the BRIN logo to open the sidebar toolbar, which contains features like Profile, Log Out, Live Overview, Previous Analysis, Export Data, Helpdesk, and Parking Analysis.",
-                position: 'bottom'
-            },
-            {
-                element: '.history',
-                title: "Slot History Section",
-                text: "This section displays the history of parking slot activities, including filters and a data table for slot number, timestamp, and status.",
-                position: 'center'
-            },
-            {
-                element: '.history-filters',
-                title: "History Filters",
-                text: "Use these filters to narrow down the slot history by slot number, date, or status (filled or empty).",
-                position: 'top'
-            },
-            {
-                element: '.customers',
-                title: "Customer Messages Section",
-                text: "This section shows customer messages related to parking slots, including details like contact number, plate, and parking notes.",
-                position: 'center'
-            },
-            {
-                element: '.sort-controls',
-                title: "Sort Controls",
-                text: "Sort customer messages by slot number, date, user, or plate. Select ascending or descending order, then click 'Apply Sort'. Use 'Reset' to revert to default sorting.",
-                position: 'top'
-            },
-            {
-                element: '.customer-item',
-                title: "Edit and Delete Actions",
-                text: "Each customer message has 'Edit' and 'Delete' buttons to modify or remove the message. Save changes after editing.",
-                position: 'right'
-            }
+            { element: 'header', title: "Website Tutorial", text: "Click BRIN logo to open sidebar with navigation.", position: 'bottom' },
+            { element: '.history', title: "Slot History", text: "View past parking slot activities with filters.", position: 'center' },
+            { element: '.history-filters', title: "Filters", text: "Filter by slot, date, or status.", position: 'top' },
+            { element: '.customers', title: "Customer Messages", text: "Manage user messages for each slot.", position: 'center' },
+            { element: '.sort-controls', title: "Sort", text: "Sort messages by field and order.", position: 'top' },
+            { element: '.customer-item', title: "Actions", text: "Edit or delete any message.", position: 'right' }
         ];
 
         let currentTourStep = 0;
@@ -1151,69 +960,39 @@
             showTooltip(currentTourStep);
         }
 
-        function showTooltip(step) {
-            const tooltip = document.getElementById('tourTooltip');
+        function showTooltip(i) {
+            const t = document.getElementById('tourTooltip');
             const title = document.getElementById('tooltipTitle');
             const text = document.getElementById('tooltipText');
-            const nextBtn = document.getElementById('tourNextBtn');
+            const next = document.getElementById('tourNextBtn');
+            const step = tourSteps[i];
+            const el = document.querySelector(step.element);
+            if (!el) return endTour();
 
-            const targetElement = document.querySelector(tourSteps[step].element);
-            if (!targetElement) {
-                console.error(`Element ${tourSteps[step].element} not found!`);
-                endTour();
-                return;
+            title.textContent = step.title;
+            text.textContent = step.text;
+            t.style.display = 'block';
+            t.className = 'tour-tooltip ' + step.position;
+
+            const r = el.getBoundingClientRect();
+            const tr = t.getBoundingClientRect();
+            let left = (window.innerWidth - tr.width) / 2;
+            let top = (window.innerHeight - tr.height) / 2;
+
+            if (step.position !== 'center') {
+                const pos = step.position;
+                if (pos === 'right') { left = r.right + 10; top = r.top + r.height/2 - tr.height/2; }
+                if (pos === 'left') { left = r.left - tr.width - 10; top = r.top + r.height/2 - tr.height/2; }
+                if (pos === 'top') { left = r.left + r.width/2 - tr.width/2; top = r.top - tr.height - 10; }
+                if (pos === 'bottom') { left = r.left + r.width/2 - tr.width/2; top = r.bottom + 10; }
             }
 
-            title.textContent = tourSteps[step].title;
-            text.textContent = tourSteps[step].text;
-            tooltip.style.display = 'block';
-            tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
+            left = Math.max(20, Math.min(left, window.innerWidth - tr.width - 20));
+            top = Math.max(20, Math.min(top, window.innerHeight - tr.height - 20));
+            t.style.left = `${left}px`;
+            t.style.top = `${top}px`;
 
-            const rect = targetElement.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
-            const margin = 20;
-            let left, top;
-
-            if (tourSteps[step].position === 'center') {
-                left = (viewportWidth - tooltipRect.width) / 2;
-                top = (viewportHeight - tooltipRect.height) / 2;
-                left = Math.max(margin, Math.min(left, viewportWidth - tooltipRect.width - margin));
-                top = Math.max(margin, Math.min(top, viewportHeight - tooltipRect.height - margin));
-            } else {
-                switch (tourSteps[step].position) {
-                    case 'right':
-                        left = rect.right + 10;
-                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-                        left = Math.max(margin, Math.min(left, viewportWidth - tooltipRect.width - margin));
-                        top = Math.max(margin, Math.min(top, viewportHeight - tooltipRect.height - margin));
-                        break;
-                    case 'left':
-                        left = rect.left - tooltipRect.width - 10;
-                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-                        left = Math.max(margin, Math.min(left, viewportWidth - tooltipRect.width - margin));
-                        top = Math.max(margin, Math.min(top, viewportHeight - tooltipRect.height - margin));
-                        break;
-                    case 'top':
-                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                        top = rect.top - tooltipRect.height - 10;
-                        left = Math.max(margin, Math.min(left, viewportWidth - tooltipRect.width - margin));
-                        top = Math.max(margin, Math.min(top, viewportHeight - tooltipRect.height - margin));
-                        break;
-                    case 'bottom':
-                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                        top = rect.bottom + 10;
-                        left = Math.max(margin, Math.min(left, viewportWidth - tooltipRect.width - margin));
-                        top = Math.max(margin, Math.min(top, viewportHeight - tooltipRect.height - margin));
-                        break;
-                }
-            }
-
-            tooltip.style.left = `${left}px`;
-            tooltip.style.top = `${top}px`;
-
-            nextBtn.textContent = step === tourSteps.length - 1 ? 'Finish' : 'Next';
+            next.textContent = i === tourSteps.length - 1 ? 'Finish' : 'Next';
         }
 
         function endTour() {
@@ -1222,112 +1001,75 @@
             currentTourStep = 0;
         }
 
+        // === DOM Loaded ===
         document.addEventListener("DOMContentLoaded", () => {
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const userInfo = document.getElementById('userInfo');
-            const userName = document.getElementById('userName');
-            const profilePic = document.getElementById('profilePic');
-            if (!currentUser) {
-                alert('Silakan login terlebih dahulu!');
-                window.location.replace('/login.html');
-                return;
-            } else {
-                userName.textContent = currentUser.username;
-                profilePic.src = currentUser.profilePic || '/assets/user.JPG';
-            }
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user) { alert('Silakan login terlebih dahulu!'); window.location.replace('/login.html'); return; }
 
-            document.querySelector('.logout').addEventListener('click', () => {
+            document.getElementById('userName').textContent = user.username;
+            document.getElementById('profilePic').src = user.profilePic || '/assets/user.JPG';
+
+            document.querySelector('.logout').onclick = () => {
                 localStorage.removeItem('currentUser');
                 alert('Berhasil logout!');
                 window.location.replace('/login.html');
-            });
+            };
 
-            const toggleToolbar = document.getElementById('toggleToolbar');
-            const toolbar = document.getElementById('toolbar');
-            toggleToolbar.addEventListener('click', () => {
-                toolbar.classList.toggle('active');
+            document.getElementById('toggleToolbar').onclick = () => {
+                document.getElementById('toolbar').classList.toggle('active');
                 document.getElementById('mainContent').classList.toggle('with-toolbar');
-            });
+            };
 
-            slotHistoryRef.on("value", (snapshot) => {
-                const historyData = snapshot.val();
+            // Firebase Listeners
+            slotHistoryRef.on('value', snap => {
+                const data = snap.val();
                 slotHistoryData = [];
-
-                if (!historyData) {
-                    console.warn("No slot history data available.");
-                    renderHistoryTable();
-                    showError("No slot history data available.");
-                    return;
-                }
-
-                Object.keys(historyData).forEach((slotKey) => {
-                    const slotLogs = historyData[slotKey];
-                    Object.entries(slotLogs).forEach(([timestamp, entry]) => {
-                        const status = entry.status === true || entry.status === 'terisi' ? 'terisi' : 'kosong';
-                        const slotNumber = slotKey.split("_")[1];
-                        slotHistoryData.push({
-                            slot: slotNumber,
-                            timestamp: timestamp,
-                            status: status
+                if (data) {
+                    Object.entries(data).forEach(([slotKey, logs]) => {
+                        const slotNum = slotKey.split('_')[1];
+                        Object.entries(logs).forEach(([ts, entry]) => {
+                            const status = entry.status === true || entry.status === 'terisi' ? 'terisi' : 'kosong';
+                            slotHistoryData.push({ slot: slotNum, timestamp: ts, status });
                         });
                     });
-                });
-
-                slotHistoryData.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+                    slotHistoryData.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+                }
                 renderHistoryTable();
-            }, (error) => {
-                console.error("Error fetching slot history:", error);
-                showError("Failed to fetch slot history data.");
             });
 
-            messagesRef.on("value", (snapshot) => {
-                const data = snapshot.val();
-                messagesData = [];
-                if (data) {
-                    for (const slot in data) {
-                        messagesData.push({ slot, message: data[slot] });
-                    }
-                    updateCustomersMessage();
-                } else {
-                    document.getElementById('customersMessageList').innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-color);">No messages available</div>';
-                }
-            }, (error) => {
-                showError(`Failed to fetch customer messages: ${error.message}`);
+            messagesRef.on('value', snap => {
+                const data = snap.val();
+                messagesData = data ? Object.entries(data).map(([slot, message]) => ({ slot, message })) : [];
+                updateCustomersMessage();
             });
 
-            document.getElementById('filter-slot').addEventListener('input', renderHistoryTable);
-            document.getElementById('filter-date').addEventListener('change', renderHistoryTable);
-            document.getElementById('filter-status').addEventListener('change', renderHistoryTable);
+            // Filters
+            ['filter-slot', 'filter-date', 'filter-status'].forEach(id => {
+                document.getElementById(id).addEventListener('input', renderHistoryTable);
+                document.getElementById(id).addEventListener('change', renderHistoryTable);
+            });
 
-            document.getElementById('tourNextBtn').addEventListener('click', () => {
+            // Tour
+            document.getElementById('tourNextBtn').onclick = () => {
                 currentTourStep++;
-                if (currentTourStep < tourSteps.length) {
-                    showTooltip(currentTourStep);
-                } else {
-                    endTour();
-                }
+                if (currentTourStep < tourSteps.length) showTooltip(currentTourStep);
+                else endTour();
+            };
+            document.getElementById('tourCloseBtn').onclick = endTour;
+
+            // Security
+            document.addEventListener('keydown', e => {
+                if ((e.ctrlKey || e.metaKey) && ['z','y','Z','Y'].includes(e.key)) e.preventDefault();
             });
+            window.addEventListener('popstate', e => { e.preventDefault(); history.replaceState(null, null, location.href); });
 
-            document.getElementById('tourCloseBtn').addEventListener('click', endTour);
-
-            document.addEventListener('keydown', (event) => {
-                if ((event.ctrlKey || event.metaKey) && (event.key === 'z' || event.key === 'y' || event.key === 'Z' || event.key === 'Y')) {
-                    event.preventDefault();
-                    console.log('Undo/Redo is disabled');
-                }
-            });
-
-            window.addEventListener('popstate', (event) => {
-                event.preventDefault();
-                if (!localStorage.getItem('currentUser')) {
-                    window.location.replace('/login.html');
-                } else {
-                    history.replaceState(null, null, window.location.href);
-                }
-            });
-
-            // Mulai tur secara otomatis saat halaman dimuat
-            startTour();
+            // Start Tour
+            if (localStorage.getItem('tourCompleted') !== 'true') {
+                setTimeout(() => {
+                    startTour();
+                    localStorage.setItem('tourCompleted', 'true');
+                }, 800);
+            }
         });
     </script>
 </body>

@@ -10,10 +10,15 @@
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
     <style>
         :root {
-            --primary-gradient: linear-gradient(to bottom, rgba(32, 178, 170, 0.8), rgba(219, 112, 147, 0.8));
-            --header-gradient: linear-gradient(to right, lightseagreen, palevioletred);
-            --text-color: darkslategrey;
-            --white-transparent: rgba(255, 255, 255, 0.9);
+            --primary-blue: #1D3354;
+            --accent-red: #D64045;
+            --text-color: #FFFFFF;
+            --white-bg: #E9FFF9;
+            --slot-empty: #9ED8DB;
+            --slot-occupied: #467599;
+            --car-small: #0000FF;
+            --car-medium: #FFA500;
+            --car-big: #FF0000;
         }
 
         body {
@@ -24,6 +29,7 @@
             overflow-x: hidden;
             font-size: 16px;
             touch-action: manipulation;
+            background-color: var(--white-bg);
         }
 
         video#bg-video {
@@ -34,11 +40,11 @@
             height: 100%;
             object-fit: cover;
             z-index: -2;
-            opacity: 0.4;
+            opacity: 0.2;
         }
 
         header {
-            background-image: var(--header-gradient);
+            background-color: var(--primary-blue);
             color: white;
             padding: 15px 30px;
             display: flex;
@@ -48,7 +54,7 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
@@ -84,12 +90,13 @@
             left: -240px;
             width: 240px;
             height: calc(100vh - 70px);
-            background-image: var(--header-gradient);
+            background-color: var(--primary-blue);
             padding: 15px 20px;
             z-index: 999;
             overflow-y: auto;
             transition: left 0.3s ease-in-out;
             box-sizing: border-box;
+            color: white;
         }
 
         .toolbar.active {
@@ -97,7 +104,8 @@
         }
 
         .toolbar .feature-box {
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--accent-red);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
@@ -107,30 +115,32 @@
         .toolbar .feature-box h3 {
             margin: 0 0 10px;
             font-size: 18px;
-            color: var(--text-color);
+            color: white;
             text-align: center;
         }
 
         .toolbar .feature-box button {
             width: 100%;
-            padding: 8px;
-            background-color: lightseagreen;
+            padding: 10px;
+            background-color: var(--accent-red);
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             transition: background-color 0.3s;
+            font-weight: bold;
         }
 
         .toolbar .feature-box button:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .toolbar .user-info {
             text-align: center;
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--accent-red);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
@@ -141,13 +151,14 @@
             height: 50px;
             border-radius: 50%;
             margin-bottom: 10px;
+            border: 2px solid white;
         }
 
         .toolbar .user-info span {
             display: block;
             margin: 6px 0;
             font-size: 14px;
-            color: var(--text-color);
+            color: white;
         }
 
         .main-content {
@@ -169,10 +180,10 @@
         }
 
         .overview, .history, .park-condition, .park-condition-2d {
-            background-image: var(--primary-gradient);
+            background-color: var(--slot-occupied);
             padding: 15px;
             border-radius: 10px;
-            border: 2px solid palevioletred;
+            border: 2px solid var(--accent-red);
             min-height: 150px;
             position: relative;
             color: white;
@@ -188,6 +199,7 @@
             color: white;
             font-size: 20px;
             text-align: center;
+            font-weight: bold;
         }
 
         .stats {
@@ -200,7 +212,7 @@
         }
 
         .stats div {
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.2);
             padding: 8px;
             border-radius: 6px;
             text-align: center;
@@ -210,13 +222,13 @@
             display: block;
             font-size: 16px;
             font-weight: bold;
-            color: var(--text-color);
+            color: white;
             margin-bottom: 6px;
         }
 
         .stats span:last-child {
             font-size: 16px;
-            color: var(--text-color);
+            color: white;
         }
 
         .history-filters {
@@ -245,11 +257,11 @@
         .history-filters select {
             width: 100%;
             padding: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--accent-red);
             border-radius: 6px;
             font-size: 14px;
-            background-color: var(--white-transparent);
-            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: border-color 0.3s, box-shadow 0.3s;
         }
@@ -257,13 +269,13 @@
         .history-filters input:focus,
         .history-filters select:focus {
             outline: none;
-            border-color: lightseagreen;
-            box-shadow: 0 0 8px rgba(32, 178, 170, 0.5);
+            border-color: white;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
         .history-filters select option {
-            background-color: white;
-            color: var(--text-color);
+            background-color: var(--primary-blue);
+            color: white;
         }
 
         .history-table-container {
@@ -287,7 +299,7 @@
         }
 
         .history-table th, .history-table td {
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 12px;
             text-align: center;
             font-size: 14px;
@@ -295,48 +307,44 @@
         }
 
         .history-table th {
-            background-color: var(--white-transparent);
-            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
             font-weight: bold;
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
-        .history-table td {
-            background-color: transparent;
-        }
-
-        .history-table tbody tr {
-            transition: background-color 0.2s;
-        }
-
         .history-table tbody tr:hover {
-            background-color: rgba(245, 245, 245, 0.7);
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
         .status.in {
-            color: green;
+            color: #00FF00;
             font-weight: bold;
         }
 
         .status.out {
-            color: red;
+            color: var(--accent-red);
             font-weight: bold;
         }
 
         td:nth-child(4):where(:not(:empty)) {
             color: white;
         }
+
         td:nth-child(4):where(:not(:empty))[data-size="small"] {
-            color: #0000FF;
+            color: var(--car-small);
         }
+
         td:nth-child(4):where(:not(:empty))[data-size="medium"] {
-            color: #FFA500;
+            color: var(--car-medium);
         }
+
         td:nth-child(4):where(:not(:empty))[data-size="big"] {
-            color: #FF0000;
+            color: var(--car-big);
         }
+
         td:nth-child(4):where(:not(:empty))[data-size="none"] {
             color: white;
         }
@@ -358,15 +366,11 @@
             gap: 3px;
         }
 
-        .column.top, .column.bottom {
-            gap: 3px;
-        }
-
         .slot {
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            border: 2px solid white;
             padding: 4px;
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: var(--slot-empty);
             font-size: 14px;
             border-radius: 5px;
             position: relative;
@@ -380,14 +384,14 @@
         }
 
         .slot.occupied {
-            background-color: #FFD700;
-            border-color: #FFA500;
+            background-color: var(--slot-occupied);
+            border-color: transparent !important;
         }
 
         .slot span {
             font-size: 14px;
             font-weight: bold;
-            color: white;
+            color: var(--primary-blue);
         }
 
         .slot .car {
@@ -408,25 +412,13 @@
         }
 
         @keyframes carEnter {
-            from {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 0;
-            }
-            to {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
+            from { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
         @keyframes carExit {
-            from {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-            to {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 0;
-            }
+            from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            to { transform: translate(-50%, -50%) scale(0); opacity: 0; }
         }
 
         .slot.occupied.exiting .car {
@@ -434,7 +426,7 @@
         }
 
         #toggleCameraBtn, #fullscreenBtn {
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
             border: none;
             padding: 8px 12px;
@@ -445,7 +437,7 @@
         }
 
         #toggleCameraBtn:hover, #fullscreenBtn:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         #cameraContainer {
@@ -470,7 +462,7 @@
 
         #threeError {
             display: none;
-            color: red;
+            color: var(--accent-red);
             font-size: 14px;
             text-align: center;
             margin-top: 10px;
@@ -489,7 +481,7 @@
         }
 
         #controls button {
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
             border: none;
             padding: 6px 10px;
@@ -497,11 +489,10 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s;
         }
 
         #controls button:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         #loading {
@@ -523,7 +514,7 @@
             top: 15px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(255, 0, 0, 0.8);
+            background: rgba(214, 64, 69, 0.9);
             color: white;
             padding: 10px;
             border-radius: 6px;
@@ -546,13 +537,12 @@
 
         .tour-tooltip {
             position: absolute;
-            background-image: var(--primary-gradient);
-            border: 2px solid palevioletred;
+            background-color: var(--primary-blue);
+            border: 2px solid var(--accent-red);
             border-radius: 8px;
             padding: 15px;
             max-width: 300px;
             text-align: center;
-            font-family: Arial, sans-serif;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             pointer-events: auto;
             animation: fadeIn 0.3s ease-in-out;
@@ -560,7 +550,7 @@
         }
 
         .tour-tooltip h3 {
-            color: var(--white-transparent);
+            color: white;
             font-size: 16px;
             margin-bottom: 10px;
             font-weight: bold;
@@ -568,7 +558,7 @@
 
         .tour-tooltip p {
             font-size: 14px;
-            color: var(--white-transparent);
+            color: white;
             margin-bottom: 15px;
             line-height: 1.5;
         }
@@ -585,20 +575,19 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s;
         }
 
         .tour-tooltip .next-btn {
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
         }
 
         .tour-tooltip .next-btn:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .tour-tooltip .close-btn {
-            background-color: palevioletred;
+            background-color: #b8323a;
             color: white;
         }
 
@@ -614,32 +603,28 @@
         }
 
         .tour-tooltip.right:after {
-            border-right-color: palevioletred;
-            border-right-width: 10px;
+            border-right-color: var(--accent-red);
             left: -20px;
             top: 50%;
             transform: translateY(-50%);
         }
 
         .tour-tooltip.left:after {
-            border-left-color: palevioletred;
-            border-left-width: 10px;
+            border-left-color: var(--accent-red);
             right: -20px;
             top: 50%;
             transform: translateY(-50%);
         }
 
         .tour-tooltip.top:after {
-            border-top-color: palevioletred;
-            border-top-width: 10px;
+            border-top-color: var(--accent-red);
             bottom: -20px;
             left: 50%;
             transform: translateX(-50%);
         }
 
         .tour-tooltip.bottom:after {
-            border-bottom-color: palevioletred;
-            border-bottom-width: 10px;
+            border-bottom-color: var(--accent-red);
             top: -20px;
             left: 50%;
             transform: translateX(-50%);
@@ -651,244 +636,24 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                font-size: 9px;
-            }
-
-            header {
-                padding: 4px 6px;
-                position: fixed;
-                width: 100%;
-                z-index: 1000;
-            }
-
-            .logo img {
-                height: 25px;
-            }
-
-            .logo span {
-                font-size: 10px;
-                margin-left: 4px;
-            }
-
-            .header-right {
-                margin-left: 5px;
-                margin-right: 5px;
-                gap: 5px;
-            }
-
-            .header-right span {
-                font-size: 9px;
-            }
-
-            .toolbar {
-                width: 100%;
-                left: -100%;
-                padding: 20px;
-                top: 70px;
-                height: calc(100vh - 70px);
-                z-index: 999;
-                box-sizing: border-box;
-            }
-
-            .toolbar.active {
-                left: 0;
-            }
-
-            .toolbar .feature-box {
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            }
-
-            .toolbar .feature-box h3 {
-                font-size: 12px;
-                margin-bottom: 8px;
-            }
-
-            .toolbar .feature-box button {
-                padding: 6px;
-                font-size: 10px;
-                border-radius: 5px;
-            }
-
-            .toolbar .user-info {
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            }
-
-            .toolbar .user-info img {
-                width: 30px;
-                height: 30px;
-            }
-
-            .toolbar .user-info span {
-                font-size: 10px;
-            }
-
-            .main-content {
-                padding: 49px 6px 6px;
-                overflow-x: auto;
-                transition: margin-left 0.3s ease-in-out;
-            }
-
-            .main-content.with-toolbar {
-                margin-left: 0;
-            }
-
-            .main-content-grid {
-                grid-template-columns: 1fr;
-                gap: 2px;
-                min-width: 800px;
-            }
-
-            .overview, .history, .park-condition, .park-condition-2d {
-                padding: 2px;
-                min-height: 40px;
-            }
-
-            .overview h1, .history h2, .park-condition h2, .park-condition-2d h2 {
-                font-size: 9px;
-            }
-
-            .stats {
-                grid-template-columns: 1fr 1fr;
-                gap: 1px;
-                font-size: 7px;
-            }
-
-            .stats div {
-                padding: 1px;
-            }
-
-            .stats span:first-child {
-                font-size: 7px;
-            }
-
-            .stats span:last-child {
-                font-size: 7px;
-            }
-
-            .history-filters {
-                gap: 10px;
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .history-filters .filter-item {
-                width: 100%;
-                min-width: 100%;
-                max-width: 100%;
-            }
-
-            .history-filters label {
-                width: 100%;
-                font-size: 9px;
-                margin-bottom: 3px;
-                line-height: 1.5;
-                text-align: left;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-
-            .history-filters input,
-            .history-filters select {
-                width: 100%;
-                height: 28px;
-                padding: 6px;
-                font-size: 9px;
-                box-sizing: border-box;
-            }
-
-            .history-filters input:focus,
-            .history-filters select:focus {
-                box-shadow: 0 0 5px rgba(32, 178, 170, 0.5);
-            }
-
-            .history-table th, .history-table td {
-                padding: 1px;
-                font-size: 7px;
-            }
-
-            .parking-lot {
-                margin-top: 4px;
-                gap: 0.2px;
-            }
-
-            .column {
-                gap: 0.2px;
-            }
-
-            .slot {
-                width: 15px;
-                height: 10px;
-                font-size: 7px;
-                border-width: 0.3px;
-            }
-
-            .slot span {
-                font-size: 7px;
-            }
-
-            .slot .car {
-                width: 12px;
-                height: 5px;
-            }
-
-            #toggleCameraBtn, #fullscreenBtn {
-                padding: 3px 5px;
-                font-size: 7px;
-            }
-
-            #cameraContainer {
-                min-height: 80px;
-            }
-
-            .tour-tooltip {
-                max-width: 70%;
-                padding: 3px;
-            }
-
-            .tour-tooltip h3 {
-                font-size: 8px;
-            }
-
-            .tour-tooltip p {
-                font-size: 7px;
-            }
-
-            .tour-tooltip button {
-                padding: 2px 3px;
-                font-size: 7px;
-            }
+            body { font-size: 9px; }
+            header { padding: 4px 6px; }
+            .logo img { height: 25px; }
+            .logo span { font-size: 10px; margin-left: 4px; }
+            .header-right span { font-size: 9px; }
+            .toolbar { width: 100%; left: -100%; top: 70px; }
+            .main-content { padding: 49px 6px 6px; }
+            .main-content-grid { grid-template-columns: 1fr; gap: 2px; min-width: 800px; }
+            .overview, .history, .park-condition, .park-condition-2d { padding: 2px; min-height: 40px; }
+            .stats { font-size: 7px; }
+            .slot { width: 15px; height: 10px; font-size: 7px; }
+            #toggleCameraBtn, #fullscreenBtn { font-size: 7px; padding: 3px 5px; }
+            #cameraContainer { min-height: 80px; }
         }
 
         @media (max-width: 480px) {
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .slot {
-                width: 30px;
-                height: 20px;
-            }
-
-            .slot .car {
-                width: 22px;
-                height: 10px;
-            }
-
-            .toolbar {
-                width: 100%;
-            }
-
-            .main-content.with-toolbar {
-                margin-left: 0;
-            }
+            .stats { grid-template-columns: 1fr; }
+            .slot { width: 30px; height: 20px; }
         }
     </style>
 </head>
@@ -897,16 +662,18 @@
         <source src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/wave.mp4?raw=true" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+
     <header>
         <div class="logo" id="toggleToolbar">
-            <img src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/Logo_BRIN.png?raw=true" alt="BRIN Logo">
+            <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/main/public/brin_logo.png?raw=true" alt="BRIN Logo">
             <span>BRIN</span>
-            <span>Badan Riset Nasional</span>
+            <span>Badan Riset dan Inovasi Nasional</span>
         </div>
         <div class="header-right">
             <span>Parking Management System</span>
         </div>
     </header>
+
     <aside class="toolbar" id="toolbar">
         <div class="feature-box user-info" id="userInfo">
             <h3>User</h3>
@@ -925,35 +692,18 @@
             <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">Parking Analysis</button>
         </div>
     </aside>
+
     <main class="main-content" id="mainContent">
         <div class="main-content-grid">
             <div class="overview">
                 <h1>Live Overview</h1>
                 <div class="stats">
-                    <div>
-                        <span>Cars</span>
-                        <span id="occupiedSlots">0 / 20</span>
-                    </div>
-                    <div>
-                        <span>Slots</span>
-                        <span id="emptySlots">20 / 20</span>
-                    </div>
-                    <div>
-                        <span>Time</span>
-                        <span id="currentTime"></span>
-                    </div>
-                    <div>
-                        <span>Loyalty Customers</span>
-                        <span>3</span>
-                    </div>
-                    <div>
-                        <span>Total Cars In</span>
-                        <span id="totalCarsIn">0 Today</span>
-                    </div>
-                    <div>
-                        <span>Total Cars Out</span>
-                        <span id="totalCarsOut">0 Today</span>
-                    </div>
+                    <div><span>Cars</span><span id="occupiedSlots">0 / 20</span></div>
+                    <div><span>Slots</span><span id="emptySlots">20 / 20</span></div>
+                    <div><span>Time</span><span id="currentTime"></span></div>
+                    <div><span>Loyalty Customers</span><span>3</span></div>
+                    <div><span>Total Cars In</span><span id="totalCarsIn">0 Today</span></div>
+                    <div><span>Total Cars Out</span><span id="totalCarsOut">0 Today</span></div>
                 </div>
             </div>
             <div class="history">
@@ -1047,11 +797,14 @@
             </div>
         </div>
     </main>
+
+    <!-- External Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
     <script>
-        // Authentication System
+        // === AUTHENTICATION ===
         class User {
             constructor(username, email, password, idWorker, profilePic = '/assets/user.JPG') {
                 this.username = username;
@@ -1061,22 +814,19 @@
                 this.profilePic = profilePic;
             }
         }
-
         class AuthSystem {
             constructor() {
                 this.users = JSON.parse(localStorage.getItem('users')) || [];
             }
-
             login(email, password) {
                 const user = this.users.find(u => u.email === email && u.password === password);
                 if (user) return user;
                 throw new Error('Invalid email or password!');
             }
         }
-
         const auth = new AuthSystem();
 
-        // Firebase Configuration
+        // === FIREBASE CONFIG ===
         const firebaseConfig = {
             apiKey: "AIzaSyAef3SJwvVVTunr6CWki79aenfpXlgYc0s",
             authDomain: "digitaltwinparkingbrin.firebaseapp.com",
@@ -1087,29 +837,24 @@
             appId: "1:608462498913:web:73695d8c91f923e2db8e20",
             measurementId: "G-F1TRY65RTG"
         };
-
         firebase.initializeApp(firebaseConfig);
         const dbRef = firebase.database().ref("slot_parking");
         const slotHistoryRef = firebase.database().ref("slot_history");
 
-        // 3D Visualization Variables
+        // === 3D VARIABLES ===
         let scene, camera, renderer, cars = [], allSlots = [], animationFrame;
-        let slotStatuses = {};
-        let slotSizes = {};
+        let slotStatuses = {}, slotSizes = {};
         const loadingElement = document.getElementById('loading');
         const errorElement = document.getElementById('error-message');
         let ambientLight, directionalLight, sun, sunLight;
 
-        // Show Error Message
         function showError(message) {
             errorElement.textContent = message;
             errorElement.style.display = 'block';
             setTimeout(() => errorElement.style.display = 'none', 5000);
         }
 
-        // Initialize Three.js Scene
         function initScene() {
-            console.log("Initializing Three.js scene...");
             const threeContainer = document.getElementById('threeContainer');
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, threeContainer.clientWidth / (threeContainer.clientHeight || 300), 0.1, 1000);
@@ -1121,6 +866,7 @@
 
             ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
             scene.add(ambientLight);
+
             directionalLight = new THREE.DirectionalLight(0xffffbb, 1.2);
             directionalLight.position.set(30, 40, 30);
             directionalLight.castShadow = true;
@@ -1145,12 +891,9 @@
             scene.add(ground);
         }
 
-        // Create Parking Slots
         function createParkingSlots() {
-            console.log("Creating parking slots...");
             const slotMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 });
             const slotGeometry = new THREE.BoxGeometry(3.5, 0.15, 6.5);
-
             for (let i = 0; i < 11; i++) {
                 const slot = new THREE.Mesh(slotGeometry, slotMaterial);
                 slot.position.set((10 - i) * 6 - 30, 0.1, 5);
@@ -1158,7 +901,6 @@
                 scene.add(slot);
                 allSlots.push({ position: slot.position.clone(), slotNumber: i + 1 });
             }
-
             for (let i = 0; i < 9; i++) {
                 const slot = new THREE.Mesh(slotGeometry, slotMaterial);
                 slot.position.set((8 - i) * 6 - 24, 0.1, -5);
@@ -1166,13 +908,10 @@
                 scene.add(slot);
                 allSlots.push({ position: slot.position.clone(), slotNumber: i + 12 });
             }
-
             createSlotLabels();
         }
 
-        // Create Slot Labels
         function createSlotLabels() {
-            console.log("Creating slot labels...");
             allSlots.forEach((slotData) => {
                 const canvas = document.createElement('canvas');
                 const context = canvas.getContext('2d');
@@ -1191,11 +930,8 @@
             });
         }
 
-        // Create Cars
         function createCars() {
-            console.log("Creating cars...");
             const carGeometry = new THREE.BoxGeometry(2, 2, 4);
-
             allSlots.forEach((slotData, index) => {
                 const slotKey = `slot_${slotData.slotNumber}`;
                 let carColor = 0x808080;
@@ -1208,7 +944,6 @@
                         default: carColor = 0x808080; targetScale = 1.0; break;
                     }
                 }
-
                 const carMaterial = new THREE.MeshLambertMaterial({
                     color: carColor,
                     transparent: true,
@@ -1235,16 +970,13 @@
             });
         }
 
-        // Update Live Overview Stats
         function updateLiveOverview(occupiedCount, emptyCount, totalSlots) {
             const occupiedElement = document.getElementById('occupiedSlots');
             const emptyElement = document.getElementById('emptySlots');
             if (occupiedElement) occupiedElement.textContent = `${occupiedCount} / ${totalSlots}`;
             if (emptyElement) emptyElement.textContent = `${emptyCount} / ${totalSlots}`;
-            console.log(`🔄 Stats updated: ${occupiedCount} occupied, ${emptyCount} empty`);
         }
 
-        // Update Sun Position and Sky Color
         function updateSunPosition() {
             const now = new Date();
             const hours = now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600;
@@ -1252,7 +984,6 @@
             const theta = 2 * Math.PI * dayFraction;
             const sunRadius = 100;
             let sunHeight;
-
             if (hours >= 0 && hours < 6 || hours >= 17) {
                 sunHeight = 50 * Math.sin(theta);
                 directionalLight.position.set(sunRadius * Math.cos(theta), sunHeight, sunRadius * Math.sin(theta));
@@ -1260,10 +991,8 @@
                 sunHeight = 50;
                 directionalLight.position.set(0, sunHeight, 0);
             }
-
             sun.position.copy(directionalLight.position);
             sunLight.position.copy(sun.position);
-
             if (hours >= 0 && hours < 10) {
                 scene.background = new THREE.Color(0x00008B);
                 directionalLight.intensity = 0.2;
@@ -1285,15 +1014,12 @@
             }
         }
 
-        // Animation Loop
         function animate() {
             animationFrame = requestAnimationFrame(animate);
             updateSunPosition();
             const time = Date.now() * 0.001;
             let animatingCars = 0;
-            let visibleCars = 0;
-
-            cars.forEach((car, index) => {
+            cars.forEach((car) => {
                 if (car.isAnimating) {
                     animatingCars++;
                     const opacityDiff = car.targetOpacity - car.currentOpacity;
@@ -1310,32 +1036,17 @@
                     }
                 }
                 if (car.currentOpacity > 0.1) {
-                    visibleCars++;
                     const bobAmount = 0.05;
                     car.mesh.position.y = car.originalY + Math.sin(time * 2 + car.bobOffset) * bobAmount;
                 }
             });
-
             renderer.render(scene, camera);
         }
 
-        // Camera Controls
-        window.resetCamera = function() {
-            camera.position.set(0, 20, 40);
-            camera.lookAt(0, 0, 0);
-        };
+        window.resetCamera = function() { camera.position.set(0, 20, 40); camera.lookAt(0, 0, 0); };
+        window.topView = function() { camera.position.set(0, 50, 0); camera.lookAt(0, 0, 0); };
+        window.sideView = function() { camera.position.set(60, 15, 0); camera.lookAt(0, 0, 0); };
 
-        window.topView = function() {
-            camera.position.set(0, 50, 0);
-            camera.lookAt(0, 0, 0);
-        };
-
-        window.sideView = function() {
-            camera.position.set(60, 15, 0);
-            camera.lookAt(0, 0, 0);
-        };
-
-        // Initialize 3D Visualization
         function initThree() {
             try {
                 const threeContainer = document.getElementById('threeContainer');
@@ -1348,13 +1059,12 @@
                 document.getElementById('threeError').style.display = 'none';
                 document.getElementById('controls').style.display = 'block';
             } catch (error) {
-                console.error("Three.js initialization error:", error);
+                console.error("Three.js error:", error);
                 document.getElementById('threeError').style.display = 'block';
                 showError("3D visualization failed to load.");
             }
         }
 
-        // Cleanup 3D Visualization
         function cleanupThree() {
             if (animationFrame) cancelAnimationFrame(animationFrame);
             if (renderer) {
@@ -1365,21 +1075,16 @@
             document.getElementById('controls').style.display = 'none';
         }
 
-        // Firebase Listener for slot_parking
         function setupFirebaseListener() {
             if (!dbRef) {
-                console.error("Database not initialized!");
-                showError("Database not initialized. Please refresh the page.");
+                showError("Database not initialized.");
                 return;
             }
-
             loadingElement.style.display = 'block';
             dbRef.on("value", (snapshot) => {
                 loadingElement.style.display = 'none';
                 const data = snapshot.val();
                 if (!data) {
-                    console.warn("No data received from Firebase");
-                    showError("No parking data available. Please check Firebase.");
                     for (let i = 1; i <= 20; i++) {
                         slotStatuses[`slot_${i}`] = false;
                         slotSizes[`slot_${i}`] = 'none';
@@ -1387,22 +1092,18 @@
                         if (slotEl) {
                             slotEl.classList.remove("occupied");
                             slotEl.querySelector(".car").style.display = "none";
-                            slotEl.querySelector(".car").style.backgroundColor = "#808080";
                         }
                         if (cars[i-1]) {
                             cars[i-1].targetOpacity = 0;
                             cars[i-1].targetScale = 0;
                             cars[i-1].isAnimating = true;
-                            cars[i-1].material.color.set(0x808080);
                         }
                     }
                     updateLiveOverview(0, 20, 20);
                     return;
                 }
-
                 let occupiedCount = 0;
                 const totalSlots = 20;
-
                 for (let i = 1; i <= totalSlots; i++) {
                     const slotKey = `slot_${i}`;
                     const slotData = data[slotKey] || { occupied: false, size: 'none' };
@@ -1419,13 +1120,11 @@
                             slotEl.querySelector(".car").style.backgroundColor =
                                 newSize === 'small' ? "#0000FF" :
                                 newSize === 'medium' ? "#FFA500" :
-                                newSize === 'big' ? "#FF0000" :
-                                "#808080";
+                                newSize === 'big' ? "#FF0000" : "#808080";
                             occupiedCount++;
                         } else {
                             slotEl.classList.remove("occupied");
                             slotEl.querySelector(".car").style.display = "none";
-                            slotEl.querySelector(".car").style.backgroundColor = "#808080";
                         }
                     }
 
@@ -1448,53 +1147,27 @@
                         }
                     }
                 }
-
                 const emptyCount = totalSlots - occupiedCount;
                 updateLiveOverview(occupiedCount, emptyCount, totalSlots);
             }, (error) => {
                 loadingElement.style.display = 'none';
-                console.error("Firebase read error:", error);
-                showError("Failed to fetch parking data. Please try again.");
+                showError("Failed to fetch data.");
             });
         }
 
-        // Tour Steps Configuration
+        // === TOUR SYSTEM ===
         const tourSteps = [
-            {
-                element: 'header',
-                title: "Petunjuk Website",
-                text: "Klik logo BRIN untuk membuka toolbar samping yang berisi fitur seperti Profile, Log Out, Live Overview, Previous Analysis, Export Data, Helpdesk, dan Parking Analysis.",
-                position: 'bottom'
-            },
-            {
-                element: '.overview',
-                title: "Live Overview",
-                text: "Menampilkan statistik terkini seperti jumlah slot terisi, kosong, waktu saat ini, pelanggan loyal, dan total mobil masuk/keluar hari ini.",
-                position: 'right'
-            },
-            {
-                element: '.history',
-                title: "Slot History",
-                text: "Menampilkan riwayat status slot parkir. Gunakan filter untuk mencari berdasarkan slot, tanggal, atau status (terisi/kosong).",
-                position: 'left'
-            },
-            {
-                element: '.park-condition',
-                title: "Park Condition (3D)",
-                text: "Visualisasi 3D area parkir. Klik 'Click to Expand' untuk melihat model interaktif. Gunakan kontrol kamera untuk navigasi. Warna mobil: biru (kecil), kuning (sedang), merah (besar), abu-abu (kosong).",
-                position: 'right'
-            },
-            {
-                element: '.park-condition-2d',
-                title: "Park Condition (2D)",
-                text: "Menampilkan peta 2D slot parkir. Slot kuning menandakan terisi, abu-abu menandakan kosong. Warna mobil sesuai ukuran dari Firebase.",
-                position: 'left'
-            }
+            { element: 'header', title: "Petunjuk Website", text: "Klik logo BRIN untuk membuka toolbar samping...", position: 'bottom' },
+            { element: '.overview', title: "Live Overview", text: "Menampilkan statistik terkini...", position: 'right' },
+            { element: '.history', title: "Slot History", text: "Menampilkan riwayat status slot parkir...", position: 'left' },
+            { element: '.park-condition', title: "Park Condition (3D)", text: "Visualisasi 3D area parkir...", position: 'right' },
+            { element: '.park-condition-2d', title: "Park Condition (2D)", text: "Menampilkan peta 2D slot parkir...", position: 'left' }
         ];
-
         let currentTourStep = 0;
+        let hasSeenTour = false;
 
         function startTour() {
+            if (hasSeenTour) return;
             document.getElementById('tourOverlay').style.display = 'block';
             showTooltip(currentTourStep);
         }
@@ -1504,23 +1177,15 @@
             const title = document.getElementById('tooltipTitle');
             const text = document.getElementById('tooltipText');
             const nextBtn = document.getElementById('tourNextBtn');
-
             const targetElement = document.querySelector(tourSteps[step].element);
-            if (!targetElement) {
-                console.error(`Element ${tourSteps[step].element} not found!`);
-                endTour();
-                return;
-            }
-
+            if (!targetElement) { endTour(); return; }
             title.textContent = tourSteps[step].title;
             text.textContent = tourSteps[step].text;
             tooltip.style.display = 'block';
             tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
-
             const rect = targetElement.getBoundingClientRect();
             const tooltipRect = tooltip.getBoundingClientRect();
             let left, top;
-
             const isMobile = window.innerWidth <= 768;
             if (isMobile) {
                 left = (window.innerWidth - tooltipRect.width) / 2;
@@ -1528,28 +1193,14 @@
                 tooltip.className = 'tour-tooltip bottom';
             } else {
                 switch (tourSteps[step].position) {
-                    case 'right':
-                        left = rect.right + 10;
-                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-                        break;
-                    case 'left':
-                        left = rect.left - tooltipRect.width - 10;
-                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-                        break;
-                    case 'top':
-                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                        top = rect.top - tooltipRect.height - 10;
-                        break;
-                    case 'bottom':
-                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                        top = rect.bottom + 10;
-                        break;
+                    case 'right': left = rect.right + 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
+                    case 'left': left = rect.left - tooltipRect.width - 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
+                    case 'top': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.top - tooltipRect.height - 10; break;
+                    case 'bottom': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.bottom + 10; break;
                 }
             }
-
             tooltip.style.left = `${left}px`;
             tooltip.style.top = `${top}px`;
-
             nextBtn.textContent = step === tourSteps.length - 1 ? 'Finish' : 'Next';
         }
 
@@ -1557,143 +1208,97 @@
             document.getElementById('tourOverlay').style.display = 'none';
             document.getElementById('tourTooltip').style.display = 'none';
             currentTourStep = 0;
+            hasSeenTour = true;
+            localStorage.setItem('tourCompleted', 'true');
         }
 
+        // === DOM LOADED ===
         document.addEventListener("DOMContentLoaded", () => {
-            // Authentication
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const userInfo = document.getElementById('userInfo');
-            const userName = document.getElementById('userName');
-            const profilePic = document.getElementById('profilePic');
             if (!currentUser) {
-                alert('Silakan login terlebih dahulu!');
                 window.location.replace('/login.html');
                 return;
-            } else {
-                userName.textContent = currentUser.username;
-                profilePic.src = currentUser.profilePic || '/assets/user.JPG';
             }
 
-            // Logout
+            hasSeenTour = localStorage.getItem('tourCompleted') === 'true';
+
+            document.getElementById('userName').textContent = currentUser.username;
+            document.getElementById('profilePic').src = currentUser.profilePic || '/assets/user.JPG';
+
             document.querySelector('.logout').addEventListener('click', () => {
                 localStorage.removeItem('currentUser');
                 alert('Berhasil logout!');
                 window.location.replace('/login.html');
             });
 
-            // Toggle Toolbar
             const toggleToolbar = document.getElementById('toggleToolbar');
             const toolbar = document.getElementById('toolbar');
             const mainContent = document.getElementById('mainContent');
             toggleToolbar.addEventListener('click', () => {
                 const isActive = toolbar.classList.toggle('active');
-                if (window.innerWidth > 768) {
-                    mainContent.classList.toggle('with-toolbar', isActive);
-                } else {
-                    mainContent.classList.toggle('with-toolbar', isActive);
-                }
+                mainContent.classList.toggle('with-toolbar', isActive);
             });
 
-            // Real-time Clock
             function updateClock() {
-                try {
-                    const now = new Date();
-                    const options = {
-                        timeZone: 'Asia/Jakarta',
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: false
-                    };
-                    const timeString = new Intl.DateTimeFormat('en-US', options).format(now) + ' WIB';
-                    const currentTimeElement = document.getElementById('currentTime');
-                    if (currentTimeElement) currentTimeElement.textContent = timeString;
-                } catch (error) {
-                    console.error('Kesalahan pembaruan jam:', error);
-                }
+                const now = new Date();
+                const options = { timeZone: 'Asia/Jakarta', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false };
+                const timeString = new Intl.DateTimeFormat('en-US', options).format(now) + ' WIB';
+                document.getElementById('currentTime').textContent = timeString;
             }
             updateClock();
             setInterval(updateClock, 1000);
 
-            // Slot History Update
             let historyDataArray = [];
             slotHistoryRef.on("value", (snapshot) => {
                 const historyData = snapshot.val();
                 historyDataArray = [];
-
                 if (!historyData) {
-                    console.warn("No slot history data available.");
                     renderHistoryTable();
                     document.getElementById('totalCarsIn').textContent = '0 Today';
                     document.getElementById('totalCarsOut').textContent = '0 Today';
                     return;
                 }
-
                 Object.keys(historyData).forEach((slotKey) => {
                     const slotLogs = historyData[slotKey];
                     Object.entries(slotLogs).forEach(([timestamp, entry]) => {
                         const status = entry.status === true || entry.status === 'terisi' ? 'terisi' : 'kosong';
                         const slotNumber = slotKey.split("_")[1];
                         const size = entry.size ? entry.size.charAt(0).toUpperCase() + entry.size.slice(1).toLowerCase() : 'none';
-                        historyDataArray.push({
-                            slot: slotNumber,
-                            timestamp: timestamp,
-                            status: status,
-                            size: size
-                        });
+                        historyDataArray.push({ slot: slotNumber, timestamp, status, size });
                     });
                 });
-
                 historyDataArray.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
-
                 const today = new Date().toISOString().split('T')[0];
-                let totalIn = 0;
-                let totalOut = 0;
-                historyDataArray.forEach((entry) => {
-                    const entryDate = entry.timestamp.split(' ')[0];
-                    if (entryDate === today) {
+                let totalIn = 0, totalOut = 0;
+                historyDataArray.forEach(entry => {
+                    if (entry.timestamp.split(' ')[0] === today) {
                         if (entry.status === 'terisi') totalIn++;
                         else if (entry.status === 'kosong') totalOut++;
                     }
                 });
-
                 document.getElementById('totalCarsIn').textContent = `${totalIn} Today`;
                 document.getElementById('totalCarsOut').textContent = `${totalOut} Today`;
                 renderHistoryTable();
-            }, (error) => {
-                console.error("Error fetching slot history:", error);
-                showError("Failed to fetch slot history data.");
-                document.getElementById('totalCarsIn').textContent = '0 Today';
-                document.getElementById('totalCarsOut').textContent = '0 Today';
             });
 
             function renderHistoryTable() {
-                const slotHistoryTable = document.getElementById("slotHistoryTable").getElementsByTagName('tbody')[0];
-                slotHistoryTable.innerHTML = "";
-
+                const tbody = document.getElementById("slotHistoryTable").getElementsByTagName('tbody')[0];
+                tbody.innerHTML = "";
                 const filterSlot = document.getElementById('filterSlot').value.trim();
                 const filterDate = document.getElementById('filterDate').value;
                 const filterStatus = document.getElementById('filterStatus').value;
-
-                historyDataArray.forEach((entry) => {
-                    const entryDate = entry.timestamp.split(' ')[0];
+                historyDataArray.forEach(entry => {
                     if (filterSlot && entry.slot !== filterSlot) return;
-                    if (filterDate && entryDate !== filterDate) return;
+                    if (filterDate && entry.timestamp.split(' ')[0] !== filterDate) return;
                     if (filterStatus && entry.status !== filterStatus) return;
-
-                    const row = slotHistoryTable.insertRow();
+                    const row = tbody.insertRow();
                     row.insertCell(0).textContent = entry.slot;
                     row.insertCell(1).textContent = entry.timestamp;
                     row.insertCell(2).textContent = entry.status;
                     const sizeCell = row.insertCell(3);
                     sizeCell.textContent = entry.size;
                     sizeCell.setAttribute('data-size', entry.size.toLowerCase());
-
-                    if (entry.status === 'terisi') {
-                        row.cells[2].className = 'status in';
-                    } else if (entry.status === 'kosong') {
-                        row.cells[2].className = 'status out';
-                    }
+                    row.cells[2].className = entry.status === 'terisi' ? 'status in' : 'status out';
                 });
             }
 
@@ -1701,12 +1306,10 @@
             document.getElementById('filterDate').addEventListener('change', renderHistoryTable);
             document.getElementById('filterStatus').addEventListener('change', renderHistoryTable);
 
-            // 3D Visualization Toggle
             const toggleCameraBtn = document.getElementById('toggleCameraBtn');
             const threeContainer = document.getElementById('threeContainer');
             const fullscreenBtn = document.getElementById('fullscreenBtn');
             let isExpanded = false;
-
             toggleCameraBtn.addEventListener('click', () => {
                 isExpanded = !isExpanded;
                 toggleCameraBtn.textContent = isExpanded ? 'Click to Collapse' : 'Click to Expand';
@@ -1717,8 +1320,6 @@
                     else {
                         renderer = new THREE.WebGLRenderer({ antialias: true });
                         renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight || 300);
-                        renderer.shadowMap.enabled = true;
-                        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
                         threeContainer.appendChild(renderer.domElement);
                         animate();
                     }
@@ -1729,7 +1330,6 @@
                 }
             });
 
-            // Full Screen Button
             fullscreenBtn.addEventListener('click', () => {
                 if (!document.fullscreenElement) {
                     if (!isExpanded) {
@@ -1737,24 +1337,10 @@
                         toggleCameraBtn.textContent = 'Click to Collapse';
                         threeContainer.style.display = 'block';
                         fullscreenBtn.style.display = 'block';
-                        document.getElementById('controls').style.display = 'block';
-                        if (!scene) {
-                            initThree();
-                        } else {
-                            renderer = new THREE.WebGLRenderer({ antialias: true });
-                            renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight || 300);
-                            renderer.shadowMap.enabled = true;
-                            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                            threeContainer.appendChild(renderer.domElement);
-                            animate();
-                        }
+                        if (!scene) initThree();
                     }
-                    threeContainer.requestFullscreen().catch(err => {
-                        alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-                    });
-                } else {
-                    document.exitFullscreen();
-                }
+                    threeContainer.requestFullscreen().catch(err => alert(`Fullscreen error: ${err.message}`));
+                } else document.exitFullscreen();
             });
 
             document.addEventListener('fullscreenchange', () => {
@@ -1767,178 +1353,25 @@
                 }
             });
 
-            // Handle Window Resize
             window.addEventListener('resize', () => {
                 if (scene && renderer) {
-                    const threeContainer = document.getElementById('threeContainer');
                     camera.aspect = threeContainer.clientWidth / (threeContainer.clientHeight || 300);
                     camera.updateProjectionMatrix();
                     renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight || 300);
                 }
             });
 
-            // Mouse Controls for Desktop
-            let mouseDown = false;
-            let mouseX = 0;
-            let mouseY = 0;
-
-            threeContainer.addEventListener('mousedown', (event) => {
-                mouseDown = true;
-                mouseX = event.clientX;
-                mouseY = event.clientY;
-            });
-
-            threeContainer.addEventListener('mouseup', () => {
-                mouseDown = false;
-            });
-
-            threeContainer.addEventListener('mousemove', (event) => {
-                if (!mouseDown || !scene) return;
-                const deltaX = event.clientX - mouseX;
-                const deltaY = event.clientY - mouseY;
-                const spherical = new THREE.Spherical();
-                spherical.setFromVector3(camera.position);
-                spherical.theta -= deltaX * 0.01;
-                spherical.phi += deltaY * 0.01;
-                spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi));
-                camera.position.setFromSpherical(spherical);
-                camera.lookAt(0, 0, 0);
-                mouseX = event.clientX;
-                mouseY = event.clientY;
-            });
-
-            threeContainer.addEventListener('wheel', (event) => {
-                if (!scene) return;
-                const zoomSpeed = 0.1;
-                const direction = event.deltaY > 0 ? 1 : -1;
-                camera.position.multiplyScalar(1 + direction * zoomSpeed);
-                const distance = camera.position.length();
-                if (distance < 10) camera.position.multiplyScalar(10 / distance);
-                if (distance > 200) camera.position.multiplyScalar(200 / distance);
-                event.preventDefault();
-            });
-
-            // Touch Controls for Mobile
-            let touchStartX = 0;
-            let touchStartY = 0;
-            let lastPinchDistance = 0;
-            let isPinching = false;
-            let isPanning = false;
-            let target = new THREE.Vector3(0, 0, 0);
-
-            threeContainer.addEventListener('touchstart', (event) => {
-                if (!scene) return;
-                event.preventDefault();
-                if (event.touches.length === 1) {
-                    isPinching = false;
-                    isPanning = false;
-                    touchStartX = event.touches[0].clientX;
-                    touchStartY = event.touches[0].clientY;
-                } else if (event.touches.length === 2) {
-                    const dx = event.touches[0].clientX - event.touches[1].clientX;
-                    const dy = event.touches[0].clientY - event.touches[1].clientY;
-                    lastPinchDistance = Math.sqrt(dx * dx + dy * dy);
-                    isPinching = true;
-                    isPanning = false;
-                }
-            });
-
-            threeContainer.addEventListener('touchmove', (event) => {
-                if (!scene) return;
-                event.preventDefault();
-                if (event.touches.length === 1 && !isPinching && !isPanning) {
-                    const deltaX = event.touches[0].clientX - touchStartX;
-                    const deltaY = event.touches[0].clientY - touchStartY;
-                    const spherical = new THREE.Spherical();
-                    spherical.setFromVector3(camera.position.sub(target));
-                    spherical.theta -= deltaX * 0.01;
-                    spherical.phi += deltaY * 0.01;
-                    spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi));
-                    camera.position.copy(target).add(new THREE.Vector3().setFromSpherical(spherical));
-                    camera.lookAt(target);
-                    touchStartX = event.touches[0].clientX;
-                    touchStartY = event.touches[0].clientY;
-                } else if (event.touches.length === 2) {
-                    const dx = event.touches[0].clientX - event.touches[1].clientX;
-                    const dy = event.touches[0].clientY - event.touches[1].clientY;
-                    const currentPinchDistance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (isPinching) {
-                        const pinchDelta = currentPinchDistance - lastPinchDistance;
-                        const zoomSpeed = 0.02;
-                        camera.position.multiplyScalar(1 - pinchDelta * zoomSpeed);
-                        const distance = camera.position.length();
-                        if (distance < 10) camera.position.multiplyScalar(10 / distance);
-                        if (distance > 200) camera.position.multiplyScalar(200 / distance);
-                        lastPinchDistance = currentPinchDistance;
-                    } else if (isPanning) {
-                        const deltaX = (event.touches[0].clientX + event.touches[1].clientX) / 2 - touchStartX;
-                        const deltaY = (event.touches[0].clientY + event.touches[1].clientY) / 2 - touchStartY;
-                        const panSpeed = 0.05;
-                        target.x -= deltaX * panSpeed;
-                        target.y += deltaY * panSpeed;
-                        camera.position.sub(new THREE.Vector3(deltaX * panSpeed, -deltaY * panSpeed, 0));
-                        camera.lookAt(target);
-                        touchStartX = (event.touches[0].clientX + event.touches[1].clientX) / 2;
-                        touchStartY = (event.touches[0].clientY + event.touches[1].clientY) / 2;
-                    }
-                }
-            });
-
-            threeContainer.addEventListener('touchend', (event) => {
-                if (event.touches.length < 2) {
-                    isPinching = false;
-                    if (event.touches.length === 0) {
-                        isPanning = false;
-                    } else if (event.touches.length === 1) {
-                        touchStartX = event.touches[0].clientX;
-                        touchStartY = event.touches[0].clientY;
-                    }
-                }
-                if (event.touches.length === 2) {
-                    isPanning = true;
-                    touchStartX = (event.touches[0].clientX + event.touches[1].clientX) / 2;
-                    touchStartY = (event.touches[0].clientY + event.touches[1].clientY) / 2;
-                }
-            });
-
-            // Prevent Undo/Redo and Navigation
-            document.addEventListener('keydown', (event) => {
-                if ((event.ctrlKey || event.metaKey) && (event.key === 'z' || event.key === 'y' || event.key === 'Z' || event.key === 'Y')) {
-                    event.preventDefault();
-                    console.log('Undo/Redo is disabled');
-                }
-            });
-
-            window.addEventListener('popstate', (event) => {
-                event.preventDefault();
-                if (!localStorage.getItem('currentUser')) {
-                    window.location.replace('/login.html');
-                } else {
-                    history.replaceState(null, null, window.location.href);
-                }
-            });
-
-            // Tour Event Listeners
             document.getElementById('tourNextBtn').addEventListener('click', () => {
                 currentTourStep++;
-                if (currentTourStep < tourSteps.length) {
-                    showTooltip(currentTourStep);
-                } else {
-                    endTour();
-                }
+                if (currentTourStep < tourSteps.length) showTooltip(currentTourStep);
+                else endTour();
             });
-
             document.getElementById('tourCloseBtn').addEventListener('click', endTour);
 
-            // Start tour automatically on page load
-            startTour();
+            if (!hasSeenTour) {
+                setTimeout(startTour, 800);
+            }
         });
-
-        // Handle Page Refresh
-        window.onbeforeunload = function() {
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        };
     </script>
 </body>
 </html>

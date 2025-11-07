@@ -10,10 +10,15 @@
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
     <style>
         :root {
-            --primary-gradient: linear-gradient(to bottom, rgba(32, 178, 170, 0.8), rgba(219, 112, 147, 0.8));
-            --header-gradient: linear-gradient(to right, lightseagreen, palevioletred);
-            --text-color: darkslategrey;
-            --white-transparent: rgba(255, 255, 255, 0.9);
+            --primary-blue: #1D3354;
+            --accent-red: #D64045;
+            --text-color: #FFFFFF;
+            --white-bg: #E9FFF9;
+            --slot-empty: #9ED8DB;
+            --slot-occupied: #467599;
+            --car-small: #0000FF;
+            --car-medium: #FFA500;
+            --car-big: #FF0000;
         }
 
         body {
@@ -24,6 +29,7 @@
             overflow-x: hidden;
             font-size: 16px;
             touch-action: manipulation;
+            background-color: var(--white-bg);
         }
 
         video#bg-video {
@@ -34,11 +40,11 @@
             height: 100%;
             object-fit: cover;
             z-index: -2;
-            opacity: 0.4;
+            opacity: 0.2;
         }
 
         header {
-            background-image: var(--header-gradient);
+            background-color: var(--primary-blue);
             color: white;
             padding: 15px 30px;
             display: flex;
@@ -48,7 +54,7 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
@@ -84,12 +90,13 @@
             left: -240px;
             width: 240px;
             height: calc(100vh - 70px);
-            background-image: var(--header-gradient);
+            background-color: var(--primary-blue);
             padding: 15px 20px;
             z-index: 999;
             overflow-y: auto;
             transition: left 0.3s ease-in-out;
             box-sizing: border-box;
+            color: white;
         }
 
         .toolbar.active {
@@ -97,7 +104,8 @@
         }
 
         .toolbar .feature-box {
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--accent-red);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
@@ -107,30 +115,32 @@
         .toolbar .feature-box h3 {
             margin: 0 0 10px;
             font-size: 18px;
-            color: var(--text-color);
+            color: white;
             text-align: center;
         }
 
         .toolbar .feature-box button {
             width: 100%;
-            padding: 8px;
-            background-color: lightseagreen;
+            padding: 10px;
+            background-color: var(--accent-red);
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             transition: background-color 0.3s;
+            font-weight: bold;
         }
 
         .toolbar .feature-box button:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .toolbar .user-info {
             text-align: center;
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--accent-red);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
@@ -141,13 +151,14 @@
             height: 50px;
             border-radius: 50%;
             margin-bottom: 10px;
+            border: 2px solid white;
         }
 
         .toolbar .user-info span {
             display: block;
             margin: 6px 0;
             font-size: 14px;
-            color: var(--text-color);
+            color: white;
         }
 
         .main-content {
@@ -162,20 +173,21 @@
         }
 
         .history {
-            background-image: var(--primary-gradient);
+            background-color: var(--slot-occupied);
             padding: 15px;
             border-radius: 10px;
-            border: 2px solid palevioletred;
+            border: 2px solid var(--accent-red);
             min-height: 150px;
+            position: relative;
             color: white;
         }
 
         .history h2 {
             margin: 0 0 15px;
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
             color: white;
+            font-size: 20px;
+            text-align: center;
+            font-weight: bold;
         }
 
         .history-filters {
@@ -204,11 +216,11 @@
         .history-filters select {
             width: 100%;
             padding: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--accent-red);
             border-radius: 6px;
             font-size: 14px;
-            background-color: var(--white-transparent);
-            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: border-color 0.3s, box-shadow 0.3s;
         }
@@ -216,31 +228,30 @@
         .history-filters input:focus,
         .history-filters select:focus {
             outline: none;
-            border-color: lightseagreen;
-            box-shadow: 0 0 8px rgba(32, 178, 170, 0.5);
+            border-color: white;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
-        .history-filters select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: right 8px center;
+        .history-filters select option {
+            background-color: var(--primary-blue);
+            color: white;
         }
 
         .history-table-container {
             max-height: 400px;
             overflow-y: auto;
             border-radius: 8px;
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.1);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
             padding: 10px;
         }
 
         .history-table {
             width: 100%;
             border-collapse: collapse;
+            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             overflow: hidden;
             table-layout: fixed;
@@ -248,110 +259,86 @@
 
         .history-table th,
         .history-table td {
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 12px;
             text-align: center;
             font-size: 14px;
-            color: var(--text-color);
+            color: white;
         }
 
         .history-table th {
-            background-color: var(--white-transparent);
-            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
             font-weight: bold;
             position: sticky;
             top: 0;
             z-index: 10;
         }
 
-        .history-table td {
-            background-color: transparent;
-        }
-
-        .history-table tbody tr {
-            transition: background-color 0.2s;
-        }
-
         .history-table tbody tr:hover {
-            background-color: rgba(245, 245, 245, 0.7);
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
         .status.in {
-            color: green;
+            color: #00FF00;
             font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 6px;
-            background-color: rgba(40, 167, 69, 0.2);
         }
 
         .status.out {
-            color: red;
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 6px;
-            background-color: rgba(220, 53, 69, 0.2);
-        }
-
-        .size.small {
-            color: #0000FF;
+            color: var(--accent-red);
             font-weight: bold;
         }
 
-        .size.medium {
-            color: #FFA500;
-            font-weight: bold;
+        td:nth-child(4):where(:not(:empty)) {
+            color: white;
         }
 
-        .size.big {
-            color: #FF0000;
-            font-weight: bold;
+        td:nth-child(4):where(:not(:empty))[data-size="small"] {
+            color: var(--car-small);
+        }
+
+        td:nth-child(4):where(:not(:empty))[data-size="medium"] {
+            color: var(--car-medium);
+        }
+
+        td:nth-child(4):where(:not(:empty))[data-size="big"] {
+            color: var(--car-big);
+        }
+
+        td:nth-child(4):where(:not(:empty))[data-size="none"] {
+            color: white;
         }
 
         #exportBtn {
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 10px 16px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
             margin: 15px auto;
             display: block;
             transition: background-color 0.3s;
+            font-weight: bold;
         }
 
         #exportBtn:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         #error-message {
-            position: fixed;
-            top: 90px;
-            right: 30px;
-            background: rgba(255, 0, 0, 0.9);
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(214, 64, 69, 0.9);
             color: white;
-            padding: 12px 20px;
+            padding: 10px;
             border-radius: 6px;
             font-size: 14px;
-            z-index: 1001;
+            z-index: 102;
             display: none;
-            max-width: 300px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        #success-message {
-            position: fixed;
-            top: 90px;
-            right: 30px;
-            background: rgba(40, 167, 69, 0.9);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            z-index: 1001;
-            display: none;
-            max-width: 300px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .tour-overlay {
@@ -368,13 +355,12 @@
 
         .tour-tooltip {
             position: absolute;
-            background-image: var(--primary-gradient);
-            border: 2px solid palevioletred;
+            background-color: var(--primary-blue);
+            border: 2px solid var(--accent-red);
             border-radius: 8px;
             padding: 15px;
             max-width: 300px;
             text-align: center;
-            font-family: Arial, sans-serif;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             pointer-events: auto;
             animation: fadeIn 0.3s ease-in-out;
@@ -382,7 +368,7 @@
         }
 
         .tour-tooltip h3 {
-            color: var(--white-transparent);
+            color: white;
             font-size: 16px;
             margin-bottom: 10px;
             font-weight: bold;
@@ -390,7 +376,7 @@
 
         .tour-tooltip p {
             font-size: 14px;
-            color: var(--white-transparent);
+            color: white;
             margin-bottom: 15px;
             line-height: 1.5;
         }
@@ -407,20 +393,19 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s;
         }
 
         .tour-tooltip .next-btn {
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
         }
 
         .tour-tooltip .next-btn:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .tour-tooltip .close-btn {
-            background-color: palevioletred;
+            background-color: #b8323a;
             color: white;
         }
 
@@ -436,32 +421,28 @@
         }
 
         .tour-tooltip.right:after {
-            border-right-color: palevioletred;
-            border-right-width: 10px;
+            border-right-color: var(--accent-red);
             left: -20px;
             top: 50%;
             transform: translateY(-50%);
         }
 
         .tour-tooltip.left:after {
-            border-left-color: palevioletred;
-            border-left-width: 10px;
+            border-left-color: var(--accent-red);
             right: -20px;
             top: 50%;
             transform: translateY(-50%);
         }
 
         .tour-tooltip.top:after {
-            border-top-color: palevioletred;
-            border-top-width: 10px;
+            border-top-color: var(--accent-red);
             bottom: -20px;
             left: 50%;
             transform: translateX(-50%);
         }
 
         .tour-tooltip.bottom:after {
-            border-bottom-color: palevioletred;
-            border-bottom-width: 10px;
+            border-bottom-color: var(--accent-red);
             top: -20px;
             left: 50%;
             transform: translateX(-50%);
@@ -473,189 +454,33 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                font-size: 9px;
-            }
-
-            header {
-                padding: 4px 6px;
-                position: fixed;
-                width: 100%;
-                z-index: 1000;
-            }
-
-            .logo img {
-                height: 25px;
-            }
-
-            .logo span {
-                font-size: 10px;
-                margin-left: 4px;
-            }
-
-            .header-right span {
-                font-size: 9px;
-            }
-
-            .toolbar {
-                width: 100%;
-                left: -100%;
-                padding: 20px;
-                top: 70px;
-                height: calc(100vh - 70px);
-                z-index: 999;
-                box-sizing: border-box;
-            }
-
-            .toolbar.active {
-                left: 0;
-            }
-
-            .toolbar .feature-box {
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            }
-
-            .toolbar .feature-box h3 {
-                font-size: 12px;
-                margin-bottom: 8px;
-            }
-
-            .toolbar .feature-box button {
-                padding: 6px;
-                font-size: 10px;
-                border-radius: 5px;
-            }
-
-            .toolbar .user-info {
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            }
-
-            .toolbar .user-info img {
-                width: 30px;
-                height: 30px;
-            }
-
-            .toolbar .user-info span {
-                font-size: 10px;
-            }
-
-            .main-content {
-                padding: 49px 6px 6px;
-                overflow-x: auto;
-                transition: margin-left 0.3s ease-in-out;
-            }
-
-            .main-content.with-toolbar {
-                margin-left: 0;
-            }
-
-            .history {
-                padding: 2px;
-                min-height: 40px;
-            }
-
-            .history h2 {
-                font-size: 9px;
-            }
-
-            .history-filters {
-                gap: 10px;
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .history-filters .filter-item {
-                width: 100%;
-                min-width: 100%;
-                max-width: 100%;
-            }
-
-            .history-filters label {
-                font-size: 9px;
-                margin-bottom: 3px;
-                line-height: 1.5;
-                text-align: left;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-
-            .history-filters input,
-            .history-filters select {
-                width: 100%;
-                height: 28px;
-                padding: 6px;
-                font-size: 9px;
-                box-sizing: border-box;
-            }
-
-            .history-filters input:focus,
-            .history-filters select:focus {
-                box-shadow: 0 0 5px rgba(32, 178, 170, 0.5);
-            }
-
-            .history-table th,
-            .history-table td {
-                padding: 6px;
-                font-size: 9px;
-            }
-
-            .status.in, .status.out {
-                padding: 3px 6px;
-                font-size: 9px;
-            }
-
-            .size.small, .size.medium, .size.big {
-                font-size: 9px;
-            }
-
-            #exportBtn {
-                padding: 6px 8px;
-                font-size: 9px;
-                border-radius: 5px;
-            }
-
-            #error-message, #success-message {
-                top: 49px;
-                right: 6px;
-                padding: 6px 10px;
-                font-size: 9px;
-                max-width: 70%;
-            }
-
-            .tour-tooltip {
-                max-width: 70%;
-                padding: 3px;
-            }
-
-            .tour-tooltip h3 {
-                font-size: 8px;
-            }
-
-            .tour-tooltip p {
-                font-size: 7px;
-            }
-
-            .tour-tooltip button {
-                padding: 2px 3px;
-                font-size: 7px;
-            }
+            body { font-size: 9px; }
+            header { padding: 4px 6px; }
+            .logo img { height: 25px; }
+            .logo span { font-size: 10px; margin-left: 4px; }
+            .header-right span { font-size: 9px; }
+            .toolbar { width: 100%; left: -100%; top: 70px; }
+            .main-content { padding: 49px 6px 6px; }
+            .main-content.with-toolbar { margin-left: 0; }
+            .history { padding: 10px; }
+            .history h2 { font-size: 9px; }
+            .history-filters { flex-direction: column; gap: 10px; }
+            .history-filters .filter-item { min-width: 100%; max-width: 100%; }
+            .history-filters label { font-size: 9px; }
+            .history-filters input, .history-filters select { font-size: 9px; padding: 6px; height: 28px; }
+            .history-table th, .history-table td { padding: 6px; font-size: 9px; }
+            .status.in, .status.out { font-size: 9px; }
+            td:nth-child(4) { font-size: 9px; }
+            #exportBtn { padding: 6px 8px; font-size: 9px; }
+            #error-message { top: 49px; left: 50%; transform: translateX(-50%); padding: 6px 10px; font-size: 9px; max-width: 70%; }
+            .tour-tooltip { max-width: 70%; padding: 3px; }
+            .tour-tooltip h3 { font-size: 8px; }
+            .tour-tooltip p { font-size: 7px; }
+            .tour-tooltip button { padding: 2px 3px; font-size: 7px; }
         }
 
         @media (max-width: 480px) {
-            .toolbar {
-                width: 100%;
-            }
-
-            .main-content.with-toolbar {
-                margin-left: 0;
-            }
+            .toolbar, .main-content.with-toolbar { margin-left: 0; }
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -667,16 +492,18 @@
         <source src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/wave.mp4?raw=true" type="video/mp4">
         Your browser does not support the video tag.
     </video>
+
     <header>
         <div class="logo" id="toggleToolbar">
-            <img src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/Logo_BRIN.png?raw=true" alt="BRIN Logo">
+            <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/main/public/brin_logo.png?raw=true" alt="BRIN Logo">
             <span>BRIN</span>
-            <span>Badan Riset Nasional</span>
+            <span>Badan Riset dan Inovasi Nasional</span>
         </div>
         <div class="header-right">
             <span>Parking Management System</span>
         </div>
     </header>
+
     <aside class="toolbar" id="toolbar">
         <div class="feature-box user-info" id="userInfo">
             <h3>User</h3>
@@ -695,13 +522,14 @@
             <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">Parking Analysis</button>
         </div>
     </aside>
+
     <main class="main-content" id="mainContent">
         <div class="history">
             <h2>Slot History</h2>
             <div class="history-filters">
                 <div class="filter-item">
                     <label for="filterSlot">Slot Number</label>
-                    <input type="text" id="filterSlot" placeholder="e.g., 10">
+                    <input type="text" id="filterSlot" placeholder="e.g. 18">
                 </div>
                 <div class="filter-item">
                     <label for="filterDate">Date</label>
@@ -716,7 +544,7 @@
                     </select>
                 </div>
             </div>
-            <button id="exportBtn">Export Data</button>
+            <button id="exportBtn">Export Data to Excel</button>
             <div class="history-table-container">
                 <table class="history-table" id="slotHistoryTable">
                     <thead>
@@ -731,8 +559,9 @@
                 </table>
             </div>
         </div>
+
         <div id="error-message"></div>
-        <div id="success-message"></div>
+
         <div class="tour-overlay" id="tourOverlay"></div>
         <div class="tour-tooltip" id="tourTooltip" style="display: none;">
             <h3 id="tooltipTitle"></h3>
@@ -743,31 +572,25 @@
             </div>
         </div>
     </main>
+
     <script>
-        // Authentication System
+        // === AUTH & FIREBASE ===
         class User {
             constructor(username, email, password, idWorker, profilePic = '/assets/user.JPG') {
-                this.username = username;
-                this.email = email;
-                this.password = password;
-                this.idWorker = idWorker;
-                this.profilePic = profilePic;
+                this.username = username; this.email = email; this.password = password;
+                this.idWorker = idWorker; this.profilePic = profilePic;
             }
         }
-
         class AuthSystem {
-            constructor() {
-                this.users = JSON.parse(localStorage.getItem('users')) || [];
-            }
-
+            constructor() { this.users = JSON.parse(localStorage.getItem('users')) || []; }
             login(email, password) {
                 const user = this.users.find(u => u.email === email && u.password === password);
                 if (user) return user;
                 throw new Error('Invalid email or password!');
             }
         }
-
         const auth = new AuthSystem();
+
         const firebaseConfig = {
             apiKey: "AIzaSyAef3SJwvVVTunr6CWki79aenfpXlgYc0s",
             authDomain: "digitaltwinparkingbrin.firebaseapp.com",
@@ -778,135 +601,95 @@
             appId: "1:608462498913:web:73695d8c91f923e2db8e20",
             measurementId: "G-F1TRY65RTG"
         };
-
         firebase.initializeApp(firebaseConfig);
         const slotHistoryRef = firebase.database().ref("slot_history");
 
         let historyDataArray = [];
 
-        // Show Error/Success Messages
+        // === ERROR MESSAGE ===
         function showError(message) {
             const errorElement = document.getElementById('error-message');
             errorElement.textContent = message;
             errorElement.style.display = 'block';
-            setTimeout(() => { errorElement.style.display = 'none'; }, 5000);
-            console.error('Error:', message);
+            setTimeout(() => errorElement.style.display = 'none', 5000);
         }
 
-        function showSuccess(message) {
-            const successElement = document.getElementById('success-message');
-            successElement.textContent = message;
-            successElement.style.display = 'block';
-            setTimeout(() => { successElement.style.display = 'none'; }, 5000);
-            console.log('Success:', message);
-        }
-
-        // Render History Table
+        // === RENDER TABLE ===
         function renderHistoryTable() {
-            const slotHistoryTable = document.getElementById("slotHistoryTable").getElementsByTagName('tbody')[0];
-            slotHistoryTable.innerHTML = "";
+            const tbody = document.getElementById("slotHistoryTable").getElementsByTagName('tbody')[0];
+            tbody.innerHTML = "";
 
             const filterSlot = document.getElementById('filterSlot').value.trim();
             const filterDate = document.getElementById('filterDate').value;
             const filterStatus = document.getElementById('filterStatus').value;
 
-            historyDataArray.forEach((entry) => {
-                const entryDate = entry.timestamp.split(' ')[0];
-                if (filterSlot && entry.slot !== filterSlot) return;
-                if (filterDate && entryDate !== filterDate) return;
-                if (filterStatus && entry.status !== filterStatus) return;
+            const filtered = historyDataArray.filter(entry => {
+                if (filterSlot && entry.slot !== filterSlot) return false;
+                if (filterDate && entry.timestamp.split(' ')[0] !== filterDate) return false;
+                if (filterStatus && entry.status !== filterStatus) return false;
+                return true;
+            });
 
-                const row = slotHistoryTable.insertRow();
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="padding: 20px; text-align: center; color: white;">No matching data</td></tr>';
+                return;
+            }
+
+            filtered.forEach(entry => {
+                const row = tbody.insertRow();
                 row.insertCell(0).textContent = entry.slot;
                 row.insertCell(1).textContent = entry.timestamp;
                 const statusCell = row.insertCell(2);
                 statusCell.textContent = entry.status;
+                statusCell.className = entry.status === 'terisi' ? 'status in' : 'status out';
                 const sizeCell = row.insertCell(3);
                 sizeCell.textContent = entry.size;
-                sizeCell.className = `size ${entry.size}`;
-
-                if (entry.status === 'terisi') {
-                    statusCell.className = 'status in';
-                } else if (entry.status === 'kosong') {
-                    statusCell.className = 'status out';
-                }
+                sizeCell.setAttribute('data-size', entry.size.toLowerCase());
             });
-
-            if (slotHistoryTable.rows.length === 0) {
-                slotHistoryTable.innerHTML = '<tr><td colspan="4" style="padding: 20px; text-align: center; color: var(--text-color);">No matching slots found</td></tr>';
-            }
         }
 
-        // Export to Excel
+        // === EXPORT TO EXCEL ===
         function exportToExcel() {
-            const filteredData = [];
-            const filterSlot = document.getElementById('filterSlot').value.trim();
-            const filterDate = document.getElementById('filterDate').value;
-            const filterStatus = document.getElementById('filterStatus').value;
-
-            historyDataArray.forEach((entry) => {
-                const entryDate = entry.timestamp.split(' ')[0];
-                if (filterSlot && entry.slot !== filterSlot) return;
-                if (filterDate && entryDate !== filterDate) return;
-                if (filterStatus && entry.status !== filterStatus) return;
-
-                filteredData.push({
-                    Slot: entry.slot,
-                    Timestamp: entry.timestamp,
-                    Status: entry.status,
-                    Size: entry.size
-                });
+            const filtered = historyDataArray.filter(entry => {
+                const filterSlot = document.getElementById('filterSlot').value.trim();
+                const filterDate = document.getElementById('filterDate').value;
+                const filterStatus = document.getElementById('filterStatus').value;
+                if (filterSlot && entry.slot !== filterSlot) return false;
+                if (filterDate && entry.timestamp.split(' ')[0] !== filterDate) return false;
+                if (filterStatus && entry.status !== filterStatus) return false;
+                return true;
             });
 
-            if (filteredData.length === 0) {
+            if (filtered.length === 0) {
                 showError("No data to export.");
                 return;
             }
 
-            const worksheet = XLSX.utils.json_to_sheet(filteredData);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Slot History");
-            XLSX.writeFile(workbook, `BRIN_Slot_History_${new Date().toISOString().split('T')[0]}.xlsx`);
-            showSuccess("Data successfully exported.");
+            const data = filtered.map(e => ({
+                Slot: e.slot,
+                Timestamp: e.timestamp,
+                Status: e.status,
+                Size: e.size
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Slot History");
+            XLSX.writeFile(wb, `BRIN_Slot_History_${new Date().toISOString().split('T')[0]}.xlsx`);
         }
 
-        // Tour Steps Configuration
+        // === TOUR SYSTEM ===
         const tourSteps = [
-            {
-                element: 'header',
-                title: "Petunjuk Website",
-                text: "Klik logo BRIN untuk membuka toolbar samping yang berisi fitur seperti Profile, Log Out, Live Overview, Previous Analysis, Export Data, Helpdesk, dan Parking Analysis.",
-                position: 'bottom'
-            },
-            {
-                element: '.history',
-                title: "Slot History",
-                text: "Bagian ini menampilkan riwayat aktivitas slot parkir, termasuk filter untuk nomor slot, tanggal, atau status (terisi/kosong), dan tombol untuk mengekspor data.",
-                position: 'right'
-            },
-            {
-                element: '.history-filters',
-                title: "Filter Riwayat",
-                text: "Gunakan filter ini untuk mempersempit riwayat slot berdasarkan nomor slot, tanggal, atau status.",
-                position: 'top'
-            },
-            {
-                element: '.history-table-container',
-                title: "Tabel Riwayat Slot",
-                text: "Tabel ini menampilkan riwayat slot yang difilter dengan detail seperti nomor slot, waktu, status, dan ukuran kendaraan.",
-                position: 'right'
-            },
-            {
-                element: '#exportBtn',
-                title: "Tombol Ekspor Data",
-                text: "Klik tombol ini untuk mengekspor data riwayat slot yang difilter ke file Excel (.xlsx).",
-                position: 'top'
-            }
+            { element: 'header', title: "Petunjuk Website", text: "Klik logo BRIN untuk membuka toolbar samping...", position: 'bottom' },
+            { element: '.history', title: "Export Data", text: "Lihat riwayat slot, filter data, dan ekspor ke Excel.", position: 'right' },
+            { element: '.history-filters', title: "Filter Data", text: "Gunakan filter untuk memilih slot, tanggal, atau status.", position: 'top' },
+            { element: '#exportBtn', title: "Ekspor ke Excel", text: "Klik tombol ini untuk mengunduh data dalam format Excel.", position: 'top' }
         ];
-
         let currentTourStep = 0;
+        let hasSeenTour = false;
 
         function startTour() {
+            if (hasSeenTour) return;
             document.getElementById('tourOverlay').style.display = 'block';
             showTooltip(currentTourStep);
         }
@@ -916,52 +699,34 @@
             const title = document.getElementById('tooltipTitle');
             const text = document.getElementById('tooltipText');
             const nextBtn = document.getElementById('tourNextBtn');
-
-            const targetElement = document.querySelector(tourSteps[step].element);
-            if (!targetElement) {
-                console.error(`Element ${tourSteps[step].element} not found!`);
-                endTour();
-                return;
-            }
+            const target = document.querySelector(tourSteps[step].element);
+            if (!target) { endTour(); return; }
 
             title.textContent = tourSteps[step].title;
             text.textContent = tourSteps[step].text;
             tooltip.style.display = 'block';
             tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
 
-            const rect = targetElement.getBoundingClientRect();
+            const rect = target.getBoundingClientRect();
             const tooltipRect = tooltip.getBoundingClientRect();
             let left, top;
-
             const isMobile = window.innerWidth <= 768;
+
             if (isMobile) {
                 left = (window.innerWidth - tooltipRect.width) / 2;
                 top = rect.bottom + 10;
                 tooltip.className = 'tour-tooltip bottom';
             } else {
                 switch (tourSteps[step].position) {
-                    case 'right':
-                        left = rect.right + 10;
-                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-                        break;
-                    case 'left':
-                        left = rect.left - tooltipRect.width - 10;
-                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-                        break;
-                    case 'top':
-                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                        top = rect.top - tooltipRect.height - 10;
-                        break;
-                    case 'bottom':
-                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                        top = rect.bottom + 10;
-                        break;
+                    case 'right': left = rect.right + 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
+                    case 'left': left = rect.left - tooltipRect.width - 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
+                    case 'top': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.top - tooltipRect.height - 10; break;
+                    case 'bottom': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.bottom + 10; break;
                 }
             }
 
             tooltip.style.left = `${left}px`;
             tooltip.style.top = `${top}px`;
-
             nextBtn.textContent = step === tourSteps.length - 1 ? 'Finish' : 'Next';
         }
 
@@ -969,117 +734,76 @@
             document.getElementById('tourOverlay').style.display = 'none';
             document.getElementById('tourTooltip').style.display = 'none';
             currentTourStep = 0;
+            hasSeenTour = true;
+            localStorage.setItem('tourCompleted_export', 'true');
         }
 
+        // === DOM LOADED ===
         document.addEventListener("DOMContentLoaded", () => {
-            // Authentication
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            const userInfo = document.getElementById('userInfo');
-            const userName = document.getElementById('userName');
-            const profilePic = document.getElementById('profilePic');
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu!');
                 window.location.replace('/login.html');
                 return;
-            } else {
-                userName.textContent = currentUser.username;
-                profilePic.src = currentUser.profilePic || '/assets/user.JPG';
             }
 
-            // Logout
+            hasSeenTour = localStorage.getItem('tourCompleted_export') === 'true';
+
+            document.getElementById('userName').textContent = currentUser.username;
+            document.getElementById('profilePic').src = currentUser.profilePic || '/assets/user.JPG';
+
             document.querySelector('.logout').addEventListener('click', () => {
                 localStorage.removeItem('currentUser');
                 alert('Berhasil logout!');
                 window.location.replace('/login.html');
             });
 
-            // Toggle Toolbar
             const toggleToolbar = document.getElementById('toggleToolbar');
             const toolbar = document.getElementById('toolbar');
             const mainContent = document.getElementById('mainContent');
             toggleToolbar.addEventListener('click', () => {
                 const isActive = toolbar.classList.toggle('active');
-                if (window.innerWidth > 768) {
-                    mainContent.classList.toggle('with-toolbar', isActive);
-                } else {
-                    mainContent.classList.toggle('with-toolbar', isActive);
-                }
+                mainContent.classList.toggle('with-toolbar', isActive);
             });
 
-            // Slot History Firebase Listener
+            // Firebase Listener
             slotHistoryRef.on("value", (snapshot) => {
-                console.log("Firebase slot_history data:", snapshot.val());
-                const historyData = snapshot.val();
+                const data = snapshot.val();
                 historyDataArray = [];
-
-                if (!historyData) {
-                    console.warn("No slot history data available.");
-                    renderHistoryTable();
-                    showError("No slot history data available.");
-                    return;
-                }
-
-                Object.keys(historyData).forEach((slotKey) => {
-                    const slotLogs = historyData[slotKey];
-                    Object.entries(slotLogs).forEach(([timestamp, entry]) => {
-                        const status = entry.status === true || entry.status === 'terisi' ? 'terisi' : 'kosong';
-                        const slotNumber = slotKey.split("_")[1];
-                        const size = entry.size ? entry.size.toLowerCase() : 'none';
-                        historyDataArray.push({
-                            slot: slotNumber,
-                            timestamp: timestamp,
-                            status: status,
-                            size: size
+                if (data) {
+                    Object.keys(data).forEach(slotKey => {
+                        const logs = data[slotKey];
+                        Object.entries(logs).forEach(([ts, entry]) => {
+                            const status = entry.status === true || entry.status === 'terisi' ? 'terisi' : 'kosong';
+                            const slotNum = slotKey.split("_")[1];
+                            const size = entry.size ? entry.size.charAt(0).toUpperCase() + entry.size.slice(1).toLowerCase() : 'None';
+                            historyDataArray.push({ slot: slotNum, timestamp: ts, status, size });
                         });
                     });
-                });
-
-                historyDataArray.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+                    historyDataArray.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+                }
                 renderHistoryTable();
-            }, (error) => {
-                console.error("Error fetching slot history:", error);
-                showError("Failed to fetch slot history data.");
             });
 
-            // Filter Event Listeners
+            // Filters
             document.getElementById('filterSlot').addEventListener('input', renderHistoryTable);
             document.getElementById('filterDate').addEventListener('change', renderHistoryTable);
             document.getElementById('filterStatus').addEventListener('change', renderHistoryTable);
 
-            // Export Button
+            // Export
             document.getElementById('exportBtn').addEventListener('click', exportToExcel);
 
-            // Tour Event Listeners
+            // Tour
             document.getElementById('tourNextBtn').addEventListener('click', () => {
                 currentTourStep++;
-                if (currentTourStep < tourSteps.length) {
-                    showTooltip(currentTourStep);
-                } else {
-                    endTour();
-                }
+                if (currentTourStep < tourSteps.length) showTooltip(currentTourStep);
+                else endTour();
             });
-
             document.getElementById('tourCloseBtn').addEventListener('click', endTour);
 
-            // Prevent Undo/Redo and Navigation
-            document.addEventListener('keydown', (event) => {
-                if ((event.ctrlKey || event.metaKey) && (event.key === 'z' || event.key === 'y' || event.key === 'Z' || event.key === 'Y')) {
-                    event.preventDefault();
-                    console.log('Undo/Redo is disabled');
-                }
-            });
-
-            window.addEventListener('popstate', (event) => {
-                event.preventDefault();
-                if (!localStorage.getItem('currentUser')) {
-                    window.location.replace('/login.html');
-                } else {
-                    history.replaceState(null, null, window.location.href);
-                }
-            });
-
-            // Start Tour automatically on page load
-            startTour();
+            if (!hasSeenTour) {
+                setTimeout(startTour, 800);
+            }
         });
     </script>
 </body>

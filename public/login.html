@@ -10,10 +10,12 @@
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
     <style>
         :root {
-            --primary-gradient: linear-gradient(to bottom, rgba(32, 178, 170, 0.8), rgba(219, 112, 147, 0.8));
-            --header-gradient: linear-gradient(to right, lightseagreen, palevioletred);
-            --text-color: darkslategrey;
-            --white-transparent: rgba(255, 255, 255, 0.9);
+            --primary-blue: #1D3354;
+            --accent-red: #D64045;
+            --text-color: #FFFFFF;
+            --white-bg: #E9FFF9;
+            --slot-empty: #9ED8DB;
+            --slot-occupied: #467599;
         }
 
         body {
@@ -27,6 +29,7 @@
             background: #d3d3d3;
         }
 
+        /* === ANIMASI FOTO LATAR BELAKANG (TIDAK DIUBAH SAMA SEKALI) === */
         body::before {
             content: "";
             position: fixed;
@@ -61,7 +64,7 @@
         }
 
         header {
-            background-image: var(--header-gradient);
+            background-color: var(--primary-blue);
             color: white;
             padding: 15px 30px;
             display: flex;
@@ -71,7 +74,7 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
@@ -107,69 +110,99 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
             padding-top: 90px;
+            padding-bottom: 50px;
         }
 
         .welcome-message {
-            color: whitesmoke;
+            color: white;
             font-size: 24px;
             font-weight: bold;
             text-align: center;
             margin-bottom: 20px;
             width: 300px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .login-box {
-            background-color: rgba(89, 158, 163, 0.4);
-            padding: 20px;
-            border-radius: 10px;
+            background-color: rgba(29, 51, 84, 0.9);
+            padding: 30px;
+            border-radius: 12px;
             width: 300px;
             text-align: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--accent-red);
         }
 
         .login-box h2 {
-            margin-top: 0;
-            color: whitesmoke;
-            font-size: 20px;
+            margin: 0 0 20px;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
         }
 
         .login-box input {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 12px;
+            margin: 12px 0;
+            border: 1px solid var(--accent-red);
+            border-radius: 6px;
             box-sizing: border-box;
             font-size: 14px;
-            background-color: rgba(255, 255, 255, 1);
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .login-box input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .login-box input:focus {
+            outline: none;
+            border-color: white;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
         .login-box button {
             width: 100%;
-            padding: 10px;
-            background-image: linear-gradient(to bottom, lightseagreen, palevioletred);
+            padding: 12px;
+            background-color: var(--accent-red);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 0;
+            transition: background-color 0.3s;
+        }
+
+        .login-box button:hover {
+            background-color: #b8323a;
         }
 
         .login-box a {
             display: block;
             margin: 10px 0;
-            color: whitesmoke;
+            color: white;
             text-decoration: none;
-            font-size: 12px;
+            font-size: 13px;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+
+        .login-box a:hover {
+            opacity: 1;
+            text-decoration: underline;
         }
 
         #error-message {
             position: fixed;
             top: 90px;
             right: 30px;
-            background: rgba(255, 0, 0, 0.8);
+            background: rgba(214, 64, 69, 0.9);
             color: white;
             padding: 12px 20px;
             border-radius: 6px;
@@ -194,13 +227,12 @@
 
         .tour-tooltip {
             position: absolute;
-            background-image: var(--primary-gradient);
-            border: 2px solid palevioletred;
+            background-color: var(--primary-blue);
+            border: 2px solid var(--accent-red);
             border-radius: 8px;
             padding: 15px;
             max-width: 300px;
             text-align: center;
-            font-family: Arial, sans-serif;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             pointer-events: auto;
             animation: fadeIn 0.3s ease-in-out;
@@ -208,7 +240,7 @@
         }
 
         .tour-tooltip h3 {
-            color: var(--white-transparent);
+            color: white;
             font-size: 16px;
             margin-bottom: 10px;
             font-weight: bold;
@@ -216,7 +248,7 @@
 
         .tour-tooltip p {
             font-size: 14px;
-            color: var(--white-transparent);
+            color: white;
             margin-bottom: 15px;
             line-height: 1.5;
         }
@@ -237,16 +269,16 @@
         }
 
         .tour-tooltip .next-btn {
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
         }
 
         .tour-tooltip .next-btn:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .tour-tooltip .close-btn {
-            background-color: palevioletred;
+            background-color: #b8323a;
             color: white;
         }
 
@@ -262,32 +294,28 @@
         }
 
         .tour-tooltip.right:after {
-            border-right-color: palevioletred;
-            border-right-width: 10px;
+            border-right-color: var(--accent-red);
             left: -20px;
             top: 50%;
             transform: translateY(-50%);
         }
 
         .tour-tooltip.left:after {
-            border-left-color: palevioletred;
-            border-left-width: 10px;
+            border-left-color: var(--accent-red);
             right: -20px;
             top: 50%;
             transform: translateY(-50%);
         }
 
         .tour-tooltip.top:after {
-            border-top-color: palevioletred;
-            border-top-width: 10px;
+            border-top-color: var(--accent-red);
             bottom: -20px;
             left: 50%;
             transform: translateX(-50%);
         }
 
         .tour-tooltip.bottom:after {
-            border-bottom-color: palevioletred;
-            border-bottom-width: 10px;
+            border-bottom-color: var(--accent-red);
             top: -20px;
             left: 50%;
             transform: translateX(-50%);
@@ -303,103 +331,43 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                font-size: 9px;
-            }
+            body { font-size: 9px; }
+            header { padding: 4px 6px; }
+            .logo img { height: 25px; }
+            .logo span { font-size: 10px; margin-left: 4px; }
+            .header-right span { font-size: 9px; }
+            .login-container { padding-top: 49px; padding-bottom: 20px; }
+            .welcome-message { font-size: 14px; width: 90%; max-width: 300px; }
+            .login-box { width: 90%; max-width: 300px; padding: 15px; }
+            .login-box h2 { font-size: 14px; }
+            .login-box input { padding: 8px; font-size: 10px; margin: 8px 0; }
+            .login-box button { padding: 8px; font-size: 10px; }
+            .login-box a { font-size: 9px; }
+            #error-message { top: 49px; right: 6px; padding: 6px 10px; font-size: 9px; max-width: 70%; }
+            .tour-tooltip { max-width: 70%; padding: 8px; }
+            .tour-tooltip h3 { font-size: 10px; }
+            .tour-tooltip p { font-size: 8px; }
+            .tour-tooltip button { padding: 4px 6px; font-size: 8px; }
+        }
 
-            header {
-                padding: 4px 6px;
-                position: fixed;
-                width: 100%;
-                z-index: 1000;
-            }
-
-            .logo img {
-                height: 25px;
-            }
-
-            .logo span {
-                font-size: 10px;
-                margin-left: 4px;
-            }
-
-            .header-right span {
-                font-size: 9px;
-            }
-
-            .login-container {
-                padding-top: 49px;
-            }
-
-            .welcome-message {
-                font-size: 14px;
-                width: 90%;
-                max-width: 300px;
-            }
-
-            .login-box {
-                width: 90%;
-                max-width: 300px;
-                padding: 10px;
-            }
-
-            .login-box h2 {
-                font-size: 12px;
-            }
-
-            .login-box input {
-                padding: 6px;
-                font-size: 9px;
-            }
-
-            .login-box button {
-                padding: 6px;
-                font-size: 9px;
-            }
-
-            .login-box a {
-                font-size: 8px;
-            }
-
-            #error-message {
-                top: 49px;
-                right: 6px;
-                padding: 6px 10px;
-                font-size: 9px;
-                max-width: 70%;
-            }
-
-            .tour-tooltip {
-                max-width: 70%;
-                padding: 3px;
-            }
-
-            .tour-tooltip h3 {
-                font-size: 8px;
-            }
-
-            .tour-tooltip p {
-                font-size: 7px;
-            }
-
-            .tour-tooltip button {
-                padding: 2px 3px;
-                font-size: 7px;
-            }
+        @media (max-width: 480px) {
+            .welcome-message { font-size: 12px; }
+            .login-box { padding: 12px; }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="logo">
-            <img src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/Logo_BRIN.png?raw=true" alt="BRIN Logo">
+            <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/main/public/brin_logo.png?raw=true" alt="BRIN Logo">
             <span>BRIN</span>
-            <span>Badan Riset Nasional</span>
+            <span>Badan Riset dan Inovasi Nasional</span>
         </div>
         <div class="header-right">
             <span>Parking Management System</span>
         </div>
     </header>
+
     <div class="login-container">
         <div class="welcome-message">Welcome to BRIN Parking (Operator)</div>
         <div class="login-box">
@@ -423,6 +391,7 @@
             </div>
         </div>
     </div>
+
     <script>
         class User {
             constructor(username, email, password, idWorker, profilePic = '/assets/user.JPG') {
@@ -567,7 +536,7 @@
         function showError(message, isSuccess = false) {
             const errorElement = document.getElementById('error-message');
             errorElement.textContent = message;
-            errorElement.style.background = isSuccess ? 'rgba(0, 255, 0, 0.8)' : 'rgba(255, 0, 0, 0.8)';
+            errorElement.style.background = isSuccess ? 'rgba(0, 200, 0, 0.9)' : 'rgba(214, 64, 69, 0.9)';
             errorElement.style.display = 'block';
             setTimeout(() => { errorElement.style.display = 'none'; }, 5000);
         }
@@ -622,8 +591,10 @@
             document.getElementById('tourCloseBtn').addEventListener('click', endTour);
 
             if (localStorage.getItem('tourCompleted') !== 'true') {
-                startTour();
-                localStorage.setItem('tourCompleted', 'true');
+                setTimeout(() => {
+                    startTour();
+                    localStorage.setItem('tourCompleted', 'true');
+                }, 800);
             }
         });
     </script>

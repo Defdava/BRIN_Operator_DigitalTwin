@@ -10,10 +10,15 @@
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
     <style>
         :root {
-            --primary-gradient: linear-gradient(to bottom, rgba(32, 178, 170, 0.8), rgba(219, 112, 147, 0.8));
-            --header-gradient: linear-gradient(to right, lightseagreen, palevioletred);
-            --text-color: darkslategrey;
-            --white-transparent: rgba(255, 255, 255, 0.9);
+            --primary-blue: #1D3354;
+            --accent-red: #D64045;
+            --text-color: #FFFFFF;
+            --white-bg: #E9FFF9;
+            --slot-empty: #9ED8DB;
+            --slot-occupied: #467599;
+            --car-small: #0000FF;
+            --car-medium: #FFA500;
+            --car-big: #FF0000;
         }
 
         body {
@@ -24,6 +29,7 @@
             overflow-x: hidden;
             font-size: 16px;
             touch-action: manipulation;
+            background-color: var(--white-bg);
         }
 
         video#bg-video {
@@ -34,11 +40,11 @@
             height: 100%;
             object-fit: cover;
             z-index: -2;
-            opacity: 0.4;
+            opacity: 0.2;
         }
 
         header {
-            background-image: var(--header-gradient);
+            background-color: var(--primary-blue);
             color: white;
             padding: 15px 30px;
             display: flex;
@@ -48,7 +54,7 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
@@ -84,12 +90,13 @@
             left: -240px;
             width: 240px;
             height: calc(100vh - 70px);
-            background-image: var(--header-gradient);
+            background-color: var(--primary-blue);
             padding: 15px 20px;
             z-index: 999;
             overflow-y: auto;
             transition: left 0.3s ease-in-out;
             box-sizing: border-box;
+            color: white;
         }
 
         .toolbar.active {
@@ -97,7 +104,8 @@
         }
 
         .toolbar .feature-box {
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--accent-red);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
@@ -107,30 +115,32 @@
         .toolbar .feature-box h3 {
             margin: 0 0 10px;
             font-size: 18px;
-            color: var(--text-color);
+            color: white;
             text-align: center;
         }
 
         .toolbar .feature-box button {
             width: 100%;
-            padding: 8px;
-            background-color: lightseagreen;
+            padding: 10px;
+            background-color: var(--accent-red);
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             transition: background-color 0.3s;
+            font-weight: bold;
         }
 
         .toolbar .feature-box button:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .toolbar .user-info {
             text-align: center;
-            background-color: var(--white-transparent);
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--accent-red);
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 20px;
@@ -141,13 +151,14 @@
             height: 50px;
             border-radius: 50%;
             margin-bottom: 10px;
+            border: 2px solid white;
         }
 
         .toolbar .user-info span {
             display: block;
             margin: 6px 0;
             font-size: 14px;
-            color: var(--text-color);
+            color: white;
         }
 
         .main-content {
@@ -162,11 +173,11 @@
         }
 
         .analysis-panel {
-            background-image: var(--primary-gradient);
-            padding: 15px;
+            background-color: var(--slot-occupied);
+            padding: 20px;
             border-radius: 10px;
-            border: 2px solid palevioletred;
-            min-height: 200px;
+            border: 2px solid var(--accent-red);
+            min-height: 500px;
             color: white;
         }
 
@@ -175,17 +186,41 @@
             color: white;
             font-size: 20px;
             text-align: center;
+            font-weight: bold;
         }
 
         .stats {
             margin-bottom: 15px;
             font-size: 16px;
             text-align: center;
+            color: white;
         }
 
         .stats span {
             font-weight: bold;
+        }
+
+        .filter-container {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .filter-container select {
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid var(--accent-red);
+            background-color: rgba(255, 255, 255, 0.2);
             color: white;
+            cursor: pointer;
+            width: 220px;
+            transition: all 0.3s;
+        }
+
+        .filter-container select:focus {
+            outline: none;
+            border-color: white;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
         .message-list {
@@ -200,48 +235,36 @@
         .message-item {
             display: grid;
             grid-template-columns: 0.5fr 1fr 0.5fr 1fr;
-            padding: 8px 0;
+            padding: 10px 0;
             font-size: 14px;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
         }
 
+        .message-item:last-child {
+            border-bottom: none;
+        }
+
+        .message-item strong {
+            color: #E9FFF9;
+        }
+
         #error-message {
-            position: fixed;
-            top: 90px;
-            right: 30px;
-            background: rgba(255, 0, 0, 0.8);
-            color: white;
-            padding: 12px 20px;
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 16px;
             border-radius: 6px;
             font-size: 14px;
-            z-index: 1001;
+            z-index: 102;
             display: none;
-            max-width: 300px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .filter-container {
-            margin-bottom: 15px;
+            max-width: 90%;
             text-align: center;
-        }
-
-        .filter-container select {
-            padding: 8px;
-            font-size: 14px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            background-color: var(--white-transparent);
-            cursor: pointer;
-            width: 200px;
-            color: var(--text-color);
-        }
-
-        .filter-container select option {
-            background-color: white;
-            color: var(--text-color);
+            background: rgba(214, 64, 69, 0.9);
+            color: white;
         }
 
         .tour-overlay {
@@ -258,13 +281,12 @@
 
         .tour-tooltip {
             position: absolute;
-            background-image: var(--primary-gradient);
-            border: 2px solid palevioletred;
+            background-color: var(--primary-blue);
+            border: 2px solid var(--accent-red);
             border-radius: 8px;
             padding: 15px;
             max-width: 300px;
             text-align: center;
-            font-family: Arial, sans-serif;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             pointer-events: auto;
             animation: fadeIn 0.3s ease-in-out;
@@ -272,7 +294,7 @@
         }
 
         .tour-tooltip h3 {
-            color: var(--white-transparent);
+            color: white;
             font-size: 16px;
             margin-bottom: 10px;
             font-weight: bold;
@@ -280,7 +302,7 @@
 
         .tour-tooltip p {
             font-size: 14px;
-            color: var(--white-transparent);
+            color: white;
             margin-bottom: 15px;
             line-height: 1.5;
         }
@@ -297,20 +319,19 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            transition: background-color 0.3s;
         }
 
         .tour-tooltip .next-btn {
-            background-color: lightseagreen;
+            background-color: var(--accent-red);
             color: white;
         }
 
         .tour-tooltip .next-btn:hover {
-            background-color: palevioletred;
+            background-color: #b8323a;
         }
 
         .tour-tooltip .close-btn {
-            background-color: palevioletred;
+            background-color: #b8323a;
             color: white;
         }
 
@@ -325,37 +346,10 @@
             pointer-events: none;
         }
 
-        .tour-tooltip.right:after {
-            border-right-color: palevioletred;
-            border-right-width: 10px;
-            left: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .tour-tooltip.left:after {
-            border-left-color: palevioletred;
-            border-left-width: 10px;
-            right: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .tour-tooltip.top:after {
-            border-top-color: palevioletred;
-            border-top-width: 10px;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .tour-tooltip.bottom:after {
-            border-bottom-color: palevioletred;
-            border-bottom-width: 10px;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+        .tour-tooltip.right:after { border-right-color: var(--accent-red); left: -20px; top: 50%; transform: translateY(-50%); }
+        .tour-tooltip.left:after { border-left-color: var(--accent-red); right: -20px; top: 50%; transform: translateY(-50%); }
+        .tour-tooltip.top:after { border-top-color: var(--accent-red); bottom: -20px; left: 50%; transform: translateX(-50%); }
+        .tour-tooltip.bottom:after { border-bottom-color: var(--accent-red); top: -20px; left: 50%; transform: translateX(-50%); }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.9); }
@@ -363,155 +357,34 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                font-size: 9px;
-            }
-
-            header {
-                padding: 4px 6px;
-                position: fixed;
-                width: 100%;
-                z-index: 1000;
-            }
-
-            .logo img {
-                height: 25px;
-            }
-
-            .logo span {
-                font-size: 10px;
-                margin-left: 4px;
-            }
-
-            .header-right {
-                margin-left: 5px;
-                margin-right: 5px;
-            }
-
-            .header-right span {
-                font-size: 9px;
-            }
-
-            .toolbar {
-                width: 100%;
-                left: -100%;
-                padding: 20px;
-                top: 70px;
-                height: calc(100vh - 70px);
-                z-index: 999;
-                box-sizing: border-box;
-            }
-
-            .toolbar.active {
-                left: 0;
-            }
-
-            .toolbar .feature-box {
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            }
-
-            .toolbar .feature-box h3 {
-                font-size: 12px;
-                margin-bottom: 8px;
-            }
-
-            .toolbar .feature-box button {
-                padding: 6px;
-                font-size: 10px;
-                border-radius: 5px;
-            }
-
-            .toolbar .user-info {
-                padding: 10px;
-                margin-bottom: 10px;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            }
-
-            .toolbar .user-info img {
-                width: 30px;
-                height: 30px;
-            }
-
-            .toolbar .user-info span {
-                font-size: 10px;
-            }
-
-            .main-content {
-                padding: 49px 6px 6px;
-                overflow-x: auto;
-                transition: margin-left 0.3s ease-in-out;
-            }
-
-            .main-content.with-toolbar {
-                margin-left: 0;
-            }
-
-            .analysis-panel h1 {
-                font-size: 9px;
-            }
-
-            .stats {
-                font-size: 9px;
-            }
-
-            .filter-container select {
-                width: 100%;
-                height: 28px;
-                padding: 6px;
-                font-size: 9px;
-            }
-
-            .message-list {
-                padding: 6px;
-            }
-
-            .message-item {
-                font-size: 8px;
-                gap: 4px;
-                padding: 6px 0;
-            }
-
-            #error-message {
-                top: 49px;
-                right: 6px;
-                padding: 6px 10px;
-                font-size: 9px;
-                max-width: 70%;
-            }
-
-            .tour-tooltip {
-                max-width: 70%;
-                padding: 3px;
-            }
-
-            .tour-tooltip h3 {
-                font-size: 8px;
-            }
-
-            .tour-tooltip p {
-                font-size: 7px;
-            }
-
-            .tour-tooltip button {
-                padding: 2px 3px;
-                font-size: 7px;
-            }
+            body { font-size: 9px; }
+            header { padding: 4px 6px; }
+            .logo img { height: 25px; }
+            .logo span { font-size: 10px; margin-left: 4px; }
+            .header-right span { font-size: 9px; }
+            .toolbar { width: 100%; left: -100%; top: 70px; }
+            .main-content { padding: 49px 6px 6px; }
+            .main-content.with-toolbar { margin-left: 0; }
+            .analysis-panel { padding: 10px; min-height: 300px; }
+            .analysis-panel h1 { font-size: 12px; }
+            .stats { font-size: 9px; }
+            .filter-container select { width: 100%; padding: 6px; font-size: 9px; }
+            .message-item { font-size: 8px; gap: 4px; padding: 6px 0; }
+            .message-list { padding: 6px; }
+            #error-message { top: 49px; padding: 6px 10px; font-size: 9px; }
+            .tour-tooltip { max-width: 70%; padding: 8px; }
+            .tour-tooltip h3 { font-size: 10px; }
+            .tour-tooltip p { font-size: 8px; }
+            .tour-tooltip button { padding: 4px 6px; font-size: 8px; }
         }
 
         @media (max-width: 480px) {
-            .toolbar {
-                width: 100%;
-            }
-
-            .main-content.with-toolbar {
-                margin-left: 0;
-            }
+            .message-item { grid-template-columns: 1fr; text-align: center; }
+            .message-item span { margin: 2px 0; }
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
     <video id="bg-video" autoplay muted loop>
@@ -521,9 +394,9 @@
 
     <header>
         <div class="logo" id="toggleToolbar">
-            <img src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/Logo_BRIN.png?raw=true" alt="BRIN Logo">
+            <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/main/public/brin_logo.png?raw=true" alt="BRIN Logo">
             <span>BRIN</span>
-            <span>Badan Riset Nasional</span>
+            <span>Badan Riset dan Inovasi Nasional</span>
         </div>
         <div class="header-right">
             <span>Parking Management System</span>
@@ -550,6 +423,8 @@
     </aside>
 
     <main class="main-content" id="mainContent">
+        <div id="error-message"></div>
+
         <div class="analysis-panel">
             <h1>Parking Analysis (Messages)</h1>
             <div class="stats">
@@ -562,9 +437,11 @@
                     <option value="oldest">Sort by Oldest</option>
                 </select>
             </div>
-            <div class="message-list" id="messageList"></div>
-            <div id="error-message"></div>
+            <div class="message-list" id="messageList">
+                <div style="text-align: center; padding: 20px; color: white;">Loading messages...</div>
+            </div>
         </div>
+
         <div class="tour-overlay" id="tourOverlay"></div>
         <div class="tour-tooltip" id="tourTooltip" style="display: none;">
             <h3 id="tooltipTitle"></h3>
@@ -576,9 +453,8 @@
         </div>
     </main>
 
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <script>
+        // === FIREBASE ===
         const firebaseConfig = {
             apiKey: "AIzaSyAef3SJwvVVTunr6CWki79aenfpXlgYc0s",
             authDomain: "digitaltwinparkingbrin.firebaseapp.com",
@@ -593,109 +469,9 @@
         const dbRef = firebase.database().ref("slot_messages_vr");
 
         let messagesData = [];
+        let hasSeenTour = false;
 
-        // Tour Steps Configuration
-        const tourSteps = [
-            {
-                element: 'header',
-                title: "Petunjuk Website",
-                text: "Klik logo BRIN untuk membuka toolbar samping yang berisi fitur seperti Profile, Log Out, Live Overview, Previous Analysis, Export Data, Helpdesk, dan Parking Analysis.",
-                position: 'bottom'
-            },
-            {
-                element: '.analysis-panel',
-                title: "Panel Analisis Parkir",
-                text: "Bagian ini menampilkan analisis pesan parkir, termasuk waktu saat ini dan daftar pesan dari slot parkir yang tersimpan di Firebase.",
-                position: 'right'
-            },
-            {
-                element: '.filter-container',
-                title: "Filter Pesan",
-                text: "Gunakan dropdown ini untuk mengurutkan pesan berdasarkan nomor slot, pesan terbaru, atau pesan tertua.",
-                position: 'top'
-            },
-            {
-                element: '.message-list',
-                title: "Daftar Pesan",
-                text: "Daftar ini menampilkan pesan dari slot parkir, termasuk nomor slot, tanggal, waktu, dan isi pesan.",
-                position: 'right'
-            }
-        ];
-
-        let currentTourStep = 0;
-
-        function startTour() {
-            document.getElementById('tourOverlay').style.display = 'block';
-            showTooltip(currentTourStep);
-        }
-
-        function showTooltip(step) {
-            const tooltip = document.getElementById('tourTooltip');
-            const title = document.getElementById('tooltipTitle');
-            const text = document.getElementById('tooltipText');
-            const nextBtn = document.getElementById('tourNextBtn');
-
-            const targetElement = document.querySelector(tourSteps[step].element);
-            if (!targetElement) {
-                console.error(`Element ${tourSteps[step].element} not found!`);
-                endTour();
-                return;
-            }
-
-            title.textContent = tourSteps[step].title;
-            text.textContent = tourSteps[step].text;
-            tooltip.style.display = 'block';
-            tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
-
-            const rect = targetElement.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
-            let left, top;
-
-            const isMobile = window.innerWidth <= 768;
-            if (isMobile) {
-                left = (window.innerWidth - tooltipRect.width) / 2;
-                top = rect.bottom + 10;
-                tooltip.className = 'tour-tooltip bottom';
-            } else {
-                switch (tourSteps[step].position) {
-                    case 'right':
-                        left = rect.right + 10;
-                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-                        break;
-                    case 'left':
-                        left = rect.left - tooltipRect.width - 10;
-                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-                        break;
-                    case 'top':
-                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                        top = rect.top - tooltipRect.height - 10;
-                        break;
-                    case 'bottom':
-                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                        top = rect.bottom + 10;
-                        break;
-                }
-            }
-
-            tooltip.style.left = `${left}px`;
-            tooltip.style.top = `${top}px`;
-
-            nextBtn.textContent = step === tourSteps.length - 1 ? 'Finish' : 'Next';
-        }
-
-        function endTour() {
-            document.getElementById('tourOverlay').style.display = 'none';
-            document.getElementById('tourTooltip').style.display = 'none';
-            currentTourStep = 0;
-        }
-
-        function showError(message) {
-            const errorElement = document.getElementById('error-message');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            setTimeout(() => { errorElement.style.display = 'none'; }, 5000);
-        }
-
+        // === CLOCK ===
         function updateClock() {
             const now = new Date();
             const options = { timeZone: 'Asia/Jakarta', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false };
@@ -704,36 +480,34 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // === MESSAGES RENDER ===
         function renderMessages() {
             const messageList = document.getElementById('messageList');
             messageList.innerHTML = "";
             const sortOption = document.getElementById('sortFilter').value;
 
             if (!messagesData.length) {
-                messageList.innerHTML = "<div style='font-size: 14px; color: white; text-align: center; padding: 20px;'>No messages available</div>";
+                messageList.innerHTML = "<div style='text-align: center; padding: 20px; color: white;'>No messages available</div>";
                 return;
             }
 
-            let sortedMessages = [...messagesData];
-            if (sortOption === 'slot') {
-                sortedMessages.sort((a, b) => a.slotKey.localeCompare(b.slotKey));
-            } else if (sortOption === 'newest') {
-                sortedMessages.sort((a, b) => new Date(b.timeKey) - new Date(a.timeKey));
-            } else if (sortOption === 'oldest') {
-                sortedMessages.sort((a, b) => new Date(a.timeKey) - new Date(b.timeKey));
-            }
+            let sorted = [...messagesData];
+            if (sortOption === 'slot') sorted.sort((a, b) => a.slotKey.localeCompare(b.slotKey));
+            else if (sortOption === 'newest') sorted.sort((a, b) => new Date(b.timeKey) - new Date(a.timeKey));
+            else if (sortOption === 'oldest') sorted.sort((a, b) => new Date(a.timeKey) - new Date(b.timeKey));
 
-            sortedMessages.forEach(({ slotKey, timeKey, msgValue }) => {
-                const div = document.createElement("div");
-                div.className = "message-item";
+            sorted.forEach(({ slotKey, timeKey, msgValue }) => {
                 const [dateStr, timeStr] = timeKey.split(" ");
                 const [year, month, day] = dateStr.split("-");
-                const tanggalDisplay = `${day}-${month}-${year}`;
-                const jamDisplay = timeStr ? timeStr.slice(0, 5) : 'N/A';
+                const tanggal = `${day}-${month}-${year}`;
+                const jam = timeStr?.slice(0, 5) || 'N/A';
+
+                const div = document.createElement("div");
+                div.className = "message-item";
                 div.innerHTML = `
                     <span><strong>${slotKey.replace('slot_', 'Slot ')}</strong></span>
-                    <span>${tanggalDisplay}</span>
-                    <span>${jamDisplay}</span>
+                    <span>${tanggal}</span>
+                    <span>${jam}</span>
                     <span>${msgValue}</span>
                 `;
                 messageList.appendChild(div);
@@ -754,16 +528,80 @@
             }
             renderMessages();
         }, (error) => {
-            showError(`Failed to fetch messages: ${error.message}`);
+            document.getElementById('error-message').textContent = `Failed to load: ${error.message}`;
+            document.getElementById('error-message').style.display = 'block';
+            setTimeout(() => document.getElementById('error-message').style.display = 'none', 5000);
         });
 
-        document.addEventListener('DOMContentLoaded', () => {
+        // === TOUR ===
+        const tourSteps = [
+            { element: 'header', title: "Petunjuk Website", text: "Klik logo BRIN untuk membuka toolbar samping...", position: 'bottom' },
+            { element: '.analysis-panel', title: "Panel Analisis", text: "Lihat semua pesan parkir dari sensor di sini.", position: 'right' },
+            { element: '.filter-container', title: "Urutkan Pesan", text: "Pilih urutan: berdasarkan slot, terbaru, atau terlama.", position: 'top' },
+            { element: '.message-list', title: "Daftar Pesan", text: "Setiap baris menampilkan slot, tanggal, jam, dan pesan.", position: 'right' }
+        ];
+        let currentTourStep = 0;
+
+        function startTour() {
+            if (hasSeenTour) return;
+            document.getElementById('tourOverlay').style.display = 'block';
+            showTooltip(currentTourStep);
+        }
+
+        function showTooltip(step) {
+            const tooltip = document.getElementById('tourTooltip');
+            const title = document.getElementById('tooltipTitle');
+            const text = document.getElementById('tooltipText');
+            const nextBtn = document.getElementById('tourNextBtn');
+            const target = document.querySelector(tourSteps[step].element);
+            if (!target) { endTour(); return; }
+
+            title.textContent = tourSteps[step].title;
+            text.textContent = tourSteps[step].text;
+            tooltip.style.display = 'block';
+            tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
+
+            const rect = target.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            let left, top;
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                left = (window.innerWidth - tooltipRect.width) / 2;
+                top = rect.bottom + 10;
+                tooltip.className = 'tour-tooltip bottom';
+            } else {
+                switch (tourSteps[step].position) {
+                    case 'right': left = rect.right + 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
+                    case 'left': left = rect.left - tooltipRect.width - 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
+                    case 'top': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.top - tooltipRect.height - 10; break;
+                    case 'bottom': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.bottom + 10; break;
+                }
+            }
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
+            nextBtn.textContent = step === tourSteps.length - 1 ? 'Finish' : 'Next';
+        }
+
+        function endTour() {
+            document.getElementById('tourOverlay').style.display = 'none';
+            document.getElementById('tourTooltip').style.display = 'none';
+            currentTourStep = 0;
+            hasSeenTour = true;
+            localStorage.setItem('tourCompleted_analysis', 'true');
+        }
+
+        // === DOM LOADED ===
+        document.addEventListener("DOMContentLoaded", () => {
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             if (!currentUser) {
                 alert('Silakan login terlebih dahulu!');
                 window.location.replace('/login.html');
                 return;
             }
+
+            hasSeenTour = localStorage.getItem('tourCompleted_analysis') === 'true';
+
             document.getElementById('userName').textContent = currentUser.username;
             document.getElementById('profilePic').src = currentUser.profilePic || '/assets/user.JPG';
 
@@ -778,43 +616,17 @@
             const mainContent = document.getElementById('mainContent');
             toggleToolbar.addEventListener('click', () => {
                 const isActive = toolbar.classList.toggle('active');
-                if (window.innerWidth > 768) {
-                    mainContent.classList.toggle('with-toolbar', isActive);
-                } else {
-                    mainContent.classList.toggle('with-toolbar', isActive);
-                }
+                mainContent.classList.toggle('with-toolbar', isActive);
             });
 
-            document.addEventListener('keydown', (event) => {
-                if ((event.ctrlKey || event.metaKey) && (event.key === 'z' || event.key === 'y' || event.key === 'Z' || event.key === 'Y')) {
-                    event.preventDefault();
-                    console.log('Fungsi undo/redo dinonaktifkan');
-                }
-            });
-
-            window.addEventListener('popstate', (event) => {
-                event.preventDefault();
-                if (!localStorage.getItem('currentUser')) {
-                    window.location.replace('/login.html');
-                } else {
-                    history.replaceState(null, null, window.location.href);
-                }
-            });
-
-            // Tour Event Listeners
             document.getElementById('tourNextBtn').addEventListener('click', () => {
                 currentTourStep++;
-                if (currentTourStep < tourSteps.length) {
-                    showTooltip(currentTourStep);
-                } else {
-                    endTour();
-                }
+                if (currentTourStep < tourSteps.length) showTooltip(currentTourStep);
+                else endTour();
             });
-
             document.getElementById('tourCloseBtn').addEventListener('click', endTour);
 
-            // Start the tour automatically on page load
-            startTour();
+            if (!hasSeenTour) setTimeout(startTour, 800);
         });
     </script>
 </body>
