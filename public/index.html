@@ -143,7 +143,7 @@
             border: 1px solid var(--accent-red);
             border-radius: 10px;
             padding: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 20px fenô;
         }
 
         .toolbar .user-info img {
@@ -656,6 +656,12 @@
             .slot { width: 30px; height: 20px; }
         }
     </style>
+    <link rel="manifest" href="manifest.json">
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+      }
+    </script>
 </head>
 <body>
     <video id="bg-video" autoplay muted loop>
@@ -804,6 +810,45 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <script>
+        // ========================================================
+        // TAMBAHAN: INHERITANCE & POLYMORPHISM (HANYA INI YANG BARU)
+        // ========================================================
+        class Vehicle {
+            constructor(size = 'none') {
+                this.size = size.toLowerCase();
+            }
+            getColor() { return 0x808080; }   // default
+            getScale() { return 1.0; }
+        }
+
+        class SmallCar extends Vehicle {
+            constructor() { super('small'); }
+            getColor() { return 0x0000FF; }
+            getScale() { return 0.7; }
+        }
+
+        class MediumCar extends Vehicle {
+            constructor() { super('medium'); }
+            getColor() { return 0xFFA500; }
+            getScale() { return 1.0; }
+        }
+
+        class BigCar extends Vehicle {
+            constructor() { super('big'); }
+            getColor() { return 0xFF0000; }
+            getScale() { return 1.3; }
+        }
+
+        function createVehicle(size) {
+            switch (size) {
+                case 'small':  return new SmallCar();
+                case 'medium': return new MediumCar();
+                case 'big':    return new BigCar();
+                default:       return new Vehicle('none');
+            }
+        }
+        // ========================================================
+
         // === AUTHENTICATION ===
         class User {
             constructor(username, email, password, idWorker, profilePic = '/assets/user.JPG') {
@@ -934,16 +979,13 @@
             const carGeometry = new THREE.BoxGeometry(2, 2, 4);
             allSlots.forEach((slotData, index) => {
                 const slotKey = `slot_${slotData.slotNumber}`;
-                let carColor = 0x808080;
-                let targetScale = 0;
-                if (slotStatuses[slotKey]) {
-                    switch (slotSizes[slotKey]?.toLowerCase()) {
-                        case 'small': carColor = 0x0000FF; targetScale = 0.7; break;
-                        case 'medium': carColor = 0xFFA500; targetScale = 1.0; break;
-                        case 'big': carColor = 0xFF0000; targetScale = 1.3; break;
-                        default: carColor = 0x808080; targetScale = 1.0; break;
-                    }
-                }
+                const size = slotSizes[slotKey] || 'none';
+
+                // POLYMORPHISM: gunakan kelas turunan
+                const vehicle = createVehicle(size);
+                const carColor = vehicle.getColor();
+                const targetScale = vehicle.getScale();
+
                 const carMaterial = new THREE.MeshLambertMaterial({
                     color: carColor,
                     transparent: true,
@@ -1129,20 +1171,11 @@
                     }
 
                     if (cars[i-1]) {
-                        let carColor = 0x808080;
-                        let targetScale = 1.0;
-                        if (newStatus) {
-                            switch (newSize) {
-                                case 'small': carColor = 0x0000FF; targetScale = 0.7; break;
-                                case 'medium': carColor = 0xFFA500; targetScale = 1.0; break;
-                                case 'big': carColor = 0xFF0000; targetScale = 1.3; break;
-                                default: carColor = 0x808080; targetScale = 1.0; break;
-                            }
-                        }
-                        cars[i-1].material.color.set(carColor);
+                        const vehicle = createVehicle(newSize);
+                        cars[i-1].material.color.set(vehicle.getColor());
                         cars[i-1].targetOpacity = newStatus ? 1 : 0;
-                        cars[i-1].targetScale = newStatus ? targetScale : 0;
-                        if (cars[i-1].currentOpacity !== (newStatus ? 1 : 0) || cars[i-1].currentScale !== (newStatus ? targetScale : 0)) {
+                        cars[i-1].targetScale = newStatus ? vehicle.getScale() : 0;
+                        if (cars[i-1].currentOpacity !== (newStatus ? 1 : 0) || cars[i-1].currentScale !== (newStatus ? vehicle.getScale() : 0)) {
                             cars[i-1].isAnimating = true;
                         }
                     }

@@ -1,0 +1,9 @@
+{
+    "name": "Digital Twin Operator",
+    "short_name": "DTO",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#1D3354",
+    "icons": []
+}
