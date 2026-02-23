@@ -1,324 +1,283 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>BRIN Login</title>
+    <title>BRIN Parking | Operator Login</title>
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
+
     <style>
+        /* Gunakan style login lengkap dari versi sebelumnya */
         :root {
             --primary-blue: #1D3354;
             --accent-red: #D64045;
-            --text-color: #FFFFFF;
-            --white-bg: #E9FFF9;
-            --slot-empty: #9ED8DB;
-            --slot-occupied: #467599;
+            --accent-red-hover: #c0392b;
+            --text-light: #f0f4f8;
+            --bg-overlay: rgba(29, 51, 84, 0.88);
+            --input-bg: rgba(255,255,255,0.12);
+            --error-bg: rgba(214,64,69,0.92);
+            --success-bg: rgba(46, 204, 113, 0.92);
         }
 
+        * { box-sizing: border-box; }
+
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            color: #333;
-            overflow-x: hidden;
-            font-size: 16px;
-            touch-action: manipulation;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #d3d3d3;
+            color: var(--text-light);
+            min-height: 100vh;
         }
 
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
+            background-position: center;
             z-index: -2;
-            animation: slideshow 20s infinite;
-            opacity: 0.4;
+            animation: slideshow 32s infinite ease-in-out;
+            opacity: 0.35;
         }
 
         @keyframes slideshow {
-            0% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.4; }
-            15% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.4; }
-            20% { opacity: 0; }
-
-            20.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
-            35% { opacity: 0.4; }
-            40% { opacity: 0; }
-
-            40.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
-            55% { opacity: 0.4; }
-            60% { opacity: 0; }
-
-            60.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
-            75% { opacity: 0.4; }
-            80% { opacity: 0; }
-
-            80.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
-            95% { opacity: 0.4; }
-            100% { opacity: 0; }
+            0%, 20%   { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); }
+            20%, 40%  { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); }
+            40%, 60%  { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); }
+            60%, 80%  { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); }
+            80%, 100% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); }
         }
 
         header {
-            background-color: var(--primary-blue);
+            background: var(--primary-blue);
             color: white;
-            padding: 15px 30px;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: fixed;
-            width: 100%;
-            top: 0;
+            top: 0; left: 0; right: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.25);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            cursor: pointer;
+            gap: 12px;
         }
 
-        .logo img { height: 50px; }
+        .logo img { height: 48px; width: auto; }
 
-        .logo span {
-            margin-left: 15px;
-            font-size: 20px;
-            font-weight: bold;
-        }
+        .logo-text { font-size: 1.35rem; font-weight: 700; }
 
-        .header-right span {
-            font-size: 18px;
-        }
+        .logo-subtext { font-size: 0.9rem; opacity: 0.9; }
 
-        .login-container {
+        .header-right { font-size: 1.1rem; font-weight: 500; }
+
+        .login-page {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding-top: 90px;
-            padding-bottom: 50px;
+            padding: 100px 20px 60px;
         }
 
-        .welcome-message {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
+        .welcome {
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            font-weight: 700;
             text-align: center;
-            margin-bottom: 20px;
-            width: 300px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 1.8rem;
+            color: white;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.5);
         }
 
-        .login-box {
-            background-color: rgba(29,51,84,0.9);
-            padding: 30px;
-            border-radius: 12px;
-            width: 300px;
+        .login-card {
+            background: var(--bg-overlay);
+            backdrop-filter: blur(6px);
+            padding: 2.2rem 1.8rem;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 380px;
+            border: 1.5px solid var(--accent-red);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .login-card h2 {
+            margin: 0 0 1.8rem;
             text-align: center;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-            border: 2px solid var(--accent-red);
-        }
-
-        .login-box h2 {
-            margin: 0 0 20px;
             color: white;
-            font-size: 22px;
-            font-weight: bold;
+            font-size: 1.5rem;
         }
 
-        .login-box input {
+        .form-group {
+            margin-bottom: 1.4rem;
+        }
+
+        input {
             width: 100%;
-            padding: 12px;
-            margin: 12px 0;
-            border: 1px solid var(--accent-red);
-            border-radius: 6px;
-            background-color: rgba(255,255,255,0.2);
+            padding: 14px 16px;
+            border: 1.5px solid var(--accent-red);
+            border-radius: 8px;
+            background: var(--input-bg);
             color: white;
-            font-size: 14px;
+            font-size: 1rem;
         }
 
-        .login-box button {
+        input::placeholder { color: rgba(255,255,255,0.6); }
+
+        input:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(215,64,69,0.25);
+        }
+
+        button {
             width: 100%;
-            padding: 12px;
-            background-color: var(--accent-red);
-            border-radius: 6px;
+            padding: 14px;
+            background: var(--accent-red);
             color: white;
-            font-weight: bold;
-            cursor: pointer;
             border: none;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
         }
 
-        #error-message {
+        button:hover { background: var(--accent-red-hover); }
+
+        button:disabled { background: #777; cursor: not-allowed; }
+
+        .links {
+            margin-top: 1.4rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .links a { color: #5dade2; text-decoration: none; }
+
+        .links a:hover { color: #85c1e9; text-decoration: underline; }
+
+        #message {
             position: fixed;
-            top: 90px;
-            right: 30px;
-            background: rgba(214,64,69,0.9);
+            top: 80px;
+            right: 20px;
+            left: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 14px 20px;
+            border-radius: 8px;
             color: white;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            display: none;
+            font-weight: 500;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.4s;
         }
 
+        #message.show { opacity: 1; }
     </style>
 </head>
 <body>
+
 <header>
     <div class="logo">
-        <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/46a20c237c763bc2ccd436c332785427771eea05/public/brin_logo.png?raw=true">
-        <span>BRIN</span>
-        <span>Badan Riset dan Inovasi Nasional</span>
+        <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/46a20c237c763bc2ccd436c332785427771eea05/public/brin_logo.png?raw=true" alt="BRIN Logo">
+        <div>
+            <div class="logo-text">BRIN</div>
+            <div class="logo-subtext">Badan Riset dan Inovasi Nasional</div>
+        </div>
     </div>
-
-    <div class="header-right">
-        <span>Parking Management System</span>
-    </div>
+    <div class="header-right">Parking Management System – Operator</div>
 </header>
 
-<div class="login-container">
-    <div class="welcome-message">Welcome to BRIN Parking (Operator)</div>
+<div class="login-page">
+    <div class="welcome">Welcome to BRIN Parking (Operator)</div>
 
-    <div class="login-box">
+    <div class="login-card">
         <h2>LOGIN</h2>
         <form id="loginForm">
-            <input type="email" id="loginEmail" placeholder="Email" required>
-            <input type="password" id="loginPassword" placeholder="Kata Sandi" required>
-            <a href="/forgotpassword.html">Forgot Password? Click Here</a>
-            <button type="submit">Login</button>
-            <a href="/register.html">Don't Have Account? Register</a>
+            <div class="form-group">
+                <input type="text" id="loginUsername" placeholder="Username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <input type="password" id="loginPassword" placeholder="Kata Sandi" required autocomplete="current-password">
+            </div>
+            <button type="submit" id="btnLogin">Masuk</button>
         </form>
-    </div>
 
-    <div id="error-message"></div>
+        <div class="links">
+            <a href="/register.html">Belum punya akun? Daftar</a>
+        </div>
+    </div>
 </div>
 
+<div id="message"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-/* ===============================
-   OOP EXCEPTION HANDLING
-================================ */
-class AuthException extends Error {
-    constructor(message, code) {
-        super(message);
-        this.name = "AuthException";
-        this.code = code;
-    }
-}
+    const { createClient } = window.supabase;
 
-class UserNotFoundException extends AuthException {
-    constructor() { super("Email tidak terdaftar!", "USER_NOT_FOUND"); }
-}
+    const supabase = createClient(
+        "https://uqnfychfsloouxjthokp.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDQzNTMsImV4cCI6MjA4NzAyMDM1M30.2xLagrKBdnFX5X7TxsTUE-5ZRBZ2SO7dewA16R078Zc"
+    );
 
-class WrongPasswordException extends AuthException {
-    constructor() { super("Kata sandi salah!", "WRONG_PASSWORD"); }
-}
+    const messageEl = document.getElementById("message");
+    const btnLogin = document.getElementById("btnLogin");
 
-class UserAlreadyExistsException extends AuthException {
-    constructor() { super("Pengguna sudah terdaftar!", "USER_EXISTS"); }
-}
-
-/* ===============================
-   USER CLASS
-================================ */
-class User {
-    constructor(username, email, password, idWorker, profilePic = "/assets/user.JPG") {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.idWorker = idWorker;
-        this.profilePic = profilePic;
-    }
-}
-
-/* ===============================
-   AUTH SYSTEM (OOP + EXCEPTIONS)
-================================ */
-class AuthSystem {
-    constructor() {
-        this.users = JSON.parse(localStorage.getItem('users')) || [];
+    function showMessage(text, isSuccess = false) {
+        messageEl.textContent = text;
+        messageEl.style.background = isSuccess ? "var(--success-bg)" : "var(--error-bg)";
+        messageEl.classList.add("show");
+        setTimeout(() => messageEl.classList.remove("show"), 4500);
     }
 
-    register(username, email, password, idWorker, profilePic) {
-        const exist = this.users.some(u => u.email === email);
-        if (exist) throw new UserAlreadyExistsException();
-
-        const newUser = new User(username, email, password, idWorker, profilePic);
-        this.users.push(newUser);
-        localStorage.setItem('users', JSON.stringify(this.users));
-        return newUser;
-    }
-
-    login(email, password) {
-        const user = this.users.find(u => u.email === email);
-        if (!user) throw new UserNotFoundException();
-
-        if (user.password !== password) throw new WrongPasswordException();
-
-        return user;
-    }
-}
-
-const auth = new AuthSystem();
-
-/* ===============================
-   ERROR DISPLAY FUNCTION
-================================ */
-function showError(message, isSuccess = false) {
-    const errorEl = document.getElementById('error-message');
-    errorEl.textContent = message;
-
-    errorEl.style.background = isSuccess
-        ? "rgba(0,200,0,0.9)"
-        : "rgba(214,64,69,0.9)";
-
-    errorEl.style.display = 'block';
-
-    setTimeout(() => { errorEl.style.display = 'none'; }, 4000);
-}
-
-/* ===============================
-   LOGIN EVENTS
-================================ */
-document.addEventListener("DOMContentLoaded", () => {
-
-    const loginForm = document.getElementById("loginForm");
-
-    loginForm.addEventListener("submit", (e) => {
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const email = document.getElementById("loginEmail").value;
+        const username = document.getElementById("loginUsername").value.trim();
         const password = document.getElementById("loginPassword").value;
 
+        if (!username || !password) {
+            showMessage("Username dan kata sandi harus diisi");
+            return;
+        }
+
+        btnLogin.disabled = true;
+        btnLogin.textContent = "Memproses...";
+
         try {
-            const user = auth.login(email, password);
+            const { data: profile, error: profileErr } = await supabase
+                .from("profiles")
+                .select("email")
+                .eq("username", username)
+                .maybeSingle();
 
-            showError("Login berhasil!", true);
+            if (profileErr) throw profileErr;
+            if (!profile?.email) throw new Error("Username tidak ditemukan");
 
-            localStorage.setItem("currentUser", JSON.stringify(user));
+            const { error: authErr } = await supabase.auth.signInWithPassword({
+                email: profile.email,
+                password
+            });
 
-            setTimeout(() => {
-                window.location.replace("/index.html");
-            }, 1500);
+            if (authErr) throw authErr;
 
+            showMessage("Login berhasil! Mengarahkan ke dashboard...", true);
+            setTimeout(() => window.location.href = "/index.html", 1500);
         } catch (err) {
-            if (err instanceof AuthException) {
-                showError(`[${err.code}] ${err.message}`);
-            } else {
-                showError("Terjadi kesalahan tidak dikenal!");
-                console.error(err);
-            }
+            console.error("Login error:", err);
+            showMessage(err.message || "Gagal login. Periksa username/kata sandi.");
+        } finally {
+            btnLogin.disabled = false;
+            btnLogin.textContent = "Masuk";
         }
     });
-});
 </script>
-
 </body>
 </html>

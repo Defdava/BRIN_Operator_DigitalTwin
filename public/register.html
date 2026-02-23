@@ -1,610 +1,310 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>BRIN Register</title>
+    <title>BRIN Parking | Daftar Operator</title>
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
+
     <style>
         :root {
             --primary-blue: #1D3354;
             --accent-red: #D64045;
-            --text-color: #FFFFFF;
-            --white-bg: #E9FFF9;
-            --slot-empty: #9ED8DB;
-            --slot-occupied: #467599;
+            --accent-red-hover: #c0392b;
+            --text-light: #f0f4f8;
+            --bg-overlay: rgba(29, 51, 84, 0.88);
+            --input-bg: rgba(255,255,255,0.12);
+            --error-bg: rgba(214,64,69,0.92);
+            --success-bg: rgba(46, 204, 113, 0.92);
         }
+
+        * { box-sizing: border-box; }
 
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            color: #333;
-            overflow-x: hidden;
-            font-size: 16px;
-            touch-action: manipulation;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #d3d3d3;
+            color: var(--text-light);
+            min-height: 100vh;
         }
 
-        /* === ANIMASI FOTO LATAR BELAKANG (100% TIDAK DIUBAH) === */
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
+            background-position: center;
             z-index: -2;
-            animation: slideshow 20s infinite;
-            opacity: 0.4;
+            animation: slideshow 32s infinite ease-in-out;
+            opacity: 0.35;
         }
 
         @keyframes slideshow {
-            0% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.4; }
-            15% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.4; }
-            20% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0; }
-            20.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
-            35% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0.4; }
-            40% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
-            40.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
-            55% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0.4; }
-            60% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
-            60.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
-            75% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0.4; }
-            80% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
-            80.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
-            95% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0.4; }
-            100% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
+            0%, 20%   { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); }
+            20%, 40%  { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); }
+            40%, 60%  { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); }
+            60%, 80%  { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); }
+            80%, 100% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); }
         }
 
         header {
-            background-color: var(--primary-blue);
+            background: var(--primary-blue);
             color: white;
-            padding: 15px 30px;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: fixed;
-            width: 100%;
-            top: 0;
+            top: 0; left: 0; right: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.25);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            cursor: pointer;
+            gap: 12px;
         }
 
-        .logo img {
-            height: 50px;
-        }
+        .logo img { height: 48px; width: auto; }
 
-        .logo span {
-            margin-left: 15px;
-            font-size: 20px;
-            font-weight: bold;
-        }
+        .logo-text { font-size: 1.35rem; font-weight: 700; }
 
-        .header-right {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-            margin-right: 30px;
-        }
+        .logo-subtext { font-size: 0.9rem; opacity: 0.9; }
 
-        .header-right span {
-            font-size: 18px;
-        }
+        .header-right { font-size: 1.1rem; font-weight: 500; }
 
-        .login-container {
+        .register-page {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding-top: 90px;
-            padding-bottom: 50px;
+            padding: 100px 20px 60px;
         }
 
-        .welcome-message {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
+        .welcome {
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            font-weight: 700;
             text-align: center;
-            margin-bottom: 20px;
-            width: 300px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1.8rem;
+            color: white;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.5);
         }
 
-        .login-box {
-            background-color: rgba(29, 51, 84, 0.9);
-            padding: 30px;
-            border-radius: 12px;
-            width: 300px;
+        .register-card {
+            background: var(--bg-overlay);
+            backdrop-filter: blur(6px);
+            padding: 2.2rem 1.8rem;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 380px;
+            border: 1.5px solid var(--accent-red);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .register-card h2 {
+            margin: 0 0 1.8rem;
             text-align: center;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            border: 2px solid var(--accent-red);
-        }
-
-        .login-box h2 {
-            margin: 0 0 20px;
             color: white;
-            font-size: 22px;
-            font-weight: bold;
+            font-size: 1.5rem;
         }
 
-        .login-box input {
+        .form-group {
+            margin-bottom: 1.4rem;
+        }
+
+        input {
             width: 100%;
-            padding: 12px;
-            margin: 12px 0;
-            border: 1px solid var(--accent-red);
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 14px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .login-box input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .login-box input:focus {
-            outline: none;
-            border-color: white;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-        }
-
-        .login-box button {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--accent-red);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            margin: 10px 0;
-            transition: background-color 0.3s;
-        }
-
-        .login-box button:hover {
-            background-color: #b8323a;
-        }
-
-        .login-box a {
-            display: block;
-            margin: 10px 0;
-            color: white;
-            text-decoration: none;
-            font-size: 13px;
-            opacity: 0.9;
-            transition: opacity 0.3s;
-        }
-
-        .login-box a:hover {
-            opacity: 1;
-            text-decoration: underline;
-        }
-
-        #error-message {
-            position: fixed;
-            top: 90px;
-            right: 30px;
-            background: rgba(214, 64, 69, 0.9);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            z-index: 1001;
-            display: none;
-            max-width: 300px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .tour-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            pointer-events: none;
-        }
-
-        .tour-tooltip {
-            position: absolute;
-            background-color: var(--primary-blue);
-            border: 2px solid var(--accent-red);
+            padding: 14px 16px;
+            border: 1.5px solid var(--accent-red);
             border-radius: 8px;
-            padding: 15px;
-            max-width: 300px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            pointer-events: auto;
-            animation: fadeIn 0.3s ease-in-out;
-            z-index: 2001;
-        }
-
-        .tour-tooltip h3 {
+            background: var(--input-bg);
             color: white;
-            font-size: 16px;
-            margin-bottom: 10px;
-            font-weight: bold;
+            font-size: 1rem;
         }
 
-        .tour-tooltip p {
-            font-size: 14px;
+        input::placeholder { color: rgba(255,255,255,0.6); }
+
+        input:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(215,64,69,0.25);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-red);
             color: white;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        .tour-tooltip .tour-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .tour-tooltip button {
-            padding: 8px 12px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
         }
 
-        .tour-tooltip .next-btn {
-            background-color: var(--accent-red);
+        button:hover { background: var(--accent-red-hover); }
+
+        button:disabled { background: #777; cursor: not-allowed; }
+
+        .links {
+            margin-top: 1.4rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .links a { color: #5dade2; text-decoration: none; }
+
+        .links a:hover { color: #85c1e9; text-decoration: underline; }
+
+        #message {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            left: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 14px 20px;
+            border-radius: 8px;
             color: white;
+            font-weight: 500;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.4s;
         }
 
-        .tour-tooltip .next-btn:hover {
-            background-color: #b8323a;
-        }
-
-        .tour-tooltip .close-btn {
-            background-color: #b8323a;
-            color: white;
-        }
-
-        .tour-tooltip .close-btn:hover {
-            background-color: #c82333;
-        }
-
-        .tour-tooltip:after {
-            content: "";
-            position: absolute;
-            border: 10px solid transparent;
-            pointer-events: none;
-        }
-
-        .tour-tooltip.right:after {
-            border-right-color: var(--accent-red);
-            left: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .tour-tooltip.left:after {
-            border-left-color: var(--accent-red);
-            right: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .tour-tooltip.top:after {
-            border-top-color: var(--accent-red);
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .tour-tooltip.bottom:after {
-            border-bottom-color: var(--accent-red);
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .tour-tooltip.center:after {
-            display: none;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        @media (max-width: 768px) {
-            body { font-size: 9px; }
-            header { padding: 4px 6px; }
-            .logo img { height: 25px; }
-            .logo span { font-size: 10px; margin-left: 4px; }
-            .header-right span { font-size: 9px; }
-            .login-container { padding-top: 49px; padding-bottom: 20px; }
-            .welcome-message { font-size: 14px; width: 90%; max-width: 300px; }
-            .login-box { width: 90%; max-width: 300px; padding: 15px; }
-            .login-box h2 { font-size: 14px; }
-            .login-box input { padding: 8px; font-size: 10px; margin: 8px 0; }
-            .login-box button { padding: 8px; font-size: 10px; }
-            .login-box a { font-size: 9px; }
-            #error-message { top: 49px; right: 6px; padding: 6px 10px; font-size: 9px; max-width: 70%; }
-            .tour-tooltip { max-width: 70%; padding: 8px; }
-            .tour-tooltip h3 { font-size: 10px; }
-            .tour-tooltip p { font-size: 8px; }
-            .tour-tooltip button { padding: 4px 6px; font-size: 8px; }
-        }
-
-        @media (max-width: 480px) {
-            .welcome-message { font-size: 12px; }
-            .login-box { padding: 12px; }
-        }
+        #message.show { opacity: 1; }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/46a20c237c763bc2ccd436c332785427771eea05/public/brin_logo.png?raw=true" alt="BRIN Logo">
-            <span>BRIN</span>
-            <span>Badan Riset dan Inovasi Nasional</span>
-        </div>
-        <div class="header-right">
-            <span>Parking Management System</span>
-        </div>
-    </header>
 
-    <div class="login-container">
-        <div class="welcome-message">Welcome to BRIN Parking</div>
-        <div class="login-box">
-            <h2>Register</h2>
-            <form id="registerForm">
-                <input type="text" id="regUsername" placeholder="Nama Pengguna" required>
-                <input type="email" id="regEmail" placeholder="Email" required>
-                <input type="text" id="regIdWorker" placeholder="ID Pegawai" required>
-                <input type="password" id="regPassword" placeholder="Kata Sandi" required>
-                <button type="submit">Regist</button>
-                <a href="/login.html">Have Account? Click Here</a>
-            </form>
-        </div>
-        <div id="error-message"></div>
-        <div class="tour-overlay" id="tourOverlay"></div>
-        <div class="tour-tooltip" id="tourTooltip" style="display: none;">
-            <h3 id="tooltipTitle"></h3>
-            <p id="tooltipText"></p>
-            <div class="tour-buttons">
-                <button class="next-btn" id="tourNextBtn">Next</button>
-                <button class="close-btn" id="tourCloseBtn">Close</button>
-            </div>
+<header>
+    <div class="logo">
+        <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/46a20c237c763bc2ccd436c332785427771eea05/public/brin_logo.png?raw=true" alt="BRIN Logo">
+        <div>
+            <div class="logo-text">BRIN</div>
+            <div class="logo-subtext">Badan Riset dan Inovasi Nasional</div>
         </div>
     </div>
+    <div class="header-right">Parking Management System – Operator</div>
+</header>
 
-    <script>
-        class User {
-            constructor(username, email, password, idWorker, profilePic = '/assets/user.JPG') {
-                this.username = username;
-                this.email = email;
-                this.password = password;
-                this.idWorker = idWorker;
-                this.profilePic = profilePic;
-            }
+<div class="register-page">
+    <div class="welcome">Daftar Akun Operator BRIN Parking</div>
+
+    <div class="register-card">
+        <h2>REGISTRASI</h2>
+        <form id="registerForm">
+            <div class="form-group">
+                <input type="text" id="regUsername" placeholder="Nama Pengguna" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <input type="email" id="regEmail" placeholder="Email" required autocomplete="email">
+            </div>
+            <div class="form-group">
+                <input type="text" id="regIdWorker" placeholder="ID Pegawai" required autocomplete="off">
+            </div>
+            <div class="form-group">
+                <input type="password" id="regPassword" placeholder="Kata Sandi" required autocomplete="new-password">
+            </div>
+            <button type="submit" id="btnRegister">Daftar</button>
+        </form>
+
+        <div class="links">
+            <a href="/login.html">Sudah punya akun? Masuk</a>
+        </div>
+    </div>
+</div>
+
+<div id="message"></div>
+
+<!-- CDN Supabase hanya SATU KALI -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // Deklarasi supabase hanya SATU KALI di sini
+    const { createClient } = window.supabase;
+
+    const supabase = createClient(
+        "https://uqnfychfsloouxjthokp.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDQzNTMsImV4cCI6MjA4NzAyMDM1M30.2xLagrKBdnFX5X7TxsTUE-5ZRBZ2SO7dewA16R078Zc"
+    );
+
+    const messageEl = document.getElementById("message");
+    const btnRegister = document.getElementById("btnRegister");
+
+    function showMessage(text, isSuccess = false) {
+        messageEl.textContent = text;
+        messageEl.style.background = isSuccess ? "var(--success-bg)" : "var(--error-bg)";
+        messageEl.classList.add("show");
+        setTimeout(() => messageEl.classList.remove("show"), 6000);
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const username = document.getElementById("regUsername").value.trim();
+        const email    = document.getElementById("regEmail").value.trim();
+        const idWorker = document.getElementById("regIdWorker").value.trim();
+        const password = document.getElementById("regPassword").value;
+
+        if (!username || !email || !idWorker || !password) {
+            showMessage("Semua kolom wajib diisi");
+            return;
         }
 
-        class AuthSystem {
-            constructor() {
-                this.users = JSON.parse(localStorage.getItem('users')) || [];
-            }
-
-            register(username, email, password, idWorker, profilePic) {
-                const userExists = this.users.some(user => user.email === email);
-                if (userExists) {
-                    throw new Error('Pengguna sudah terdaftar!');
-                }
-                const user = new User(username, email, password, idWorker, profilePic);
-                this.users.push(user);
-                localStorage.setItem('users', JSON.stringify(this.users));
-                return user;
-            }
-
-            login(email, password) {
-                const user = this.users.find(u => u.email === email && u.password === password);
-                if (user) {
-                    return user;
-                }
-                throw new Error('Email atau kata sandi salah!');
-            }
+        if (password.length < 6) {
+            showMessage("Kata sandi minimal 6 karakter");
+            return;
         }
 
-        const auth = new AuthSystem();
+        btnRegister.disabled = true;
+        btnRegister.textContent = "Memproses...";
 
-        // Tour Steps Configuration
-        const tourSteps = [
-            {
-                element: 'header',
-                title: "Petunjuk Halaman Registrasi",
-                text: "Ini adalah header halaman registrasi, menampilkan logo BRIN dan nama sistem.",
-                position: 'bottom'
-            },
-            {
-                element: '.welcome-message',
-                title: "Pesan Selamat Datang",
-                text: "Pesan ini menyambut Anda di Sistem Manajemen Parkir BRIN.",
-                position: 'top'
-            },
-            {
-                element: '.login-box',
-                title: "Formulir Registrasi",
-                text: "Masukkan nama pengguna, email, ID pegawai, dan kata sandi untuk mendaftar. Gunakan tautan di bawah untuk kembali ke halaman login.",
-                position: 'center'
-            }
-        ];
-
-        let currentTourStep = 0;
-
-        function startTour() {
-            document.getElementById('tourOverlay').style.display = 'block';
-            showTooltip(currentTourStep);
-        }
-
-        function showTooltip(step) {
-            const tooltip = document.getElementById('tourTooltip');
-            const title = document.getElementById('tooltipTitle');
-            const text = document.getElementById('tooltipText');
-            const nextBtn = document.getElementById('tourNextBtn');
-
-            const targetElement = document.querySelector(tourSteps[step].element);
-            if (!targetElement) {
-                console.error(`Element ${tourSteps[step].element} not found!`);
-                endTour();
-                return;
-            }
-
-            title.textContent = tourSteps[step].title;
-            text.textContent = tourSteps[step].text;
-            tooltip.style.display = 'block';
-            tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
-
-            const rect = targetElement.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
-            const isMobile = window.innerWidth <= 768;
-            let left, top;
-
-            if (isMobile) {
-                left = (window.innerWidth - tooltipRect.width) / 2;
-                top = rect.bottom + 10;
-                tooltip.className = 'tour-tooltip bottom';
-            } else {
-                switch (tourSteps[step].position) {
-                    case 'center':
-                        left = (window.innerWidth - tooltipRect.width) / 2;
-                        top = (window.innerHeight - tooltipRect.height) / 2;
-                        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
-                        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
-                        break;
-                    case 'right':
-                        left = rect.right + 10;
-                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-                        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
-                        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
-                        break;
-                    case 'left':
-                        left = rect.left - tooltipRect.width - 10;
-                        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
-                        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
-                        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
-                        break;
-                    case 'top':
-                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                        top = rect.top - tooltipRect.height - 10;
-                        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
-                        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
-                        break;
-                    case 'bottom':
-                        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
-                        top = rect.bottom + 10;
-                        left = Math.max(20, Math.min(left, window.innerWidth - tooltipRect.width - 20));
-                        top = Math.max(20, Math.min(top, window.innerHeight - tooltipRect.height - 20));
-                        break;
-                }
-            }
-
-            tooltip.style.left = `${left}px`;
-            tooltip.style.top = `${top}px`;
-
-            nextBtn.textContent = step === tourSteps.length - 1 ? 'Selesai' : 'Lanjut';
-        }
-
-        function endTour() {
-            document.getElementById('tourOverlay').style.display = 'none';
-            document.getElementById('tourTooltip').style.display = 'none';
-            currentTourStep = 0;
-        }
-
-        function showError(message, isSuccess = false) {
-            const errorElement = document.getElementById('error-message');
-            errorElement.textContent = message;
-            errorElement.style.background = isSuccess ? 'rgba(0, 200, 0, 0.9)' : 'rgba(214, 64, 69, 0.9)';
-            errorElement.style.display = 'block';
-            setTimeout(() => { errorElement.style.display = 'none'; }, 5000);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.getItem('currentUser')) {
-                window.location.replace('/index.html');
-                return;
-            }
-
-            const registerForm = document.getElementById('registerForm');
-            registerForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const username = document.getElementById('regUsername').value;
-                const email = document.getElementById('regEmail').value;
-                const idWorker = document.getElementById('regIdWorker').value;
-                const password = document.getElementById('regPassword').value;
-
-                if (!username || !email || !idWorker || !password) {
-                    showError('Harap isi semua kolom!');
-                    return;
-                }
-
-                try {
-                    auth.register(username, email, password, idWorker);
-                    showError('Registrasi berhasil! Silakan login.', true);
-                    setTimeout(() => {
-                        window.location.href = '/login.html';
-                    }, 2000);
-                } catch (error) {
-                    showError(error.message);
+        try {
+            // 1. Daftar user ke Supabase Auth
+            const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        username,
+                        id_pegawai: idWorker
+                    }
                 }
             });
 
-            document.addEventListener('keydown', (event) => {
-                if ((event.ctrlKey || event.metaKey) && (event.key === 'z' || event.key === 'y' || event.key === 'Z' || event.key === 'Y')) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    console.log('Fungsi undo/redo dinonaktifkan');
-                }
+            if (signUpError) throw signUpError;
+
+            if (!signUpData.user) throw new Error("User tidak tercipta");
+
+            // 2. Auto-login langsung setelah signup berhasil
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+                email,
+                password
             });
 
-            window.addEventListener('popstate', (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                history.replaceState(null, null, window.location.href);
-            });
+            if (signInError) throw signInError;
 
-            document.getElementById('tourNextBtn').addEventListener('click', () => {
-                currentTourStep++;
-                if (currentTourStep < tourSteps.length) {
-                    showTooltip(currentTourStep);
-                } else {
-                    endTour();
-                }
-            });
+            showMessage("Registrasi berhasil! Sedang masuk ke dashboard...", true);
 
-            document.getElementById('tourCloseBtn').addEventListener('click', endTour);
+            // 3. Redirect ke index.html setelah 1.5 detik
+            setTimeout(() => {
+                window.location.href = "/index.html";
+            }, 1500);
 
-            if (localStorage.getItem('tourCompleted') !== 'true') {
-                setTimeout(() => {
-                    startTour();
-                    localStorage.setItem('tourCompleted', 'true');
-                }, 800);
-            }
-        });
-    </script>
+        } catch (err) {
+            console.error("Register error detail:", err);
+            showMessage("Gagal registrasi: " + (err.message || "Unknown error. Cek console."));
+        } finally {
+            btnRegister.disabled = false;
+            btnRegister.textContent = "Daftar";
+        }
+    });
+</script>
 </body>
 </html>
