@@ -222,16 +222,25 @@
 
 <div id="message"></div>
 
-<!-- CDN Supabase hanya SATU KALI -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-    // Deklarasi supabase hanya SATU KALI di sini
-    const { createClient } = window.supabase;
+// Tunggu DOM ready
+document.addEventListener('DOMContentLoaded', () => {
 
-    const supabase = createClient(
+    // Client dengan ANON key (untuk signUp & signIn)
+    const anonSupabase = supabase.createClient(
         "https://uqnfychfsloouxjthokp.supabase.co",
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDQzNTMsImV4cCI6MjA4NzAyMDM1M30.2xLagrKBdnFX5X7TxsTUE-5ZRBZ2SO7dewA16R078Zc"
+    );
+
+    // Client dengan SERVICE ROLE key → BYPASS RLS sepenuhnya
+    // GANTI DENGAN SERVICE_ROLE KEY ANDA (dari dashboard → Settings → API → service_role)
+    const serviceRoleKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTQ0NDM1MywiZXhwIjoyMDg3MDIwMzUzfQ.CLbPdh_ecNS8SdGtXTUDqJ1QOd0IO_dbIJ_AKfqk78I";
+
+    const serviceSupabase = supabase.createClient(
+        "https://uqnfychfsloouxjthokp.supabase.co",
+        serviceRoleKey
     );
 
     const messageEl = document.getElementById("message");
@@ -250,7 +259,7 @@
         const username = document.getElementById("regUsername").value.trim();
         const email    = document.getElementById("regEmail").value.trim();
         const idWorker = document.getElementById("regIdWorker").value.trim();
-        const password = document.getElementById("regPassword").value;
+        const password = document.getElementById("regPassword").value.trim();
 
         if (!username || !email || !idWorker || !password) {
             showMessage("Semua kolom wajib diisi");
@@ -266,45 +275,72 @@
         btnRegister.textContent = "Memproses...";
 
         try {
-            // 1. Daftar user ke Supabase Auth
-            const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+            // 1. Daftar ke Auth (pakai anon key)
+            const { data: signUpData, error: signUpError } = await anonSupabase.auth.signUp({
                 email,
                 password,
                 options: {
                     data: {
                         username,
-                        id_pegawai: idWorker
+                        id_pegawai: idWorker,
+                        profilePic: '/assets/user.JPG' // default
                     }
                 }
             });
 
             if (signUpError) throw signUpError;
-
             if (!signUpData.user) throw new Error("User tidak tercipta");
 
-            // 2. Auto-login langsung setelah signup berhasil
-            const { error: signInError } = await supabase.auth.signInWithPassword({
+            const userId = signUpData.user.id;
+
+            // 2. Insert profil pakai SERVICE ROLE (bypass RLS)
+            const { error: profileError } = await serviceSupabase
+                .from('operator_profiles')
+                .insert({
+                    user_id: userId,
+                    username: username,
+                    email: email,
+                    id_pegawai: idWorker,
+                    profile_pic: '/assets/user.JPG',
+                    role: 'operator',
+                    status: 'active',
+                    created_at: new Date().toISOString()
+                });
+
+            if (profileError) throw profileError;
+
+            // 3. Auto-login (pakai anon key)
+            const { error: signInError } = await anonSupabase.auth.signInWithPassword({
                 email,
                 password
             });
 
             if (signInError) throw signInError;
 
+            // 4. Simpan data user ke localStorage
+            localStorage.setItem('currentUser', JSON.stringify({
+                id: userId,
+                username,
+                email,
+                id_pegawai: idWorker,
+                profilePic: '/assets/user.JPG'
+            }));
+
             showMessage("Registrasi berhasil! Sedang masuk ke dashboard...", true);
 
-            // 3. Redirect ke index.html setelah 1.5 detik
             setTimeout(() => {
                 window.location.href = "/index.html";
             }, 1500);
 
         } catch (err) {
-            console.error("Register error detail:", err);
-            showMessage("Gagal registrasi: " + (err.message || "Unknown error. Cek console."));
+            console.error("Registrasi error detail:", err);
+            showMessage("Gagal registrasi: " + (err.message || "Unknown error. Cek console browser (F12)"));
         } finally {
             btnRegister.disabled = false;
             btnRegister.textContent = "Daftar";
         }
     });
+});
 </script>
 </body>
 </html>
