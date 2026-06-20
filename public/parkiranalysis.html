@@ -7,46 +7,104 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>BRIN Parking Analysis</title>
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-blue: #1D3354;
-            --accent-red: #D64045;
-            --text-color: #FFFFFF;
-            --white-bg: #E9FFF9;
-            --slot-empty: #9ED8DB;
-            --slot-occupied: #467599;
-            --car-small: #0000FF;
-            --car-medium: #FFA500;
-            --car-big: #FF0000;
+            --primary-blue: #0B192C;
+            --secondary-blue: #1E3E62;
+            --accent-red: #E63946;
+            --accent-red-hover: #D62828;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --bg-dark: #070F19;
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(15, 32, 54, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: rgba(0, 0, 0, 0.35);
+            --glass-blur: blur(16px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-dark);
             overflow-x: hidden;
             font-size: 16px;
             touch-action: manipulation;
-            background-color: var(--white-bg);
+            min-height: 100vh;
+            line-height: 1.5;
         }
 
-        video#bg-video {
+        /* Ambient Glow Highlights */
+        .ambient-glow {
+            position: fixed;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(230, 57, 70, 0.07) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 15%;
+            right: -150px;
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(50px);
+        }
+
+        /* Animasi Background Slideshow */
+        body::before {
+            content: "";
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
             z-index: -2;
-            opacity: 0.2;
+            animation: slideshow 20s infinite;
+            opacity: 0.25;
+            filter: contrast(105%) brightness(85%);
         }
 
+        @keyframes slideshow {
+            0% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.25; }
+            15% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.25; }
+            20% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0; }
+            20.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
+            35% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0.25; }
+            40% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
+            40.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
+            55% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0.25; }
+            60% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
+            60.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
+            75% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0.25; }
+            80% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
+            80.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
+            95% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0.25; }
+            100% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
+        }
+
+        /* Sticky Glassmorphic Header */
         header {
-            background-color: var(--primary-blue);
+            background: rgba(11, 25, 44, 0.8);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--glass-border);
             color: white;
-            padding: 15px 30px;
+            padding: 0 24px;
+            height: 72px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -54,219 +112,402 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
             display: flex;
             align-items: center;
             cursor: pointer;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            transition: background-color 0.3s;
+        }
+
+        .logo:hover {
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .logo img {
-            height: 50px;
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.1));
         }
 
-        .logo span {
-            margin-left: 15px;
-            font-size: 20px;
-            font-weight: bold;
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #FFFFFF 0%, #E2E8F0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-subtitle {
+            font-size: 10px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: -2px;
         }
 
         .header-right {
             display: flex;
             align-items: center;
-            margin-left: auto;
-            margin-right: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .header-right span {
-            font-size: 18px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #E2E8F0;
         }
 
+        /* Glassmorphic Sidebar Drawer */
         .toolbar {
             position: fixed;
-            top: 70px;
-            left: -240px;
-            width: 240px;
-            height: calc(100vh - 70px);
-            background-color: var(--primary-blue);
-            padding: 15px 20px;
+            top: 72px;
+            left: -280px;
+            width: 280px;
+            height: calc(100vh - 72px);
+            background: rgba(11, 25, 44, 0.88);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--glass-border);
+            padding: 24px 20px;
             z-index: 999;
             overflow-y: auto;
-            transition: left 0.3s ease-in-out;
-            box-sizing: border-box;
-            color: white;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.25);
         }
 
         .toolbar.active {
+            transform: translateX(280px);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 72px;
             left: 0;
+            width: 100%;
+            height: calc(100vh - 72px);
+            background-color: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
         }
 
         .toolbar .feature-box {
-            background-color: rgba(255, 255, 255, 0.15);
-            border: 1px solid var(--accent-red);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px var(--glass-shadow);
         }
 
         .toolbar .feature-box h3 {
-            margin: 0 0 10px;
-            font-size: 18px;
-            color: white;
+            margin-bottom: 16px;
+            font-size: 15px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-primary);
             text-align: center;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 8px;
         }
 
-        .toolbar .feature-box button {
+        .toolbar button {
             width: 100%;
-            padding: 10px;
-            background-color: var(--accent-red);
-            color: white;
-            border: none;
-            border-radius: 6px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #E2E8F0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
-            margin-bottom: 8px;
-            transition: background-color 0.3s;
-            font-weight: bold;
+            font-weight: 500;
+            margin-bottom: 10px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.25s ease;
         }
 
-        .toolbar .feature-box button:hover {
-            background-color: #b8323a;
+        .toolbar button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(4px);
+        }
+
+        /* Active Navigation Link styling (parking-analysis) */
+        .toolbar button.parking-analysis {
+            background: rgba(230, 57, 70, 0.15);
+            border-color: rgba(230, 57, 70, 0.4);
+            color: white;
+            font-weight: 600;
+        }
+
+        .toolbar button.parking-analysis::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-red);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-red);
         }
 
         .toolbar .user-info {
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.15);
-            border: 1px solid var(--accent-red);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .toolbar .user-info img {
-            width: 50px;
-            height: 50px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
-            margin-bottom: 10px;
-            border: 2px solid white;
+            margin-bottom: 12px;
+            border: 3px solid var(--secondary-blue);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            object-fit: cover;
         }
 
-        .toolbar .user-info span {
+        .toolbar .user-info .welcome-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .toolbar .user-info #userName {
             display: block;
-            margin: 6px 0;
-            font-size: 14px;
+            margin: 4px 0 16px 0;
+            font-size: 16px;
+            font-weight: 700;
             color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
+        .toolbar .user-info button.profile {
+            background-color: var(--secondary-blue);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .toolbar .user-info button.profile:hover {
+            background-color: #2c598c;
+            transform: scale(1.02);
+        }
+
+        .toolbar .user-info button.logout {
+            background-color: transparent;
+            border: 1px solid rgba(230, 57, 70, 0.3);
+            color: var(--accent-red);
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .toolbar .user-info button.logout:hover {
+            background-color: rgba(230, 57, 70, 0.12);
+            border-color: var(--accent-red);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        /* Main Workspace Area */
         .main-content {
-            padding: 90px 30px 30px;
+            padding: 104px 32px 40px;
             min-height: 100vh;
             margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
+            transition: margin-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 1200px;
+            margin-right: auto;
         }
 
         .main-content.with-toolbar {
-            margin-left: 260px;
+            margin-left: 280px;
         }
 
+        /* Glassmorphic Analysis Panel */
         .analysis-panel {
-            background-color: var(--slot-occupied);
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid var(--accent-red);
-            min-height: 500px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            padding: 32px 28px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 12px 40px var(--glass-shadow);
             color: white;
+            min-height: 500px;
         }
 
         .analysis-panel h1 {
-            margin: 0 0 15px;
-            color: white;
-            font-size: 20px;
+            margin-bottom: 24px;
+            font-size: 22px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             text-align: center;
-            font-weight: bold;
+            font-weight: 700;
+            background: linear-gradient(90deg, #FFFFFF 30%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-container {
+            text-align: center;
+            margin-bottom: 24px;
         }
 
         .stats {
-            margin-bottom: 15px;
-            font-size: 16px;
-            text-align: center;
-            color: white;
+            font-size: 15px;
+            color: #CBD5E1;
+            font-weight: 500;
+            background: rgba(11, 25, 44, 0.4);
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: inline-block;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .stats span {
-            font-weight: bold;
+        .stats span:first-child {
+            margin-right: 8px;
+        }
+
+        .stats #currentTime {
+            color: white;
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         .filter-container {
-            margin-bottom: 15px;
+            margin-bottom: 24px;
             text-align: center;
         }
 
         .filter-container select {
-            padding: 10px;
+            padding: 12px 16px;
             font-size: 14px;
-            border-radius: 6px;
-            border: 1px solid var(--accent-red);
-            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(11, 25, 44, 0.8);
             color: white;
             cursor: pointer;
             width: 220px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-family: inherit;
         }
 
         .filter-container select:focus {
             outline: none;
-            border-color: white;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
         }
 
+        /* Message List & Items */
         .message-list {
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 10px;
-            border-radius: 6px;
-            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 16px;
+            background: rgba(11, 25, 44, 0.4);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
         }
+
+        .message-list::-webkit-scrollbar { width: 6px; }
+        .message-list::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); border-radius: 10px; }
+        .message-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+        .message-list::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); }
 
         .message-item {
             display: grid;
-            grid-template-columns: 0.5fr 1fr 0.5fr 1fr;
-            padding: 10px 0;
+            grid-template-columns: 0.8fr 1fr 0.8fr 1.5fr;
+            padding: 14px 16px;
             font-size: 14px;
             align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            color: #E2E8F0;
+            transition: background-color 0.2s ease;
+            border-radius: 8px;
+        }
+
+        .message-item:hover {
+            background-color: rgba(255, 255, 255, 0.03);
         }
 
         .message-item:last-child {
             border-bottom: none;
         }
 
-        .message-item strong {
-            color: #E9FFF9;
-        }
-
-        #error-message {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            z-index: 102;
-            display: none;
-            max-width: 90%;
-            text-align: center;
-            background: rgba(214, 64, 69, 0.9);
+        .message-item span:first-child strong {
             color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: rgba(230, 57, 70, 0.15);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(230, 57, 70, 0.3);
+            display: inline-block;
         }
 
+        /* Glass Toast System */
+        #error-message {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            left: auto;
+            transform: translateY(-50px);
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1002;
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            pointer-events: none;
+            opacity: 0;
+            background: rgba(230, 57, 70, 0.95);
+            color: white;
+            text-align: left;
+        }
+
+        #error-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Interactive Tour Overlay */
         .tour-overlay {
             display: none;
             position: fixed;
@@ -274,151 +515,208 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
             z-index: 2000;
-            pointer-events: none;
+            pointer-events: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
+
+        .tour-overlay.active { opacity: 1; }
 
         .tour-tooltip {
             position: absolute;
-            background-color: var(--primary-blue);
+            background: rgba(11, 25, 44, 0.95);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             border: 2px solid var(--accent-red);
-            border-radius: 8px;
-            padding: 15px;
-            max-width: 300px;
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 320px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
             pointer-events: auto;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: tourFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 2001;
+            color: white;
+            border: 1.5px solid rgba(230, 57, 70, 0.5);
         }
 
         .tour-tooltip h3 {
             color: white;
             font-size: 16px;
-            margin-bottom: 10px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         .tour-tooltip p {
-            font-size: 14px;
-            color: white;
-            margin-bottom: 15px;
-            line-height: 1.5;
+            font-size: 13.5px;
+            color: #CBD5E1;
+            margin-bottom: 16px;
+            line-height: 1.6;
         }
 
         .tour-tooltip .tour-buttons {
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
+            justify-content: center;
+            gap: 12px;
         }
 
         .tour-tooltip button {
-            padding: 8px 12px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.2s ease;
         }
 
         .tour-tooltip .next-btn {
             background-color: var(--accent-red);
             color: white;
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
         }
-
-        .tour-tooltip .next-btn:hover {
-            background-color: #b8323a;
-        }
+        .tour-tooltip .next-btn:hover { background-color: var(--accent-red-hover); transform: translateY(-1px); }
 
         .tour-tooltip .close-btn {
-            background-color: #b8323a;
-            color: white;
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #E2E8F0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
+        .tour-tooltip .close-btn:hover { background-color: rgba(255, 255, 255, 0.15); color: white; }
 
-        .tour-tooltip .close-btn:hover {
-            background-color: #c82333;
-        }
-
-        .tour-tooltip:after {
+        .tour-tooltip::after {
             content: "";
             position: absolute;
-            border: 10px solid transparent;
+            border: 8px solid transparent;
             pointer-events: none;
         }
 
-        .tour-tooltip.right:after { border-right-color: var(--accent-red); left: -20px; top: 50%; transform: translateY(-50%); }
-        .tour-tooltip.left:after { border-left-color: var(--accent-red); right: -20px; top: 50%; transform: translateY(-50%); }
-        .tour-tooltip.top:after { border-top-color: var(--accent-red); bottom: -20px; left: 50%; transform: translateX(-50%); }
-        .tour-tooltip.bottom:after { border-bottom-color: var(--accent-red); top: -20px; left: 50%; transform: translateX(-50%); }
+        .tour-tooltip.right::after { border-right-color: var(--accent-red); left: -16px; top: 50%; transform: translateY(-50%); }
+        .tour-tooltip.left::after { border-left-color: var(--accent-red); right: -16px; top: 50%; transform: translateY(-50%); }
+        .tour-tooltip.top::after { border-top-color: var(--accent-red); bottom: -16px; left: 50%; transform: translateX(-50%); }
+        .tour-tooltip.bottom::after { border-bottom-color: var(--accent-red); top: -16px; left: 50%; transform: translateX(-50%); }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes tourFadeIn {
+            from { opacity: 0; transform: scale(0.92) translate3d(0, 10px, 0); }
+            to { opacity: 1; transform: scale(1) translate3d(0, 0, 0); }
+        }
+
+        /* Mobile View Response */
+        @media (max-width: 992px) {
+            .main-content.with-toolbar { margin-left: 0; }
         }
 
         @media (max-width: 768px) {
-            body { font-size: 9px; }
-            header { padding: 4px 6px; }
-            .logo img { height: 25px; }
-            .logo span { font-size: 10px; margin-left: 4px; }
-            .header-right span { font-size: 9px; }
-            .toolbar { width: 100%; left: -100%; top: 70px; }
-            .main-content { padding: 49px 6px 6px; }
-            .main-content.with-toolbar { margin-left: 0; }
-            .analysis-panel { padding: 10px; min-height: 300px; }
-            .analysis-panel h1 { font-size: 12px; }
-            .stats { font-size: 9px; }
-            .filter-container select { width: 100%; padding: 6px; font-size: 9px; }
-            .message-item { font-size: 8px; gap: 4px; padding: 6px 0; }
-            .message-list { padding: 6px; }
-            #error-message { top: 49px; padding: 6px 10px; font-size: 9px; }
-            .tour-tooltip { max-width: 70%; padding: 8px; }
-            .tour-tooltip h3 { font-size: 10px; }
-            .tour-tooltip p { font-size: 8px; }
-            .tour-tooltip button { padding: 4px 6px; font-size: 8px; }
-        }
+            body { font-size: 15px; }
+            header { padding: 0 16px; height: 64px; }
+            .logo { gap: 8px; padding: 4px; }
+            .logo img { height: 32px; }
+            .logo-title { font-size: 15px; }
+            .logo-subtitle { display: none; }
+            .header-right { padding: 6px 12px; }
+            .header-right span { font-size: 11px; }
 
-        @media (max-width: 480px) {
-            .message-item { grid-template-columns: 1fr; text-align: center; }
-            .message-item span { margin: 2px 0; }
+            .toolbar { top: 64px; height: calc(100vh - 64px); left: -280px; width: 280px; }
+            .toolbar.active { transform: translateX(280px); left: -280px; }
+            .sidebar-overlay { top: 64px; height: calc(100vh - 64px); }
+            
+            .main-content { padding: 88px 16px 32px; }
+            .analysis-panel { padding: 20px 16px; min-height: 400px; }
+            .analysis-panel h1 { font-size: 18px; }
+            .stats { font-size: 13px; margin-bottom: 16px; padding: 10px 16px; }
+            .filter-container select { width: 100%; padding: 10px; font-size: 13px; }
+            
+            .message-list { padding: 12px; background: transparent; box-shadow: none; border: none; }
+            .message-item { 
+                grid-template-columns: 1fr; 
+                text-align: center; 
+                gap: 8px; 
+                padding: 12px; 
+                background: rgba(255,255,255,0.02); 
+                margin-bottom: 8px; 
+                border-bottom: none;
+                border: 1px solid rgba(255,255,255,0.05);
+            }
+            .message-item span:first-child strong { width: auto; display: inline-block; }
+            
+            #error-message {
+                top: 76px;
+                right: 16px;
+                left: 16px;
+                transform: translateX(0) !important;
+                text-align: center;
+                max-width: none;
+            }
+
+            .tour-tooltip { max-width: 90%; left: 5% !important; right: 5% !important; top: 50% !important; transform: translateY(-50%) !important; position: fixed; }
+            .tour-tooltip::after { display: none; }
         }
     </style>
+    <!-- Firebase core libraries -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
-    <video id="bg-video" autoplay muted loop>
-        <source src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/wave.mp4?raw=true" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+
+    <div class="ambient-glow"></div>
 
     <header>
-        <div class="logo" id="toggleToolbar">
+        <div class="logo" id="toggleToolbar" aria-label="Toggle Sidebar Menu">
             <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/46a20c237c763bc2ccd436c332785427771eea05/public/brin_logo.png?raw=true" alt="BRIN Logo">
-            <span>BRIN</span>
-            <span>Badan Riset dan Inovasi Nasional</span>
+            <div class="logo-text">
+                <span class="logo-title">BRIN</span>
+                <span class="logo-subtitle">Badan Riset dan Inovasi Nasional</span>
+            </div>
         </div>
         <div class="header-right">
-            <span>Parking Management System</span>
+            <span>Parking System</span>
         </div>
     </header>
 
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <aside class="toolbar" id="toolbar">
         <div class="feature-box user-info" id="userInfo">
-            <h3>User</h3>
-            <img id="profilePic" src="/assets/user.JPG" alt="User">
-            <span>Welcome Back</span>
-            <span id="userName"></span>
-            <button class="profile" onclick="window.location.href='/profile.html'">Profile</button>
-            <button class="logout">Log Out</button>
+            <span class="welcome-text">Welcome Back</span>
+            <img id="profilePic" src="/assets/user.JPG" alt="User Avatar">
+            <span id="userName">Operator</span>
+            <button class="profile" onclick="window.location.href='/profile.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg>
+                Profile
+            </button>
+            <button class="logout">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"/><path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"/></svg>
+                Log Out
+            </button>
         </div>
         <div class="feature-box">
-            <h3>Parking Management System</h3>
-            <button class="live-overview" onclick="window.location.href='/index.html'">Live Overview</button>
-            <button class="prev-analysis" onclick="window.location.href='/previous-analysis.html'">Previous Analysis</button>
-            <button class="export-data" onclick="window.location.href='/exportdata.html'">Export Data</button>
-            <button class="helpdesk" onclick="window.location.href='/helpdesk.html'">Helpdesk</button>
-            <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">Parking Analysis</button>
+            <h3>Management Suite</h3>
+            <button class="live-overview" onclick="window.location.href='/index.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8.47 1.318a1 1 0 0 0-.94 0l-6 3A1 1 0 0 0 1 5.2v8.8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5.2a1 1 0 0 0-.53-.882zM7.5 3v10.5H2V5.7l5.5-2.75zm1 0 5.5 2.75V13.5H8.5z"/></svg>
+                Live Overview
+            </button>
+            <button class="prev-analysis" onclick="window.location.href='/previous-analysis.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 7.61h-.024l-1.9-3.608H2.784L5.275 8.72 2.748 13.5h1.312l2.007-3.956h.024L8.136 13.5h1.313L6.92 8.728z"/></svg>
+                Previous Analysis
+            </button>
+            <button class="export-data" onclick="window.location.href='/exportdata.html'">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                Export Data
+            </button>
+            <button class="helpdesk" onclick="window.location.href='/helpdesk.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.03-.94-.584 0-1.01.388-1.01.94"/></svg>
+                Helpdesk
+            </button>
+            <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 11.5a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v7.5a.5.5 0 0 1-.5.5H4.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v10.5a.5.5 0 0 1-.5.5H8.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v13.5a.5.5 0 0 1-.5.5h-1.4a.5.5 0 0 1-.5-.5z"/></svg>
+                Parking Analysis
+            </button>
         </div>
     </aside>
 
@@ -427,18 +725,22 @@
 
         <div class="analysis-panel">
             <h1>Parking Analysis (Messages)</h1>
-            <div class="stats">
-                <span>Current Time:</span> <span id="currentTime"></span>
+            <div class="stats-container">
+                <div class="stats">
+                    <span>Waktu Terkini:</span> <span id="currentTime"></span>
+                </div>
             </div>
+            
             <div class="filter-container">
                 <select id="sortFilter" onchange="renderMessages()">
-                    <option value="slot">Sort by Slot</option>
-                    <option value="newest">Sort by Newest</option>
-                    <option value="oldest">Sort by Oldest</option>
+                    <option value="slot">Urutkan berdasarkan Slot</option>
+                    <option value="newest">Urutkan dari Terbaru</option>
+                    <option value="oldest">Urutkan dari Terlama</option>
                 </select>
             </div>
+            
             <div class="message-list" id="messageList">
-                <div style="text-align: center; padding: 20px; color: white;">Loading messages...</div>
+                <div style="text-align: center; padding: 40px 20px; color: #94A3B8;">Memuat data pesan...</div>
             </div>
         </div>
 
@@ -454,7 +756,7 @@
     </main>
 
     <script>
-        // === FIREBASE ===
+        // === FIREBASE INITIALIZATION ===
         const firebaseConfig = {
             apiKey: "AIzaSyAef3SJwvVVTunr6CWki79aenfpXlgYc0s",
             authDomain: "digitaltwinparkingbrin.firebaseapp.com",
@@ -475,7 +777,7 @@
         function updateClock() {
             const now = new Date();
             const options = { timeZone: 'Asia/Jakarta', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false };
-            document.getElementById('currentTime').textContent = new Intl.DateTimeFormat('en-US', options).format(now) + ' WIB';
+            document.getElementById('currentTime').textContent = new Intl.DateTimeFormat('id-ID', options).format(now) + ' WIB';
         }
         setInterval(updateClock, 1000);
         updateClock();
@@ -487,7 +789,7 @@
             const sortOption = document.getElementById('sortFilter').value;
 
             if (!messagesData.length) {
-                messageList.innerHTML = "<div style='text-align: center; padding: 20px; color: white;'>No messages available</div>";
+                messageList.innerHTML = "<div style='text-align: center; padding: 40px 20px; color: #94A3B8;'>Belum ada data pesan yang tersedia.</div>";
                 return;
             }
 
@@ -507,7 +809,7 @@
                 div.innerHTML = `
                     <span><strong>${slotKey.replace('slot_', 'Slot ')}</strong></span>
                     <span>${tanggal}</span>
-                    <span>${jam}</span>
+                    <span>${jam} WIB</span>
                     <span>${msgValue}</span>
                 `;
                 messageList.appendChild(div);
@@ -528,23 +830,26 @@
             }
             renderMessages();
         }, (error) => {
-            document.getElementById('error-message').textContent = `Failed to load: ${error.message}`;
-            document.getElementById('error-message').style.display = 'block';
-            setTimeout(() => document.getElementById('error-message').style.display = 'none', 5000);
+            const errEl = document.getElementById('error-message');
+            errEl.textContent = `Gagal memuat data: ${error.message}`;
+            errEl.classList.add('show');
+            setTimeout(() => errEl.classList.remove('show'), 5000);
         });
 
         // === TOUR ===
         const tourSteps = [
-            { element: 'header', title: "Petunjuk Website", text: "Klik logo BRIN untuk membuka toolbar samping...", position: 'bottom' },
-            { element: '.analysis-panel', title: "Panel Analisis", text: "Lihat semua pesan parkir dari sensor di sini.", position: 'right' },
-            { element: '.filter-container', title: "Urutkan Pesan", text: "Pilih urutan: berdasarkan slot, terbaru, atau terlama.", position: 'top' },
-            { element: '.message-list', title: "Daftar Pesan", text: "Setiap baris menampilkan slot, tanggal, jam, dan pesan.", position: 'right' }
+            { element: 'header', title: "Petunjuk Website", text: "Klik logo BRIN untuk membuka menu navigasi di sebelah kiri.", position: 'bottom' },
+            { element: '.analysis-panel', title: "Panel Analisis", text: "Di sini Anda bisa melihat log dan histori pesan dari sensor masing-masing slot parkir.", position: 'right' },
+            { element: '.filter-container', title: "Fitur Urutkan", text: "Gunakan dropdown ini untuk mengurutkan pesan berdasarkan nama slot, atau urutan waktu (terbaru/terlama).", position: 'top' },
+            { element: '.message-list', title: "Daftar Pesan", text: "Detail data berupa nomor slot, tanggal masuk, jam, dan keterangan sensor ditampilkan pada tabel ini.", position: 'right' }
         ];
         let currentTourStep = 0;
 
         function startTour() {
             if (hasSeenTour) return;
-            document.getElementById('tourOverlay').style.display = 'block';
+            const overlay = document.getElementById('tourOverlay');
+            overlay.classList.add('active');
+            overlay.style.display = 'block';
             showTooltip(currentTourStep);
         }
 
@@ -554,48 +859,76 @@
             const text = document.getElementById('tooltipText');
             const nextBtn = document.getElementById('tourNextBtn');
             const target = document.querySelector(tourSteps[step].element);
+            
             if (!target) { endTour(); return; }
 
             title.textContent = tourSteps[step].title;
             text.textContent = tourSteps[step].text;
             tooltip.style.display = 'block';
-            tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
-
+            
             const rect = target.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
-            let left, top;
             const isMobile = window.innerWidth <= 768;
 
             if (isMobile) {
-                left = (window.innerWidth - tooltipRect.width) / 2;
-                top = rect.bottom + 10;
                 tooltip.className = 'tour-tooltip bottom';
+                tooltip.style.left = '5%';
+                tooltip.style.right = '5%';
+                tooltip.style.top = '50%';
+                tooltip.style.transform = 'translateY(-50%)';
             } else {
+                tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
+                tooltip.style.transform = 'none';
+                
+                let left, top;
+                const gap = 16;
+                const tooltipWidth = 320;
+                const tooltipHeight = tooltip.offsetHeight || 160;
+
                 switch (tourSteps[step].position) {
-                    case 'right': left = rect.right + 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
-                    case 'left': left = rect.left - tooltipRect.width - 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
-                    case 'top': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.top - tooltipRect.height - 10; break;
-                    case 'bottom': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.bottom + 10; break;
+                    case 'right': 
+                        left = rect.right + gap; 
+                        top = rect.top + (rect.height / 2) - (tooltipHeight / 2); 
+                        break;
+                    case 'left': 
+                        left = rect.left - tooltipWidth - gap; 
+                        top = rect.top + (rect.height / 2) - (tooltipHeight / 2); 
+                        break;
+                    case 'top': 
+                        left = rect.left + (rect.width / 2) - (tooltipWidth / 2); 
+                        top = rect.top - tooltipHeight - gap; 
+                        break;
+                    case 'bottom': 
+                        left = rect.left + (rect.width / 2) - (tooltipWidth / 2); 
+                        top = rect.bottom + gap; 
+                        break;
                 }
+                
+                left = Math.max(gap, Math.min(left, window.innerWidth - tooltipWidth - gap));
+                top = Math.max(gap + 72, Math.min(top, window.innerHeight - tooltipHeight - gap));
+
+                tooltip.style.left = `${left}px`;
+                tooltip.style.top = `${top}px`;
             }
-            tooltip.style.left = `${left}px`;
-            tooltip.style.top = `${top}px`;
-            nextBtn.textContent = step === tourSteps.length - 1 ? 'Finish' : 'Next';
+
+            nextBtn.textContent = step === tourSteps.length - 1 ? 'Selesai' : 'Lanjut';
         }
 
         function endTour() {
-            document.getElementById('tourOverlay').style.display = 'none';
+            const overlay = document.getElementById('tourOverlay');
+            overlay.classList.remove('active');
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+            
             document.getElementById('tourTooltip').style.display = 'none';
             currentTourStep = 0;
             hasSeenTour = true;
             localStorage.setItem('tourCompleted_analysis', 'true');
         }
 
-        // === DOM LOADED ===
+        // === DOM EVENT BINDING ===
         document.addEventListener("DOMContentLoaded", () => {
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             if (!currentUser) {
-                alert('Silakan login terlebih dahulu!');
+                alert('Sesi telah berakhir. Silakan login terlebih dahulu!');
                 window.location.replace('/login.html');
                 return;
             }
@@ -603,7 +936,9 @@
             hasSeenTour = localStorage.getItem('tourCompleted_analysis') === 'true';
 
             document.getElementById('userName').textContent = currentUser.username;
-            document.getElementById('profilePic').src = currentUser.profilePic || '/assets/user.JPG';
+            if(currentUser.profilePic) {
+                document.getElementById('profilePic').src = currentUser.profilePic;
+            }
 
             document.querySelector('.logout').addEventListener('click', () => {
                 localStorage.removeItem('currentUser');
@@ -614,19 +949,31 @@
             const toggleToolbar = document.getElementById('toggleToolbar');
             const toolbar = document.getElementById('toolbar');
             const mainContent = document.getElementById('mainContent');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+
             toggleToolbar.addEventListener('click', () => {
-                const isActive = toolbar.classList.toggle('active');
-                mainContent.classList.toggle('with-toolbar', isActive);
+                toolbar.classList.toggle('active');
+                mainContent.classList.toggle('with-toolbar');
+                sidebarOverlay.classList.toggle('active');
+            });
+
+            sidebarOverlay.addEventListener('click', () => {
+                toolbar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
             });
 
             document.getElementById('tourNextBtn').addEventListener('click', () => {
                 currentTourStep++;
-                if (currentTourStep < tourSteps.length) showTooltip(currentTourStep);
-                else endTour();
+                if (currentTourStep < tourSteps.length) {
+                    showTooltip(currentTourStep);
+                } else {
+                    endTour();
+                }
             });
+            
             document.getElementById('tourCloseBtn').addEventListener('click', endTour);
 
-            if (!hasSeenTour) setTimeout(startTour, 800);
+            if (!hasSeenTour) setTimeout(startTour, 1000);
         });
     </script>
 </body>

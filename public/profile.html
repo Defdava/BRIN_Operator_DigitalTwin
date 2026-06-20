@@ -7,66 +7,107 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>BRIN Parking | Profile Operator</title>
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
-
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary-blue: #1D3354;
-            --accent-red: #D64045;
-            --accent-red-hover: #b8323a;
-            --text-light: #FFFFFF;
-            --toolbar-bg: rgba(29, 51, 84, 0.95);
-            --card-bg: rgba(29, 51, 84, 0.9);
-            --input-bg: rgba(255,255,255,0.12);
-            --success-bg: rgba(46, 204, 113, 0.92);
-            --error-bg: rgba(214,64,69,0.92);
+            --primary-blue: #0B192C;
+            --secondary-blue: #1E3E62;
+            --accent-red: #E63946;
+            --accent-red-hover: #D62828;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --bg-dark: #070F19;
+            --success-bg: #10B981;
+            --error-bg: #EF4444;
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(15, 32, 54, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: rgba(0, 0, 0, 0.35);
+            --glass-blur: blur(16px);
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
 
         body {
-            margin: 0;
-            font-family: Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #d3d3d3;
-            color: var(--text-light);
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-dark);
             overflow-x: hidden;
+            font-size: 16px;
+            touch-action: manipulation;
+            min-height: 100vh;
+            line-height: 1.5;
         }
 
+        /* Ambient Glow Highlights */
+        .ambient-glow {
+            position: fixed;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(230, 57, 70, 0.07) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 15%;
+            right: -150px;
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(50px);
+        }
+
+        /* Animasi Background Slideshow */
         body::before {
             content: "";
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
             z-index: -2;
             animation: slideshow 20s infinite;
-            opacity: 0.4;
+            opacity: 0.25;
+            filter: contrast(105%) brightness(85%);
         }
 
         @keyframes slideshow {
-            0%   { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.4; }
-            15%  { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.4; }
-            20%  { opacity: 0; }
+            0% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.25; }
+            15% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.25; }
+            20% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0; }
             20.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
-            35%  { opacity: 0.4; }
-            40%  { opacity: 0; }
+            35% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0.25; }
+            40% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
             40.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
-            55%  { opacity: 0.4; }
-            60%  { opacity: 0; }
+            55% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0.25; }
+            60% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
             60.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
-            75%  { opacity: 0.4; }
-            80%  { opacity: 0; }
+            75% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0.25; }
+            80% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
             80.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
-            95%  { opacity: 0.4; }
-            100% { opacity: 0; }
+            95% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0.25; }
+            100% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
         }
 
+        /* Sticky Glassmorphic Header */
         header {
-            background-color: var(--primary-blue);
+            background: rgba(11, 25, 44, 0.8);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--glass-border);
             color: white;
-            padding: 15px 30px;
+            padding: 0 24px;
+            height: 72px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -74,607 +115,955 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
             display: flex;
             align-items: center;
             cursor: pointer;
-            gap: 15px;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            transition: background-color 0.3s;
         }
 
-        .logo img { height: 50px; width: auto; }
+        .logo:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
 
-        .logo span:first-child { font-size: 22px; font-weight: bold; }
-        .logo span:last-child { font-size: 14px; opacity: 0.9; }
+        .logo img {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.1));
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #FFFFFF 0%, #E2E8F0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-subtitle {
+            font-size: 10px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: -2px;
+        }
 
         .header-right {
             display: flex;
             align-items: center;
-            padding-right: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .header-title {
-            font-size: 28px;
-            font-weight: 900;
-            color: #FFFFFF;
-            text-shadow: 
-                0 0 10px rgba(214, 64, 69, 0.8),
-                0 0 20px rgba(214, 64, 69, 0.6),
-                0 0 30px rgba(214, 64, 69, 0.4);
-            letter-spacing: 1.5px;
-            white-space: nowrap;
-            animation: pulseGlow 4s infinite alternate;
+        .header-right span {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #E2E8F0;
         }
 
-        @keyframes pulseGlow {
-            0%   { text-shadow: 0 0 10px rgba(214,64,69,0.8), 0 0 20px rgba(214,64,69,0.6); }
-            100% { text-shadow: 0 0 15px rgba(214,64,69,1), 0 0 30px rgba(214,64,69,0.8), 0 0 45px rgba(214,64,69,0.5); }
-        }
-
+        /* Glassmorphic Sidebar Drawer */
         .toolbar {
             position: fixed;
-            top: 80px;
-            left: -300px;
-            width: 260px;
-            height: calc(100vh - 80px);
-            background: var(--toolbar-bg);
-            backdrop-filter: blur(4px);
-            padding: 20px;
+            top: 72px;
+            left: -280px;
+            width: 280px;
+            height: calc(100vh - 72px);
+            background: rgba(11, 25, 44, 0.88);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--glass-border);
+            padding: 24px 20px;
             z-index: 999;
             overflow-y: auto;
-            transition: left 0.35s ease-in-out;
-            box-shadow: 3px 0 12px rgba(0,0,0,0.35);
-            border-right: 2px solid var(--accent-red);
-            color: white;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.25);
         }
 
-        .toolbar.active { left: 0; }
-
-        .feature-box {
-            background: rgba(255,255,255,0.15);
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.18);
+        .toolbar.active {
+            transform: translateX(280px);
         }
 
-        .feature-box h3 {
-            margin: 0 0 14px;
-            font-size: 1.15rem;
-            color: white;
-            font-weight: bold;
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 72px);
+            background-color: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .toolbar .feature-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px var(--glass-shadow);
+        }
+
+        .toolbar .feature-box h3 {
+            margin-bottom: 16px;
+            font-size: 15px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-primary);
             text-align: center;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 8px;
         }
-
-        .user-info { text-align: center; }
-
-        .user-info img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            border: 3px solid var(--accent-red);
-            margin-bottom: 12px;
-            object-fit: cover;
-        }
-
-        .user-info span { display: block; margin: 6px 0; font-size: 0.98rem; }
 
         .toolbar button {
             width: 100%;
-            padding: 11px;
-            margin: 7px 0;
-            background: var(--accent-red);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #E2E8F0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.25s;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.25s ease;
         }
 
         .toolbar button:hover {
-            background: var(--accent-red-hover);
-            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(4px);
         }
 
-        .main-content {
-            padding: 100px 25px 40px;
-            min-height: 100vh;
-            transition: margin-left 0.35s ease-in-out;
+        .toolbar button.profile {
+            background: rgba(230, 57, 70, 0.15);
+            border-color: rgba(230, 57, 70, 0.4);
+            color: white;
+            font-weight: 600;
+        }
+        .toolbar button.profile::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-red);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-red);
         }
 
-        .main-content.with-toolbar { margin-left: 260px; }
-
-        .profile-container {
-            background: var(--card-bg);
-            backdrop-filter: blur(6px);
-            padding: 2.2rem;
-            border-radius: 14px;
-            max-width: 460px;
-            margin: 0 auto;
-            border: 2px solid var(--accent-red);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+        .toolbar .user-info {
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .toolbar .user-info img {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            margin-bottom: 12px;
+            border: 3px solid var(--secondary-blue);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            object-fit: cover;
+        }
+
+        .toolbar .user-info .welcome-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .toolbar .user-info #sidebarUserName {
+            display: block;
+            margin: 4px 0 16px 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        
+        .toolbar .user-info button.logout {
+            background-color: transparent;
+            border: 1px solid rgba(230, 57, 70, 0.3);
+            color: var(--accent-red);
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .toolbar .user-info button.logout:hover {
+            background-color: rgba(230, 57, 70, 0.12);
+            border-color: var(--accent-red);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        /* Profile Main Content */
+        .main-content {
+            padding: 104px 20px 60px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-left: 0;
+            transition: margin-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .main-content.with-toolbar {
+            margin-left: 280px;
+        }
+
+        .profile-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            padding: 32px 28px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 440px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 12px 40px var(--glass-shadow);
             color: white;
         }
 
-        .profile-container h2 { margin: 0 0 1.8rem; font-size: 1.8rem; font-weight: bold; }
+        .profile-card h2 {
+            margin-bottom: 24px;
+            color: white;
+            font-size: 22px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #FFFFFF 30%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-        .profile-picture-section {
+        .profile-pic-container {
             position: relative;
-            display: inline-block;
-            margin-bottom: 1.8rem;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
         }
 
-        .profile-container img {
-            width: 130px;
-            height: 130px;
+        .profile-pic-container img {
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 4px solid var(--accent-red);
+            border: 4px solid var(--secondary-blue);
             object-fit: cover;
-            transition: transform 0.25s;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            background-color: rgba(255,255,255,0.05);
         }
 
-        .profile-container img:hover { transform: scale(1.06); }
-
-        .change-photo-btn {
+        .action-buttons {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
-            width: 38px;
-            height: 38px;
+            bottom: -10px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .action-buttons button {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: var(--accent-red);
             color: white;
             border: none;
-            font-size: 1.2rem;
+            font-size: 18px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.4);
+            transition: all 0.3s ease;
         }
 
-        .change-photo-btn:hover { background: var(--accent-red-hover); }
+        .action-buttons button:hover {
+            background: var(--accent-red-hover);
+            transform: translateY(-3px) scale(1.05);
+        }
 
         .form-group {
-            margin-bottom: 1.4rem;
-            text-align: left;
+            margin-bottom: 16px;
         }
 
-        .form-group label {
+        label {
             display: block;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
             font-weight: 600;
-            font-size: 0.98rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
         }
 
         input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1.5px solid var(--accent-red);
-            border-radius: 8px;
-            background: var(--input-bg);
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 14px;
+            background: rgba(11, 25, 44, 0.6);
             color: white;
-            font-size: 1rem;
-            transition: all 0.2s;
+            font-family: inherit;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
-        input::placeholder { color: rgba(255,255,255,0.55); }
+        input::placeholder { color: rgba(255, 255, 255, 0.35); }
 
         input:focus {
             outline: none;
-            border-color: #e74c3c;
-            box-shadow: 0 0 0 3px rgba(215,64,69,0.28);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+            background: rgba(11, 25, 44, 0.8);
         }
 
         .password-section {
-            margin: 1.8rem 0;
-            padding: 1.2rem;
-            border: 1px solid rgba(255,255,255,0.18);
-            border-radius: 10px;
-            background: rgba(255,255,255,0.06);
+            background: rgba(11, 25, 44, 0.4);
+            padding: 20px;
+            border-radius: 14px;
+            margin: 24px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .password-section h3 { margin: 0 0 1.2rem; font-size: 1.15rem; }
+        .password-section h3 {
+            margin: 0 0 16px;
+            color: white;
+            font-size: 14px;
+            text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: 0.5px;
+        }
 
-        #saveProfile {
+        button#saveProfile {
             width: 100%;
-            padding: 14px;
-            background: var(--accent-red);
+            background: linear-gradient(135deg, var(--accent-red) 0%, #D62828 100%);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            padding: 14px 28px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.25s;
-            margin-top: 1.2rem;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(230, 57, 70, 0.3);
+            transition: all 0.3s ease;
         }
 
-        #saveProfile:hover {
-            background: var(--accent-red-hover);
+        button#saveProfile:hover {
             transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(230, 57, 70, 0.4);
+            background: linear-gradient(135deg, #FF4D5A 0%, #E63946 100%);
         }
 
         .loading-spinner {
             display: none;
-            width: 28px;
-            height: 28px;
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
+            width: 32px;
+            height: 32px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid var(--accent-red);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 1.2rem auto;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 20px;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* Toast Message */
         #message {
             position: fixed;
-            top: 90px;
-            left: 50%;
-            transform: translateX(-50%);
-            max-width: 90%;
+            top: 24px;
+            right: 24px;
             padding: 14px 24px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
             z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            pointer-events: none;
             opacity: 0;
-            transition: all 0.4s;
+            transform: translateY(-50px);
+            color: white;
         }
-
         #message.show {
             opacity: 1;
-            transform: translateX(-50%) translateY(0);
+            transform: translateY(0);
+        }
+
+        /* Kamera Live Modal */
+        .camera-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .camera-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .camera-box {
+            background: rgba(11, 25, 44, 0.95);
+            backdrop-filter: var(--glass-blur);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            border: 1.5px solid var(--accent-red);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+            animation: formFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes formFadeIn {
+            from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .camera-box h3 {
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin-bottom: 16px;
+        }
+
+        .camera-box video {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: #000;
+            margin-bottom: 20px;
+            transform: scaleX(-1); /* Efek mirror untuk kamera depan */
+        }
+
+        .camera-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .camera-actions button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .camera-actions .capture-btn {
+            background-color: var(--accent-red);
+            color: white;
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+        }
+        .camera-actions .capture-btn:hover {
+            background-color: var(--accent-red-hover);
+        }
+
+        .camera-actions .cancel-btn {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #E2E8F0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .camera-actions .cancel-btn:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        /* Mobile View Response */
+        @media (max-width: 992px) {
+            .main-content.with-toolbar { margin-left: 0; }
         }
 
         @media (max-width: 768px) {
-            header { padding: 12px 20px; }
-            .logo img { height: 42px; }
-            .header-title { font-size: 20px; }
-            .toolbar { width: 82%; left: -82%; top: 70px; }
-            .main-content.with-toolbar { margin-left: 0; }
-            .profile-container { padding: 1.8rem; }
+            header { padding: 0 16px; height: 64px; }
+            .logo img { height: 32px; }
+            .logo-title { font-size: 15px; }
+            .logo-subtitle { display: none; }
+            .header-right span { font-size: 11px; }
+            .toolbar { top: 64px; height: calc(100vh - 64px); left: -280px; }
+            .toolbar.active { transform: translateX(280px); }
+            .sidebar-overlay { top: 64px; height: calc(100vh - 64px); }
+            .main-content { padding: 88px 16px 40px; }
+            .profile-card { padding: 24px 20px; }
+            
+            #message {
+                top: 76px;
+                right: 16px;
+                left: 16px;
+                max-width: none;
+                text-align: center;
+                transform: translateX(0) !important;
+            }
         }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo" id="toggleToolbar">
-        <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/46a20c237c763bc2ccd436c332785427771eea05/public/brin_logo.png?raw=true" alt="BRIN Logo">
-        <div>
-            <span>BRIN</span>
-            <span>Badan Riset dan Inovasi Nasional</span>
+    <div class="ambient-glow"></div>
+
+    <header>
+        <div class="logo" id="toggleToolbar" aria-label="Toggle Sidebar Menu">
+            <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/46a20c237c763bc2ccd436c332785427771eea05/public/brin_logo.png?raw=true" alt="BRIN Logo">
+            <div class="logo-text">
+                <span class="logo-title">BRIN</span>
+                <span class="logo-subtitle">Badan Riset dan Inovasi Nasional</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <span>Parking System</span>
+        </div>
+    </header>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <aside class="toolbar" id="toolbar">
+        <div class="feature-box user-info">
+            <span class="welcome-text">Selamat Datang</span>
+            <img id="sidebarProfilePic" src="/assets/user.JPG" alt="Profile">
+            <span id="sidebarUserName">Operator</span>
+            <button class="profile" onclick="window.location.href='/profile.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg>
+                Profile
+            </button>
+            <button class="logout" id="logoutBtn">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"/><path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"/></svg>
+                Keluar
+            </button>
+        </div>
+        <div class="feature-box">
+            <h3>Management Suite</h3>
+            <button onclick="window.location.href='/index.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8.47 1.318a1 1 0 0 0-.94 0l-6 3A1 1 0 0 0 1 5.2v8.8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5.2a1 1 0 0 0-.53-.882zM7.5 3v10.5H2V5.7l5.5-2.75zm1 0 5.5 2.75V13.5H8.5z"/></svg>
+                Live Overview
+            </button>
+            <button onclick="window.location.href='/previous-analysis.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 7.61h-.024l-1.9-3.608H2.784L5.275 8.72 2.748 13.5h1.312l2.007-3.956h.024L8.136 13.5h1.313L6.92 8.728z"/></svg>
+                Previous Analysis
+            </button>
+            <button onclick="window.location.href='/exportdata.html'">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                Export Data
+            </button>
+            <button onclick="window.location.href='/helpdesk.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.03-.94-.584 0-1.01.388-1.01.94"/></svg>
+                Helpdesk
+            </button>
+            <button onclick="window.location.href='/parkiranalysis.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 11.5a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v7.5a.5.5 0 0 1-.5.5H4.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v10.5a.5.5 0 0 1-.5.5H8.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v13.5a.5.5 0 0 1-.5.5h-1.4a.5.5 0 0 1-.5-.5z"/></svg>
+                Parking Analysis
+            </button>
+        </div>
+    </aside>
+
+    <div class="main-content" id="mainContent">
+        <div class="profile-card">
+            <h2>PENGATURAN PROFIL</h2>
+
+            <div class="profile-pic-container">
+                <img id="previewPic" src="/assets/user.JPG" alt="Foto Profil">
+                <div class="action-buttons">
+                    <button id="changePhotoBtn" title="Upload dari File">📁</button>
+                    <button id="openCameraBtn" title="Buka Live Kamera">📸</button>
+                </div>
+                <input type="file" id="profilePicture" accept="image/*" style="display:none;">
+            </div>
+
+            <div class="loading-spinner" id="loadingSpinner"></div>
+
+            <div class="form-group">
+                <label for="username">Nama Pengguna</label>
+                <input type="text" id="username" placeholder="Nama pengguna" required>
+            </div>
+
+            <div class="form-group">
+                <label for="idPegawai">ID Pegawai</label>
+                <input type="text" id="idPegawai" placeholder="ID pegawai" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Email" required>
+            </div>
+
+            <div class="password-section">
+                <h3>Ganti Kata Sandi</h3>
+                <div class="form-group">
+                    <label for="password">Kata Sandi Baru</label>
+                    <input type="password" id="password" placeholder="Kata sandi baru (opsional)">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Konfirmasi Kata Sandi</label>
+                    <input type="password" id="confirmPassword" placeholder="Konfirmasi kata sandi">
+                </div>
+            </div>
+
+            <button id="saveProfile">Simpan Perubahan</button>
         </div>
     </div>
-    <div class="header-right">
-        <div class="header-title">Parking Management System – Profile</div>
-    </div>
-</header>
 
-<aside class="toolbar" id="toolbar">
-    <div class="feature-box user-info">
-        <h3>User Info</h3>
-        <img id="sidebarProfilePic" src="/assets/user.JPG" alt="Profile">
-        <span>Selamat Datang</span>
-        <span id="sidebarUserName"></span>
-        <button onclick="window.location.href='/profile.html'">Profile</button>
-        <button id="logoutBtn">Keluar</button>
+    <!-- Live Camera Modal -->
+    <div id="cameraModal" class="camera-modal">
+        <div class="camera-box">
+            <h3>Ambil Foto Profil</h3>
+            <video id="cameraVideo" autoplay playsinline></video>
+            <div class="camera-actions">
+                <button id="captureBtn" class="capture-btn">Ambil Foto</button>
+                <button id="cancelCameraBtn" class="cancel-btn">Batal</button>
+            </div>
+            <canvas id="cameraCanvas" style="display:none;"></canvas>
+        </div>
     </div>
-    <div class="feature-box">
-        <h3>Parking Management System</h3>
-        <button onclick="window.location.href='/index.html'">Live Overview</button>
-        <button onclick="window.location.href='/previous-analysis.html'">Previous Analysis</button>
-        <button onclick="window.location.href='/exportdata.html'">Export Data</button>
-        <button onclick="window.location.href='/helpdesk.html'">Helpdesk</button>
-        <button onclick="window.location.href='/parkiranalysis.html'">Parking Analysis</button>
-    </div>
-</aside>
 
-<div class="main-content" id="mainContent">
     <div id="message"></div>
 
-    <div class="profile-container">
-        <h2>Pengaturan Profil</h2>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        <div class="profile-picture-section">
-            <img id="previewPic" src="/assets/user.JPG" alt="Foto Profil">
-            <button class="change-photo-btn" id="changePhotoBtn">📷</button>
-            <input type="file" id="profilePicture" accept="image/*" style="display:none;">
-        </div>
+    <script>
+        // Client ANON untuk auth & operasi biasa
+        const anonSupabase = supabase.createClient(
+            "https://uqnfychfsloouxjthokp.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDQzNTMsImV4cCI6MjA4NzAyMDM1M30.2xLagrKBdnFX5X7TxsTUE-5ZRBZ2SO7dewA16R078Zc"
+        );
 
-        <div class="loading-spinner" id="loadingSpinner"></div>
+        // Client SERVICE ROLE untuk bypass RLS
+        const serviceRoleKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTQ0NDM1MywiZXhwIjoyMDg3MDIwMzUzfQ.CLbPdh_ecNS8SdGtXTUDqJ1QOd0IO_dbIJ_AKfqk78I";
 
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Nama pengguna">
-        </div>
+        const serviceSupabase = supabase.createClient(
+            "https://uqnfychfsloouxjthokp.supabase.co",
+            serviceRoleKey
+        );
 
-        <div class="form-group">
-            <label for="idPegawai">ID Pegawai</label>
-            <input type="text" id="idPegawai" placeholder="ID pegawai">
-        </div>
+        const messageEl = document.getElementById("message");
+        let currentUser = null;
+        let currentProfile = null;
+        let autoSaveTimeout = null;
 
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Alamat email">
-        </div>
-
-        <div class="password-section">
-            <h3>Ganti Kata Sandi</h3>
-            <div class="form-group">
-                <label for="password">Kata Sandi Baru</label>
-                <input type="password" id="password" placeholder="Kata sandi baru (opsional)">
-            </div>
-            <div class="form-group">
-                <label for="confirmPassword">Konfirmasi Kata Sandi</label>
-                <input type="password" id="confirmPassword" placeholder="Konfirmasi kata sandi">
-            </div>
-        </div>
-
-        <button id="saveProfile">Simpan Perubahan</button>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-    const supabase = Supabase.createClient(
-        'https://uqnfychfsloouxjthokp.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDQzNTMsImV4cCI6MjA4NzAyMDM1M30.2xLagrKBdnFX5X7TxsTUE-5ZRBZ2SO7dewA16R078Zc'
-    );
-
-    const messageEl = document.getElementById('message');
-    let currentUser = null;
-    let currentProfile = null;
-    let autoSaveTimeout = null;
-
-    function showMessage(text, isSuccess = false) {
-        messageEl.textContent = text;
-        messageEl.style.background = isSuccess ? 'var(--success-bg)' : 'var(--error-bg)';
-        messageEl.classList.add('show');
-        setTimeout(() => messageEl.classList.remove('show'), 5000);
-    }
-
-    function showLoading(show = true) {
-        document.getElementById('loadingSpinner').style.display = show ? 'block' : 'none';
-    }
-
-    async function loadUserProfile() {
-        showLoading(true);
-        try {
-            const { data: { user }, error: authErr } = await supabase.auth.getUser();
-            if (authErr || !user) {
-                showMessage('Sesi berakhir. Silakan login kembali.');
-                setTimeout(() => window.location.href = '/login.html', 2000);
-                return;
-            }
-
-            currentUser = user;
-            console.log('[DEBUG] User Auth:', { id: user.id, email: user.email });
-
-            let { data: profile, error: profileErr } = await supabase
-                .from('operator_profiles')
-                .select('username, profile_pic, email, id_pegawai')
-                .eq('user_id', user.id)
-                .maybeSingle();
-
-            if (profileErr) {
-                console.error('[DEBUG] Profile fetch error:', profileErr);
-                throw profileErr;
-            }
-
-            if (!profile) {
-                console.log('[DEBUG] Profil belum ada → membuat baru...');
-                const { error: insertErr } = await supabase
-                    .from('operator_profiles')
-                    .insert({
-                        user_id: user.id,
-                        email: user.email || '',
-                        username: user.email ? user.email.split('@')[0] : 'user_' + user.id.slice(0,8),
-                        profile_pic: '/assets/user.JPG',
-                        id_pegawai: ''
-                    });
-
-                if (insertErr) {
-                    console.error('[DEBUG] Insert error:', insertErr);
-                    throw insertErr;
-                }
-
-                console.log('[DEBUG] Insert berhasil → reload profil');
-                ({ data: profile } = await supabase
-                    .from('operator_profiles')
-                    .select('username, profile_pic, email, id_pegawai')
-                    .eq('user_id', user.id)
-                    .single());
-            }
-
-            if (!profile) throw new Error('Gagal memuat profil setelah insert');
-
-            currentProfile = profile;
-            console.log('[DEBUG] Profil berhasil dimuat:', currentProfile);
-
-            // Update UI
-            document.getElementById('previewPic').src = profile.profile_pic || '/assets/user.JPG';
-            document.getElementById('sidebarProfilePic').src = profile.profile_pic || '/assets/user.JPG';
-            document.getElementById('username').value = profile.username || '';
-            document.getElementById('idPegawai').value = profile.id_pegawai || '';
-            document.getElementById('email').value = profile.email || user.email || '';
-            document.getElementById('sidebarUserName').textContent = profile.username || user.email.split('@')[0];
-
-        } catch (err) {
-            console.error('[DEBUG] Load profile gagal:', err.message, err);
-            showMessage('Gagal memuat profil: ' + (err.message || 'Cek console browser'));
-        } finally {
-            showLoading(false);
-        }
-    }
-
-    async function updateProfile(field, value) {
-        if (!currentUser || !currentProfile) {
-            console.warn('[DEBUG] Tidak bisa update: user atau profile belum ada');
-            return;
+        function showMessage(text, isSuccess = false) {
+            messageEl.textContent = text;
+            messageEl.style.background = isSuccess ? "var(--success-bg)" : "var(--error-bg)";
+            messageEl.classList.add("show");
+            setTimeout(() => messageEl.classList.remove("show"), 5000);
         }
 
-        try {
-            console.log(`[DEBUG] Update ${field} menjadi: ${value}`);
-            const { error } = await supabase
-                .from('operator_profiles')
-                .update({ [field]: value })
-                .eq('user_id', currentUser.id);
-
-            if (error) {
-                console.error(`[DEBUG] Update ${field} gagal:`, error);
-                throw error;
-            }
-
-            currentProfile[field] = value;
-            if (field === 'username') {
-                document.getElementById('sidebarUserName').textContent = value;
-            }
-            showMessage(`${field} berhasil diperbarui!`, true);
-            console.log(`[DEBUG] Update ${field} berhasil`);
-        } catch (err) {
-            console.error(`[DEBUG] Gagal update ${field}:`, err.message, err);
-            showMessage('Gagal update ' + field + ': ' + (err.message || 'Cek console'));
+        function showLoading(show = true) {
+            document.getElementById("loadingSpinner").style.display = show ? "block" : "none";
         }
-    }
 
-    async function uploadProfilePicture(file) {
-        if (!file || !currentUser) return;
-
-        try {
-            showLoading(true);
-            const fileExt = file.name.split('.').pop() || 'jpg';
-            const fileName = `${currentUser.id}.${fileExt}`;
-            const filePath = `profiles/${fileName}`;
-
-            console.log('[DEBUG] Upload foto ke path:', filePath);
-
-            const { error: uploadError } = await supabase.storage
-                .from('profiles')
-                .upload(filePath, file, { upsert: true });
-
-            if (uploadError) {
-                console.error('[DEBUG] Upload storage error:', uploadError);
-                throw uploadError;
-            }
-
-            const { data: { publicUrl } } = supabase.storage
-                .from('profiles')
-                .getPublicUrl(filePath);
-
-            console.log('[DEBUG] Public URL foto:', publicUrl);
-
-            await updateProfile('profile_pic', publicUrl);
-
-            document.getElementById('previewPic').src = publicUrl;
-            document.getElementById('sidebarProfilePic').src = publicUrl;
-
-        } catch (err) {
-            console.error('[DEBUG] Upload foto gagal:', err.message, err);
-            showMessage('Gagal upload foto: ' + (err.message || 'Cek console'));
-        } finally {
-            showLoading(false);
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-        await loadUserProfile();
-
-        const toolbar = document.getElementById('toolbar');
-        const mainContent = document.getElementById('mainContent');
-
-        document.getElementById('toggleToolbar').addEventListener('click', () => {
-            toolbar.classList.toggle('active');
-            mainContent.classList.toggle('with-toolbar');
-        });
-
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            await supabase.auth.signOut();
-            showMessage('Berhasil logout!', true);
-            setTimeout(() => window.location.href = '/login.html', 1200);
-        });
-
-        document.getElementById('changePhotoBtn').addEventListener('click', () => {
-            document.getElementById('profilePicture').click();
-        });
-
-        document.getElementById('profilePicture').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) uploadProfilePicture(file);
-        });
-
-        document.getElementById('username').addEventListener('input', (e) => {
-            clearTimeout(autoSaveTimeout);
-            autoSaveTimeout = setTimeout(async () => {
-                const val = e.target.value.trim();
-                if (val.length < 3 || val === currentProfile?.username) return;
-                await updateProfile('username', val);
-            }, 1200);
-        });
-
-        document.getElementById('idPegawai').addEventListener('input', (e) => {
-            clearTimeout(autoSaveTimeout);
-            autoSaveTimeout = setTimeout(async () => {
-                const val = e.target.value.trim();
-                if (val === currentProfile?.id_pegawai) return;
-                await updateProfile('id_pegawai', val);
-            }, 1200);
-        });
-
-        document.getElementById('saveProfile').addEventListener('click', async () => {
-            const username = document.getElementById('username').value.trim();
-            const idPegawai = document.getElementById('idPegawai').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const pass = document.getElementById('password').value;
-            const confirm = document.getElementById('confirmPassword').value;
-
-            if (!username || !idPegawai || !email) {
-                showMessage('Username, ID Pegawai, dan Email wajib diisi!');
-                return;
-            }
-
+        async function loadUserProfile() {
             showLoading(true);
             try {
-                await updateProfile('username', username);
-                await updateProfile('id_pegawai', idPegawai);
-
-                // Update email jika berubah
-                if (email !== currentProfile.email) {
-                    console.log('[DEBUG] Update email ke:', email);
-                    const { error: authEmailErr } = await supabase.auth.updateUser({ email });
-                    if (authEmailErr) throw authEmailErr;
-                    await updateProfile('email', email);
+                const { data: { user }, error: authErr } = await anonSupabase.auth.getUser();
+                if (authErr || !user) {
+                    showMessage("Sesi berakhir. Silakan login kembali.");
+                    setTimeout(() => window.location.href = "/login.html", 2000);
+                    return;
                 }
 
-                // Update password jika diisi
-                if (pass) {
-                    if (pass.length < 6) throw new Error('Password minimal 6 karakter');
-                    if (pass !== confirm) throw new Error('Konfirmasi password tidak cocok');
+                currentUser = user;
 
-                    console.log('[DEBUG] Update password...');
-                    const { error: authPassErr } = await supabase.auth.updateUser({ password: pass });
-                    if (authPassErr) throw authPassErr;
+                const { data: profile, error: profileErr } = await serviceSupabase
+                    .from("operator_profiles")
+                    .select("username, profile_pic, email, id_pegawai")
+                    .eq("user_id", user.id)
+                    .maybeSingle();
 
-                    document.getElementById('password').value = '';
-                    document.getElementById('confirmPassword').value = '';
+                if (profileErr) throw profileErr;
+
+                if (!profile) {
+                    const { error: insertErr } = await serviceSupabase
+                        .from("operator_profiles")
+                        .insert({
+                            user_id: user.id,
+                            email: user.email,
+                            username: user.email.split('@')[0],
+                            profile_pic: "/assets/user.JPG",
+                            id_pegawai: ""
+                        });
+
+                    if (insertErr) throw insertErr;
+
+                    const { data: newProfile } = await serviceSupabase
+                        .from("operator_profiles")
+                        .select("username, profile_pic, email, id_pegawai")
+                        .eq("user_id", user.id)
+                        .single();
+
+                    currentProfile = newProfile;
+                } else {
+                    currentProfile = profile;
                 }
 
-                showMessage('Semua perubahan berhasil disimpan!', true);
-                console.log('[DEBUG] Save all berhasil');
+                document.getElementById("previewPic").src = currentProfile.profile_pic || "/assets/user.JPG";
+                document.getElementById("sidebarProfilePic").src = currentProfile.profile_pic || "/assets/user.JPG";
+                document.getElementById("username").value = currentProfile.username || "";
+                document.getElementById("idPegawai").value = currentProfile.id_pegawai || "";
+                document.getElementById("email").value = currentProfile.email || user.email || "";
+                document.getElementById("sidebarUserName").textContent = currentProfile.username || user.email.split('@')[0];
+
             } catch (err) {
-                console.error('[DEBUG] Save error:', err.message, err);
-                showMessage('Gagal menyimpan: ' + (err.message || 'Cek console browser'));
+                console.error("Load profile error:", err);
+                showMessage("Gagal memuat profil: " + (err.message || "Cek console"));
             } finally {
                 showLoading(false);
             }
+        }
+
+        async function updateProfile(field, value) {
+            if (!currentUser) return;
+
+            try {
+                const { error } = await serviceSupabase
+                    .from("operator_profiles")
+                    .update({ [field]: value })
+                    .eq("user_id", currentUser.id);
+
+                if (error) throw error;
+
+                currentProfile[field] = value;
+                if (field === "username") {
+                    document.getElementById("sidebarUserName").textContent = value;
+                }
+                showMessage(`${field.charAt(0).toUpperCase() + field.slice(1)} berhasil diperbarui!`, true);
+            } catch (err) {
+                showMessage("Gagal menyimpan: " + (err.message || "Unknown error"));
+                console.error("Update error:", err);
+            }
+        }
+
+        async function uploadProfilePicture(file) {
+            if (!file) return;
+
+            try {
+                showLoading(true);
+                const fileExt = file.name.split('.').pop() || 'jpg';
+                const fileName = `${currentUser.id}_${Date.now()}.${fileExt}`; // Menghindari cache gambar lama
+                const filePath = `profiles/${fileName}`;
+
+                const { error: uploadError } = await serviceSupabase.storage
+                    .from('profiles')
+                    .upload(filePath, file, { upsert: true });
+
+                if (uploadError) throw uploadError;
+
+                const { data: { publicUrl } } = serviceSupabase.storage
+                    .from('profiles')
+                    .getPublicUrl(filePath);
+
+                await updateProfile("profile_pic", publicUrl);
+
+                document.getElementById("previewPic").src = publicUrl;
+                document.getElementById("sidebarProfilePic").src = publicUrl;
+
+            } catch (err) {
+                showMessage("Gagal upload foto: " + err.message);
+                console.error(err);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await loadUserProfile();
+
+            const toolbar = document.getElementById("toolbar");
+            const mainContent = document.getElementById("mainContent");
+            const sidebarOverlay = document.getElementById("sidebarOverlay");
+
+            // Event toggle sidebar untuk layout responsive
+            document.getElementById("toggleToolbar").addEventListener("click", () => {
+                toolbar.classList.toggle("active");
+                mainContent.classList.toggle("with-toolbar");
+                sidebarOverlay.classList.toggle("active");
+            });
+            sidebarOverlay.addEventListener("click", () => {
+                toolbar.classList.remove("active");
+                sidebarOverlay.classList.remove("active");
+            });
+
+            document.getElementById("logoutBtn").addEventListener("click", async () => {
+                await anonSupabase.auth.signOut();
+                showMessage("Berhasil logout!", true);
+                setTimeout(() => window.location.href = "/login.html", 1200);
+            });
+
+            // Ganti Photo by File Input
+            document.getElementById("changePhotoBtn").addEventListener("click", () => {
+                document.getElementById("profilePicture").click();
+            });
+
+            document.getElementById("profilePicture").addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) uploadProfilePicture(file);
+            });
+
+            // =====================================
+            // LOGIKA LIVE KAMERA (WEBCAM)
+            // =====================================
+            const cameraModal = document.getElementById("cameraModal");
+            const cameraVideo = document.getElementById("cameraVideo");
+            const cameraCanvas = document.getElementById("cameraCanvas");
+            let mediaStream = null;
+
+            document.getElementById("openCameraBtn").addEventListener("click", async () => {
+                try {
+                    mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                    cameraVideo.srcObject = mediaStream;
+                    cameraModal.classList.add("active");
+                } catch (err) {
+                    showMessage("Gagal mengakses kamera: Pastikan izin kamera aktif.");
+                    console.error("Camera access error:", err);
+                }
+            });
+
+            function stopCamera() {
+                if (mediaStream) {
+                    mediaStream.getTracks().forEach(track => track.stop());
+                    mediaStream = null;
+                }
+                cameraModal.classList.remove("active");
+            }
+
+            document.getElementById("cancelCameraBtn").addEventListener("click", stopCamera);
+
+            document.getElementById("captureBtn").addEventListener("click", () => {
+                if (!mediaStream) return;
+                
+                // Samakan ukuran canvas dengan stream video asli
+                cameraCanvas.width = cameraVideo.videoWidth;
+                cameraCanvas.height = cameraVideo.videoHeight;
+                
+                const ctx = cameraCanvas.getContext("2d");
+                
+                // Karena efek mirror di CSS, kita juga harus flip gambar di canvas agar tersimpan dengan benar
+                ctx.translate(cameraCanvas.width, 0);
+                ctx.scale(-1, 1);
+                ctx.drawImage(cameraVideo, 0, 0, cameraCanvas.width, cameraCanvas.height);
+                
+                // Konversi canvas ke file blob (JPEG format)
+                cameraCanvas.toBlob((blob) => {
+                    if (blob) {
+                        const file = new File([blob], "camera_capture.jpg", { type: "image/jpeg" });
+                        uploadProfilePicture(file); // Proses sama seperti upload file
+                    }
+                }, "image/jpeg", 0.9);
+                
+                stopCamera();
+            });
+            // =====================================
+
+            document.getElementById("username").addEventListener("input", (e) => {
+                clearTimeout(autoSaveTimeout);
+                autoSaveTimeout = setTimeout(async () => {
+                    const val = e.target.value.trim();
+                    if (val.length < 3 || val === currentProfile?.username) return;
+                    await updateProfile("username", val);
+                }, 1200);
+            });
+
+            document.getElementById("idPegawai").addEventListener("input", (e) => {
+                clearTimeout(autoSaveTimeout);
+                autoSaveTimeout = setTimeout(async () => {
+                    const val = e.target.value.trim();
+                    if (val === currentProfile?.id_pegawai) return;
+                    await updateProfile("id_pegawai", val);
+                }, 1200);
+            });
+
+            document.getElementById("saveProfile").addEventListener("click", async () => {
+                const username = document.getElementById("username").value.trim();
+                const idPegawai = document.getElementById("idPegawai").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const pass = document.getElementById("password").value;
+                const confirmPass = document.getElementById("confirmPassword").value;
+
+                if (!username || !idPegawai || !email) {
+                    showMessage("Semua field wajib diisi!");
+                    return;
+                }
+
+                showLoading(true);
+                try {
+                    if (username !== currentProfile.username) await updateProfile("username", username);
+                    if (idPegawai !== currentProfile.id_pegawai) await updateProfile("id_pegawai", idPegawai);
+
+                    // Update email jika berubah (pakai anon untuk auth)
+                    if (email !== currentProfile.email) {
+                        const { error } = await anonSupabase.auth.updateUser({ email });
+                        if (error) throw error;
+                        await updateProfile("email", email);
+                    }
+
+                    // Update password jika diisi
+                    if (pass) {
+                        if (pass.length < 6) throw new Error("Password minimal 6 karakter");
+                        if (pass !== confirmPass) throw new Error("Konfirmasi password tidak cocok");
+
+                        const { error } = await anonSupabase.auth.updateUser({ password: pass });
+                        if (error) throw error;
+
+                        document.getElementById("password").value = "";
+                        document.getElementById("confirmPassword").value = "";
+                    }
+
+                    showMessage("Semua perubahan berhasil disimpan!", true);
+                } catch (err) {
+                    showMessage(err.message || "Gagal menyimpan perubahan");
+                    console.error(err);
+                } finally {
+                    showLoading(false);
+                }
+            });
         });
-    });
-</script>
+    </script>
 </body>
 </html>

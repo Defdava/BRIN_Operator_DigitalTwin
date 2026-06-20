@@ -8,214 +8,191 @@
     <meta http-equiv="Expires" content="0">
     <title>BRIN Parking | Daftar Operator</title>
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary-blue: #1D3354;
-            --accent-red: #D64045;
-            --accent-red-hover: #c0392b;
-            --text-light: #f0f4f8;
-            --bg-overlay: rgba(29, 51, 84, 0.88);
-            --input-bg: rgba(255,255,255,0.12);
-            --error-bg: rgba(214,64,69,0.92);
-            --success-bg: rgba(46, 204, 113, 0.92);
+            --primary-blue: #0B192C;
+            --accent-red: #E63946;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --bg-dark: #070F19;
+            --glass-bg: rgba(15, 32, 54, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: rgba(0, 0, 0, 0.35);
+            --glass-blur: blur(16px);
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #d3d3d3;
-            color: var(--text-light);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            width: 450px; height: 450px;
+            background: radial-gradient(circle, rgba(230, 57, 70, 0.07) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 15%; right: -150px;
+            z-index: -1; pointer-events: none; filter: blur(50px);
         }
 
         body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            z-index: -2;
-            animation: slideshow 32s infinite ease-in-out;
-            opacity: 0.35;
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center center;
+            z-index: -2; animation: slideshow 20s infinite;
+            opacity: 0.25; filter: contrast(105%) brightness(85%);
         }
 
         @keyframes slideshow {
-            0%, 20%   { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); }
-            20%, 40%  { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); }
-            40%, 60%  { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); }
-            60%, 80%  { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); }
-            80%, 100% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); }
+            0% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.25; }
+            15% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0.25; }
+            20% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin1.jpg?raw=true'); opacity: 0; }
+            20.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
+            35% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0.25; }
+            40% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin3.jpg?raw=true'); opacity: 0; }
+            40.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
+            55% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0.25; }
+            60% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin2.jpg?raw=true'); opacity: 0; }
+            60.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
+            75% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0.25; }
+            80% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin4.jpg?raw=true'); opacity: 0; }
+            80.01% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
+            95% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0.25; }
+            100% { background-image: url('https://github.com/Defdava/Digital-Twin-Website-used/blob/e93ccec33c490658c360964197ea2bc52b9ec83a/fotobrin.jpg?raw=true'); opacity: 0; }
         }
 
         header {
-            background: var(--primary-blue);
-            color: white;
-            padding: 12px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+            background: rgba(11, 25, 44, 0.8);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 24px; height: 72px; display: flex; justify-content: space-between; align-items: center;
+            position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo img { height: 40px; width: auto; filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.1)); }
+        .logo-text { display: flex; flex-direction: column; }
+        .logo-title {
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 800; letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #FFFFFF 0%, #E2E8F0 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
-        .logo img { height: 48px; width: auto; }
-
-        .logo-text { font-size: 1.35rem; font-weight: 700; }
-
-        .logo-subtext { font-size: 0.9rem; opacity: 0.9; }
-
-        .header-right { font-size: 1.1rem; font-weight: 500; }
+        .logo-subtitle { font-size: 10px; color: var(--text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; margin-top: -2px; }
+        
+        .header-right { background: rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .header-right span { font-size: 13px; font-weight: 600; color: #E2E8F0; }
 
         .register-page {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 100px 20px 60px;
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 100px 20px 40px;
         }
 
         .welcome {
-            font-size: clamp(1.6rem, 5vw, 2.2rem);
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 1.8rem;
-            color: white;
-            text-shadow: 0 3px 10px rgba(0,0,0,0.5);
+            font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 24px;
+            background: linear-gradient(90deg, #FFFFFF 30%, var(--text-secondary) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
         .register-card {
-            background: var(--bg-overlay);
-            backdrop-filter: blur(6px);
-            padding: 2.2rem 1.8rem;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 380px;
-            border: 1.5px solid var(--accent-red);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            padding: 40px 32px; border-radius: 20px; width: 100%; max-width: 400px;
+            border: 1px solid var(--glass-border); box-shadow: 0 16px 40px var(--glass-shadow);
         }
 
-        .register-card h2 {
-            margin: 0 0 1.8rem;
-            text-align: center;
-            color: white;
-            font-size: 1.5rem;
-        }
+        .register-card h2 { margin: 0 0 24px; text-align: center; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: white; letter-spacing: 1px; }
 
-        .form-group {
-            margin-bottom: 1.4rem;
-        }
+        .form-group { margin-bottom: 20px; }
 
         input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1.5px solid var(--accent-red);
-            border-radius: 8px;
-            background: var(--input-bg);
-            color: white;
-            font-size: 1rem;
+            width: 100%; padding: 14px 16px; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
+            background: rgba(11, 25, 44, 0.6); color: white; font-size: 14px; font-family: inherit;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); transition: all 0.3s ease;
         }
 
-        input::placeholder { color: rgba(255,255,255,0.6); }
-
-        input:focus {
-            outline: none;
-            border-color: #e74c3c;
-            box-shadow: 0 0 0 3px rgba(215,64,69,0.25);
-        }
+        input::placeholder { color: rgba(255, 255, 255, 0.35); }
+        input:focus { outline: none; border-color: var(--accent-red); box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2); background: rgba(11, 25, 44, 0.8); }
 
         button {
-            width: 100%;
-            padding: 14px;
-            background: var(--accent-red);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            cursor: pointer;
+            width: 100%; background: linear-gradient(135deg, var(--accent-red) 0%, #D62828 100%);
+            color: white; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 8px 20px rgba(230, 57, 70, 0.3); transition: all 0.3s ease;
         }
 
-        button:hover { background: var(--accent-red-hover); }
+        button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(230, 57, 70, 0.4); background: linear-gradient(135deg, #FF4D5A 0%, #E63946 100%); }
+        button:disabled { background: rgba(255,255,255,0.1); color: #888; box-shadow: none; cursor: not-allowed; }
 
-        button:disabled { background: #777; cursor: not-allowed; }
-
-        .links {
-            margin-top: 1.4rem;
-            text-align: center;
-            font-size: 0.95rem;
-        }
-
-        .links a { color: #5dade2; text-decoration: none; }
-
-        .links a:hover { color: #85c1e9; text-decoration: underline; }
+        .links { margin-top: 24px; text-align: center; font-size: 13.5px; }
+        .links a { color: #94A3B8; text-decoration: none; transition: color 0.3s; }
+        .links a:hover { color: white; text-decoration: underline; }
 
         #message {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            left: 20px;
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 14px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            z-index: 2000;
-            opacity: 0;
-            transition: all 0.4s;
+            position: fixed; top: 24px; right: 24px; padding: 14px 24px; border-radius: 12px; font-size: 14px; font-weight: 600;
+            z-index: 2000; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            pointer-events: none; opacity: 0; transform: translateY(-50px); color: white;
         }
+        #message.show { opacity: 1; transform: translateY(0); }
 
-        #message.show { opacity: 1; }
+        @media (max-width: 768px) {
+            header { padding: 0 16px; height: 64px; }
+            .logo img { height: 32px; }
+            .logo-title { font-size: 15px; }
+            .logo-subtitle { display: none; }
+            .header-right { padding: 6px 12px; }
+            .header-right span { font-size: 11px; }
+            .welcome { font-size: 20px; }
+            .register-card { padding: 32px 24px; }
+            #message { top: 76px; right: 16px; left: 16px; transform: translateX(0); text-align: center; }
+        }
     </style>
 </head>
 <body>
 
+<div class="ambient-glow"></div>
+
 <header>
     <div class="logo">
         <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/46a20c237c763bc2ccd436c332785427771eea05/public/brin_logo.png?raw=true" alt="BRIN Logo">
-        <div>
-            <div class="logo-text">BRIN</div>
-            <div class="logo-subtext">Badan Riset dan Inovasi Nasional</div>
+        <div class="logo-text">
+            <span class="logo-title">BRIN</span>
+            <span class="logo-subtitle">Badan Riset dan Inovasi Nasional</span>
         </div>
     </div>
-    <div class="header-right">Parking Management System – Operator</div>
+    <div class="header-right">
+        <span>Operator System</span>
+    </div>
 </header>
 
 <div class="register-page">
-    <div class="welcome">Daftar Akun Operator BRIN Parking</div>
+    <div class="welcome">Registrasi Operator Baru</div>
 
     <div class="register-card">
-        <h2>REGISTRASI</h2>
+        <h2>DAFTAR AKUN</h2>
         <form id="registerForm">
             <div class="form-group">
                 <input type="text" id="regUsername" placeholder="Nama Pengguna" required autocomplete="username">
             </div>
             <div class="form-group">
-                <input type="email" id="regEmail" placeholder="Email" required autocomplete="email">
+                <input type="email" id="regEmail" placeholder="Alamat Email" required autocomplete="email">
             </div>
             <div class="form-group">
-                <input type="text" id="regIdWorker" placeholder="ID Pegawai" required autocomplete="off">
+                <input type="text" id="regIdWorker" placeholder="ID Pegawai / NIP" required autocomplete="off">
             </div>
             <div class="form-group">
-                <input type="password" id="regPassword" placeholder="Kata Sandi" required autocomplete="new-password">
+                <input type="password" id="regPassword" placeholder="Kata Sandi (Min. 6 Karakter)" required autocomplete="new-password">
             </div>
-            <button type="submit" id="btnRegister">Daftar</button>
+            <button type="submit" id="btnRegister">Buat Akun</button>
         </form>
 
         <div class="links">
-            <a href="/login.html">Sudah punya akun? Masuk</a>
+            <a href="/login.html">Sudah punya akun? Masuk di sini</a>
         </div>
     </div>
 </div>
@@ -223,19 +200,14 @@
 <div id="message"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-// Tunggu DOM ready
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Client dengan ANON key (untuk signUp & signIn)
     const anonSupabase = supabase.createClient(
         "https://uqnfychfsloouxjthokp.supabase.co",
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0NDQzNTMsImV4cCI6MjA4NzAyMDM1M30.2xLagrKBdnFX5X7TxsTUE-5ZRBZ2SO7dewA16R078Zc"
     );
 
-    // Client dengan SERVICE ROLE key → BYPASS RLS sepenuhnya
-    // GANTI DENGAN SERVICE_ROLE KEY ANDA (dari dashboard → Settings → API → service_role)
     const serviceRoleKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTQ0NDM1MywiZXhwIjoyMDg3MDIwMzUzfQ.CLbPdh_ecNS8SdGtXTUDqJ1QOd0IO_dbIJ_AKfqk78I";
 
     const serviceSupabase = supabase.createClient(
@@ -248,9 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showMessage(text, isSuccess = false) {
         messageEl.textContent = text;
-        messageEl.style.background = isSuccess ? "var(--success-bg)" : "var(--error-bg)";
+        messageEl.style.background = isSuccess ? "rgba(16, 185, 129, 0.95)" : "rgba(230, 57, 70, 0.95)";
         messageEl.classList.add("show");
-        setTimeout(() => messageEl.classList.remove("show"), 6000);
+        setTimeout(() => messageEl.classList.remove("show"), 5000);
     }
 
     document.getElementById("registerForm").addEventListener("submit", async (e) => {
@@ -262,38 +234,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById("regPassword").value.trim();
 
         if (!username || !email || !idWorker || !password) {
-            showMessage("Semua kolom wajib diisi");
+            showMessage("Semua kolom wajib diisi.");
             return;
         }
 
         if (password.length < 6) {
-            showMessage("Kata sandi minimal 6 karakter");
+            showMessage("Kata sandi minimal 6 karakter.");
             return;
         }
 
         btnRegister.disabled = true;
-        btnRegister.textContent = "Memproses...";
+        btnRegister.textContent = "Memproses Pendaftaran...";
 
         try {
-            // 1. Daftar ke Auth (pakai anon key)
             const { data: signUpData, error: signUpError } = await anonSupabase.auth.signUp({
-                email,
-                password,
-                options: {
-                    data: {
-                        username,
-                        id_pegawai: idWorker,
-                        profilePic: '/assets/user.JPG' // default
-                    }
-                }
+                email, password,
+                options: { data: { username, id_pegawai: idWorker, profilePic: '/assets/user.JPG' } }
             });
 
             if (signUpError) throw signUpError;
-            if (!signUpData.user) throw new Error("User tidak tercipta");
+            if (!signUpData.user) throw new Error("Gagal membuat user auth");
 
             const userId = signUpData.user.id;
 
-            // 2. Insert profil pakai SERVICE ROLE (bypass RLS)
             const { error: profileError } = await serviceSupabase
                 .from('operator_profiles')
                 .insert({
@@ -309,35 +272,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (profileError) throw profileError;
 
-            // 3. Auto-login (pakai anon key)
-            const { error: signInError } = await anonSupabase.auth.signInWithPassword({
-                email,
-                password
-            });
-
+            const { error: signInError } = await anonSupabase.auth.signInWithPassword({ email, password });
             if (signInError) throw signInError;
 
-            // 4. Simpan data user ke localStorage
             localStorage.setItem('currentUser', JSON.stringify({
-                id: userId,
-                username,
-                email,
-                id_pegawai: idWorker,
-                profilePic: '/assets/user.JPG'
+                id: userId, username, email, id_pegawai: idWorker, profilePic: '/assets/user.JPG'
             }));
 
-            showMessage("Registrasi berhasil! Sedang masuk ke dashboard...", true);
-
-            setTimeout(() => {
-                window.location.href = "/index.html";
-            }, 1500);
+            showMessage("Registrasi berhasil! Membuka dashboard sistem...", true);
+            setTimeout(() => { window.location.href = "/index.html"; }, 1500);
 
         } catch (err) {
-            console.error("Registrasi error detail:", err);
-            showMessage("Gagal registrasi: " + (err.message || "Unknown error. Cek console browser (F12)"));
+            console.error(err);
+            showMessage("Pendaftaran gagal: Email mungkin sudah digunakan.");
         } finally {
             btnRegister.disabled = false;
-            btnRegister.textContent = "Daftar";
+            btnRegister.textContent = "Buat Akun";
         }
     });
 });

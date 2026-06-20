@@ -7,46 +7,96 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>Export Data - BRIN Parking Management</title>
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="https://github.com/Defdava/Digital-Twin-Website-used/blob/575171d0e9964327d99950733c2b48cea0c59d72/logo-brin.png?raw=true">
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-blue: #1D3354;
-            --accent-red: #D64045;
-            --text-color: #FFFFFF;
-            --white-bg: #E9FFF9;
-            --slot-empty: #9ED8DB;
-            --slot-occupied: #467599;
-            --car-small: #0000FF;
-            --car-medium: #FFA500;
-            --car-big: #FF0000;
+            --primary-blue: #0B192C;
+            --secondary-blue: #1E3E62;
+            --accent-red: #E63946;
+            --accent-red-hover: #D62828;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --bg-dark: #070F19;
+            
+            /* Status Colors */
+            --slot-empty: #06B6D4;
+            --slot-occupied: #3B82F6;
+            --car-small: #38BDF8;
+            --car-medium: #F59E0B;
+            --car-big: #EF4444;
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(15, 32, 54, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: rgba(0, 0, 0, 0.3);
+            --glass-blur: blur(16px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-dark);
             overflow-x: hidden;
             font-size: 16px;
             touch-action: manipulation;
-            background-color: var(--white-bg);
+            min-height: 100vh;
+            line-height: 1.5;
         }
 
-        video#bg-video {
+        /* Enhanced Video Background Overlay */
+        .video-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
             z-index: -2;
-            opacity: 0.2;
+            overflow: hidden;
+            background: radial-gradient(circle at top right, rgba(30, 62, 98, 0.3) 0%, rgba(7, 15, 25, 1) 100%);
         }
 
+        video#bg-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.15;
+            filter: grayscale(40%) contrast(110%);
+        }
+
+        /* Ambient Glow Highlights */
+        .ambient-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(230, 57, 70, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 10%;
+            right: -100px;
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(40px);
+        }
+
+        /* Sticky Glassmorphic Header */
         header {
-            background-color: var(--primary-blue);
+            background: rgba(11, 25, 44, 0.75);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--glass-border);
             color: white;
-            padding: 15px 30px;
+            padding: 0 24px;
+            height: 72px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -54,293 +104,514 @@
             width: 100%;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
         }
 
         .logo {
             display: flex;
             align-items: center;
             cursor: pointer;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            transition: background-color 0.3s;
+        }
+
+        .logo:hover {
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .logo img {
-            height: 50px;
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.1));
         }
 
-        .logo span {
-            margin-left: 15px;
-            font-size: 20px;
-            font-weight: bold;
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #FFFFFF 0%, #E2E8F0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-subtitle {
+            font-size: 10px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: -2px;
         }
 
         .header-right {
             display: flex;
             align-items: center;
-            margin-left: auto;
-            margin-right: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .header-right span {
-            font-size: 18px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #E2E8F0;
         }
 
+        /* Glassmorphic Sidebar Drawer */
         .toolbar {
             position: fixed;
-            top: 70px;
-            left: -240px;
-            width: 240px;
-            height: calc(100vh - 70px);
-            background-color: var(--primary-blue);
-            padding: 15px 20px;
+            top: 72px;
+            left: -280px;
+            width: 280px;
+            height: calc(100vh - 72px);
+            background: rgba(11, 25, 44, 0.85);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--glass-border);
+            padding: 24px 20px;
             z-index: 999;
             overflow-y: auto;
-            transition: left 0.3s ease-in-out;
-            box-sizing: border-box;
-            color: white;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.25);
         }
 
         .toolbar.active {
-            left: 0;
+            transform: translateX(280px);
         }
 
+        /* Sidebar Backdrop Overlay on Mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 72px);
+            background-color: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Glass Cards in Toolbar */
         .toolbar .feature-box {
-            background-color: rgba(255, 255, 255, 0.15);
-            border: 1px solid var(--accent-red);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px var(--glass-shadow);
         }
 
         .toolbar .feature-box h3 {
-            margin: 0 0 10px;
-            font-size: 18px;
-            color: white;
+            margin-bottom: 16px;
+            font-size: 15px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-primary);
             text-align: center;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 8px;
         }
 
-        .toolbar .feature-box button {
+        /* Styled Navigation Buttons */
+        .toolbar button {
             width: 100%;
-            padding: 10px;
-            background-color: var(--accent-red);
-            color: white;
-            border: none;
-            border-radius: 6px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            color: #E2E8F0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
             cursor: pointer;
             font-size: 14px;
-            margin-bottom: 8px;
-            transition: background-color 0.3s;
-            font-weight: bold;
+            font-weight: 500;
+            margin-bottom: 10px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.25s ease;
         }
 
-        .toolbar .feature-box button:hover {
-            background-color: #b8323a;
+        .toolbar button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(4px);
         }
 
+        /* Active Navigation Link styling */
+        .toolbar button.export-data {
+            background: rgba(230, 57, 70, 0.15);
+            border-color: rgba(230, 57, 70, 0.4);
+            color: white;
+            font-weight: 600;
+        }
+
+        .toolbar button.export-data::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-red);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-red);
+        }
+
+        /* User Profile Widget */
         .toolbar .user-info {
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.15);
-            border: 1px solid var(--accent-red);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .toolbar .user-info img {
-            width: 50px;
-            height: 50px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
-            margin-bottom: 10px;
-            border: 2px solid white;
+            margin-bottom: 12px;
+            border: 3px solid var(--secondary-blue);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            object-fit: cover;
         }
 
-        .toolbar .user-info span {
+        .toolbar .user-info .welcome-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .toolbar .user-info #userName {
             display: block;
-            margin: 6px 0;
-            font-size: 14px;
+            margin: 4px 0 16px 0;
+            font-size: 16px;
+            font-weight: 700;
             color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
+        .toolbar .user-info button.profile {
+            background-color: var(--secondary-blue);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .toolbar .user-info button.profile:hover {
+            background-color: #2c598c;
+            transform: scale(1.02);
+        }
+
+        .toolbar .user-info button.logout {
+            background-color: transparent;
+            border: 1px solid rgba(230, 57, 70, 0.3);
+            color: var(--accent-red);
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .toolbar .user-info button.logout:hover {
+            background-color: rgba(230, 57, 70, 0.12);
+            border-color: var(--accent-red);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        /* Main Workspace Area */
         .main-content {
-            padding: 90px 30px 30px;
+            padding: 104px 32px 40px;
             min-height: 100vh;
             margin-left: 0;
-            transition: margin-left 0.3s ease-in-out;
+            transition: margin-left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            max-width: 1200px;
+            margin-right: auto;
         }
 
         .main-content.with-toolbar {
-            margin-left: 260px;
+            margin-left: 280px;
         }
 
+        /* Glassmorphic Data Panel */
         .history {
-            background-color: var(--slot-occupied);
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px solid var(--accent-red);
-            min-height: 150px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 12px 40px var(--glass-shadow);
             position: relative;
-            color: white;
         }
 
         .history h2 {
-            margin: 0 0 15px;
+            margin-bottom: 24px;
             color: white;
-            font-size: 20px;
+            font-size: 22px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             text-align: center;
-            font-weight: bold;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #FFFFFF 30%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
+        /* Filters Layout styling */
         .history-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 15px;
-            justify-content: space-evenly;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
         }
 
         .history-filters .filter-item {
-            flex: 1 1 30%;
-            min-width: 120px;
-            max-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .history-filters label {
-            display: block;
-            font-size: 14px;
-            color: white;
-            margin-bottom: 5px;
-            font-weight: bold;
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
         }
 
         .history-filters input,
         .history-filters select {
             width: 100%;
-            padding: 8px;
-            border: 1px solid var(--accent-red);
-            border-radius: 6px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             font-size: 14px;
-            background-color: rgba(255, 255, 255, 0.2);
+            background: rgba(11, 25, 44, 0.6);
             color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: inherit;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .history-filters input::placeholder {
+            color: rgba(255, 255, 255, 0.35);
         }
 
         .history-filters input:focus,
         .history-filters select:focus {
             outline: none;
-            border-color: white;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+            border-color: var(--accent-red);
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+            background: rgba(11, 25, 44, 0.8);
         }
 
         .history-filters select option {
-            background-color: var(--primary-blue);
+            background-color: var(--bg-dark);
             color: white;
+            padding: 12px;
         }
 
-        .history-table-container {
-            max-height: 400px;
-            overflow-y: auto;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        /* Premium Export Button */
+        #exportBtn {
+            background: linear-gradient(135deg, var(--accent-red) 0%, #D62828 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0 auto 24px auto;
             display: flex;
-            justify-content: center;
-            padding: 10px;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(230, 57, 70, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        #exportBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(230, 57, 70, 0.4);
+            background: linear-gradient(135deg, #FF4D5A 0%, #E63946 100%);
+        }
+
+        #exportBtn:active {
+            transform: translateY(1px);
+        }
+
+        /* Table & Layout Container for Data */
+        .history-table-container {
+            border-radius: 14px;
+            background: rgba(11, 25, 44, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        .history-table-container::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .history-table-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .history-table-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        .history-table-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
         }
 
         .history-table {
             width: 100%;
             border-collapse: collapse;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            table-layout: fixed;
-        }
-
-        .history-table th,
-        .history-table td {
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 12px;
-            text-align: center;
-            font-size: 14px;
-            color: white;
+            text-align: left;
         }
 
         .history-table th {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            font-weight: bold;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            background-color: rgba(11, 25, 44, 0.8);
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+            padding: 16px 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .history-table td {
+            padding: 16px 20px;
+            font-size: 14px;
+            color: #E2E8F0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-weight: 500;
+        }
+
+        .history-table tbody tr {
+            transition: background-color 0.2s ease;
         }
 
         .history-table tbody tr:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.03);
         }
 
-        .status.in {
-            color: #00FF00;
-            font-weight: bold;
+        .history-table tbody tr:last-child td {
+            border-bottom: none;
         }
 
-        .status.out {
-            color: var(--accent-red);
-            font-weight: bold;
+        /* Clean Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
         }
 
-        td:nth-child(4):where(:not(:empty)) {
-            color: white;
+        .status-badge.in {
+            background-color: rgba(16, 185, 129, 0.12);
+            color: #10B981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
-        td:nth-child(4):where(:not(:empty))[data-size="small"] {
-            color: var(--car-small);
+        .status-badge.in::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: #10B981;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 6px #10B981;
         }
 
-        td:nth-child(4):where(:not(:empty))[data-size="medium"] {
-            color: var(--car-medium);
+        .status-badge.out {
+            background-color: rgba(239, 68, 68, 0.12);
+            color: #EF4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
-        td:nth-child(4):where(:not(:empty))[data-size="big"] {
-            color: var(--car-big);
+        .status-badge.out::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: #EF4444;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 6px #EF4444;
         }
 
-        td:nth-child(4):where(:not(:empty))[data-size="none"] {
-            color: white;
-        }
-
-        #exportBtn {
-            background-color: var(--accent-red);
-            color: white;
-            border: none;
-            padding: 10px 16px;
+        /* Dynamic Slot Size Styling */
+        .size-badge {
+            font-weight: 600;
+            padding: 4px 8px;
             border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            margin: 15px auto;
-            display: block;
-            transition: background-color 0.3s;
-            font-weight: bold;
+            font-size: 13px;
         }
 
-        #exportBtn:hover {
-            background-color: #b8323a;
-        }
+        .size-badge[data-size="small"] { color: var(--car-small); }
+        .size-badge[data-size="medium"] { color: var(--car-medium); }
+        .size-badge[data-size="big"] { color: var(--car-big); }
+        .size-badge[data-size="none"] { color: var(--text-secondary); }
 
+        /* Elegant Toast System */
         #error-message {
-            position: absolute;
-            top: 15px;
+            position: fixed;
+            top: 24px;
             left: 50%;
-            transform: translateX(-50%);
-            background: rgba(214, 64, 69, 0.9);
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(230, 57, 70, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             color: white;
-            padding: 10px;
-            border-radius: 6px;
+            padding: 14px 24px;
+            border-radius: 12px;
             font-size: 14px;
-            z-index: 102;
-            display: none;
+            font-weight: 600;
+            z-index: 1002;
+            box-shadow: 0 10px 30px rgba(230, 57, 70, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
+        #error-message.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Interactive Tour Overlay & Tooltip */
         .tour-overlay {
             display: none;
             position: fixed;
@@ -348,203 +619,429 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
             z-index: 2000;
-            pointer-events: none;
+            pointer-events: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tour-overlay.active {
+            opacity: 1;
         }
 
         .tour-tooltip {
             position: absolute;
-            background-color: var(--primary-blue);
+            background: rgba(11, 25, 44, 0.95);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             border: 2px solid var(--accent-red);
-            border-radius: 8px;
-            padding: 15px;
-            max-width: 300px;
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 320px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
             pointer-events: auto;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: tourFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 2001;
+            border: 1.5px solid rgba(230, 57, 70, 0.5);
         }
 
         .tour-tooltip h3 {
             color: white;
             font-size: 16px;
-            margin-bottom: 10px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         .tour-tooltip p {
-            font-size: 14px;
-            color: white;
-            margin-bottom: 15px;
-            line-height: 1.5;
+            font-size: 13.5px;
+            color: #CBD5E1;
+            margin-bottom: 16px;
+            line-height: 1.6;
         }
 
         .tour-tooltip .tour-buttons {
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
+            justify-content: center;
+            gap: 12px;
         }
 
         .tour-tooltip button {
-            padding: 8px 12px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.2s ease;
         }
 
         .tour-tooltip .next-btn {
             background-color: var(--accent-red);
             color: white;
+            box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
         }
 
         .tour-tooltip .next-btn:hover {
-            background-color: #b8323a;
+            background-color: var(--accent-red-hover);
+            transform: translateY(-1px);
         }
 
         .tour-tooltip .close-btn {
-            background-color: #b8323a;
-            color: white;
+            background-color: rgba(255, 255, 255, 0.08);
+            color: #E2E8F0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .tour-tooltip .close-btn:hover {
-            background-color: #c82333;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
         }
 
-        .tour-tooltip:after {
+        .tour-tooltip::after {
             content: "";
             position: absolute;
-            border: 10px solid transparent;
+            border: 8px solid transparent;
             pointer-events: none;
         }
 
-        .tour-tooltip.right:after {
+        .tour-tooltip.right::after {
             border-right-color: var(--accent-red);
-            left: -20px;
+            left: -16px;
             top: 50%;
             transform: translateY(-50%);
         }
 
-        .tour-tooltip.left:after {
+        .tour-tooltip.left::after {
             border-left-color: var(--accent-red);
-            right: -20px;
+            right: -16px;
             top: 50%;
             transform: translateY(-50%);
         }
 
-        .tour-tooltip.top:after {
+        .tour-tooltip.top::after {
             border-top-color: var(--accent-red);
-            bottom: -20px;
+            bottom: -16px;
             left: 50%;
             transform: translateX(-50%);
         }
 
-        .tour-tooltip.bottom:after {
+        .tour-tooltip.bottom::after {
             border-bottom-color: var(--accent-red);
-            top: -20px;
+            top: -16px;
             left: 50%;
             transform: translateX(-50%);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+        /* Overlay highlight for tour target */
+        .tour-highlight {
+            position: relative;
+            z-index: 2002 !important;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.65) !important;
+            border-color: var(--accent-red) !important;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes tourFadeIn {
+            from { opacity: 0; transform: scale(0.92) translate3d(0, 10px, 0); }
+            to { opacity: 1; transform: scale(1) translate3d(0, 0, 0); }
+        }
+
+        /* ========================================================
+           RESPONSIVE MOBILE VIEW DESIGN SYSTEM
+           ======================================================== */
+        @media (max-width: 992px) {
+            .main-content.with-toolbar {
+                margin-left: 0;
+            }
         }
 
         @media (max-width: 768px) {
-            body { font-size: 9px; }
-            header { padding: 4px 6px; }
-            .logo img { height: 25px; }
-            .logo span { font-size: 10px; margin-left: 4px; }
-            .header-right span { font-size: 9px; }
-            .toolbar { width: 100%; left: -100%; top: 70px; }
-            .main-content { padding: 49px 6px 6px; }
-            .main-content.with-toolbar { margin-left: 0; }
-            .history { padding: 10px; }
-            .history h2 { font-size: 9px; }
-            .history-filters { flex-direction: column; gap: 10px; }
-            .history-filters .filter-item { min-width: 100%; max-width: 100%; }
-            .history-filters label { font-size: 9px; }
-            .history-filters input, .history-filters select { font-size: 9px; padding: 6px; height: 28px; }
-            .history-table th, .history-table td { padding: 6px; font-size: 9px; }
-            .status.in, .status.out { font-size: 9px; }
-            td:nth-child(4) { font-size: 9px; }
-            #exportBtn { padding: 6px 8px; font-size: 9px; }
-            #error-message { top: 49px; left: 50%; transform: translateX(-50%); padding: 6px 10px; font-size: 9px; max-width: 70%; }
-            .tour-tooltip { max-width: 70%; padding: 3px; }
-            .tour-tooltip h3 { font-size: 8px; }
-            .tour-tooltip p { font-size: 7px; }
-            .tour-tooltip button { padding: 2px 3px; font-size: 7px; }
+            body {
+                font-size: 15px;
+            }
+
+            header {
+                padding: 0 16px;
+                height: 64px;
+            }
+
+            .logo {
+                gap: 8px;
+                padding: 4px;
+            }
+
+            .logo img {
+                height: 32px;
+            }
+
+            .logo-title {
+                font-size: 15px;
+            }
+
+            .logo-subtitle {
+                font-size: 8px;
+                letter-spacing: 0.5px;
+            }
+
+            .header-right {
+                padding: 6px 12px;
+            }
+
+            .header-right span {
+                font-size: 11px;
+            }
+
+            /* Swipeable Sidebar from side */
+            .toolbar {
+                top: 64px;
+                height: calc(100vh - 64px);
+                width: 280px;
+                left: -280px;
+            }
+
+            .toolbar.active {
+                transform: translateX(280px);
+            }
+
+            .sidebar-overlay {
+                top: 64px;
+                height: calc(100vh - 64px);
+            }
+
+            .main-content {
+                padding: 88px 16px 32px;
+            }
+
+            .history {
+                padding: 20px 16px;
+                border-radius: 16px;
+            }
+
+            .history h2 {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+
+            .history-filters {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .history-filters input, 
+            .history-filters select {
+                padding: 12px 14px;
+                font-size: 14px; /* Essential: prevents iOS auto-zoom */
+                border-radius: 10px;
+            }
+
+            #exportBtn {
+                width: 100%;
+                justify-content: center;
+                padding: 14px;
+                font-size: 14px;
+            }
+
+            /* Responsive Table Card Layout transformation on narrow screens */
+            .history-table-container {
+                background: transparent;
+                border: none;
+                box-shadow: none;
+            }
+
+            .history-table {
+                display: block;
+            }
+
+            .history-table thead {
+                display: none; /* Hide header on mobile view */
+            }
+
+            .history-table tbody {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .history-table tbody tr {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px 12px;
+                background: rgba(11, 25, 44, 0.55);
+                border: 1px solid rgba(255, 255, 255, 0.06);
+                border-radius: 12px;
+                padding: 16px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+                transition: transform 0.2s ease, border-color 0.2s ease;
+            }
+
+            .history-table tbody tr:hover {
+                background-color: rgba(11, 25, 44, 0.7);
+                border-color: rgba(230, 57, 70, 0.2);
+                transform: translateY(-2px);
+            }
+
+            .history-table td {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 0;
+                border: none;
+                font-size: 13.5px;
+            }
+
+            /* Add visual labels above the cellular value on mobile cards */
+            .history-table td::before {
+                font-size: 10px;
+                color: var(--text-secondary);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 4px;
+                font-weight: 600;
+            }
+
+            .history-table td:nth-child(1)::before { content: "Slot Number"; }
+            .history-table td:nth-child(2)::before { content: "Timestamp"; }
+            .history-table td:nth-child(3)::before { content: "Parking Status"; }
+            .history-table td:nth-child(4)::before { content: "Vehicle Size"; }
+
+            /* Grid item positions */
+            .history-table td:nth-child(1) { grid-order: 1; }
+            .history-table td:nth-child(3) { grid-order: 2; align-items: flex-end; }
+            .history-table td:nth-child(2) { grid-order: 3; grid-column: span 2; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 8px; margin-top: 4px; }
+            .history-table td:nth-child(4) { grid-order: 4; grid-column: span 2; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 8px; }
+            
+            .history-table td:nth-child(4)::before {
+                margin-bottom: 0;
+            }
+
+            .history-table td:nth-child(3) .status-badge {
+                align-self: flex-end;
+            }
+
+            /* Tour Tooltip Mobile positioning centering */
+            .tour-tooltip {
+                max-width: 90%;
+                left: 5% !important;
+                right: 5% !important;
+                top: 50% !important;
+                transform: translateY(-50%) !important;
+                position: fixed;
+            }
+
+            .tour-tooltip::after {
+                display: none; /* Hide arrows on mobile standard overlay */
+            }
         }
 
         @media (max-width: 480px) {
-            .toolbar, .main-content.with-toolbar { margin-left: 0; }
+            .logo-subtitle {
+                display: none; /* Hide long subtitle text on small mobile screens */
+            }
         }
     </style>
+    <!-- Firebase Libraries -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <!-- SheetJS Excel Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-    <video id="bg-video" autoplay muted loop>
-        <source src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/wave.mp4?raw=true" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div class="video-container">
+        <video id="bg-video" autoplay muted loop playsinline>
+            <source src="https://github.com/Defdava/Digital-Twin-Website-used/blob/main/wave.mp4?raw=true" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    
+    <div class="ambient-glow"></div>
 
     <header>
-        <div class="logo" id="toggleToolbar">
+        <div class="logo" id="toggleToolbar" aria-label="Toggle Sidebar Menu">
             <img src="https://github.com/Defdava/BRIN_Operator_DigitalTwin/blob/46a20c237c763bc2ccd436c332785427771eea05/public/brin_logo.png?raw=true" alt="BRIN Logo">
-            <span>BRIN</span>
-            <span>Badan Riset dan Inovasi Nasional</span>
+            <div class="logo-text">
+                <span class="logo-title">BRIN</span>
+                <span class="logo-subtitle">Badan Riset dan Inovasi Nasional</span>
+            </div>
         </div>
         <div class="header-right">
-            <span>Parking Management System</span>
+            <span>Parking System</span>
         </div>
     </header>
 
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <aside class="toolbar" id="toolbar">
         <div class="feature-box user-info" id="userInfo">
-            <h3>User</h3>
-            <img id="profilePic" src="/assets/user.JPG" alt="User">
-            <span>Welcome Back</span>
-            <span id="userName"></span>
-            <button class="profile" onclick="window.location.href='/profile.html'">Profile</button>
-            <button class="logout">Log Out</button>
+            <span class="welcome-text">Welcome Back</span>
+            <img id="profilePic" src="/assets/user.JPG" alt="User Avatar">
+            <span id="userName">Operator</span>
+            <button class="profile" onclick="window.location.href='/profile.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg>
+                Profile
+            </button>
+            <button class="logout">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"/><path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"/></svg>
+                Log Out
+            </button>
         </div>
         <div class="feature-box">
-            <h3>Parking Management System</h3>
-            <button class="live-overview" onclick="window.location.href='/index.html'">Live Overview</button>
-            <button class="prev-analysis" onclick="window.location.href='/previous-analysis.html'">Previous Analysis</button>
-            <button class="export-data" onclick="window.location.href='/exportdata.html'">Export Data</button>
-            <button class="helpdesk" onclick="window.location.href='/helpdesk.html'">Helpdesk</button>
-            <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">Parking Analysis</button>
+            <h3>Management Suite</h3>
+            <button class="live-overview" onclick="window.location.href='/index.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8.47 1.318a1 1 0 0 0-.94 0l-6 3A1 1 0 0 0 1 5.2v8.8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5.2a1 1 0 0 0-.53-.882zM7.5 3v10.5H2V5.7l5.5-2.75zm1 0 5.5 2.75V13.5H8.5z"/></svg>
+                Live Overview
+            </button>
+            <button class="prev-analysis" onclick="window.location.href='/previous-analysis.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 7.61h-.024l-1.9-3.608H2.784L5.275 8.72 2.748 13.5h1.312l2.007-3.956h.024L8.136 13.5h1.313L6.92 8.728z"/></svg>
+                Previous Analysis
+            </button>
+            <button class="export-data" onclick="window.location.href='/exportdata.html'">
+                Export Data
+            </button>
+            <button class="helpdesk" onclick="window.location.href='/helpdesk.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.03-.94-.584 0-1.01.388-1.01.94"/></svg>
+                Helpdesk
+            </button>
+            <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 11.5a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v7.5a.5.5 0 0 1-.5.5H4.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v10.5a.5.5 0 0 1-.5.5H8.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v13.5a.5.5 0 0 1-.5.5h-1.4a.5.5 0 0 1-.5-.5z"/></svg>
+                Parking Analysis
+            </button>
         </div>
     </aside>
 
     <main class="main-content" id="mainContent">
         <div class="history">
-            <h2>Slot History</h2>
+            <h2>Slot Transaction Log</h2>
             <div class="history-filters">
                 <div class="filter-item">
                     <label for="filterSlot">Slot Number</label>
-                    <input type="text" id="filterSlot" placeholder="e.g. 18">
+                    <input type="text" id="filterSlot" placeholder="Enter Slot (e.g. 18)">
                 </div>
                 <div class="filter-item">
-                    <label for="filterDate">Date</label>
+                    <label for="filterDate">Filter Date</label>
                     <input type="date" id="filterDate">
                 </div>
                 <div class="filter-item">
                     <label for="filterStatus">Status</label>
                     <select id="filterStatus">
-                        <option value="">All Status</option>
-                        <option value="terisi">Terisi</option>
-                        <option value="kosong">Kosong</option>
+                        <option value="">All Statuses</option>
+                        <option value="terisi">Occupied (Terisi)</option>
+                        <option value="kosong">Vacant (Kosong)</option>
                     </select>
                 </div>
             </div>
-            <button id="exportBtn">Export Data to Excel</button>
+            
+            <button id="exportBtn">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                Export Selected Data to Excel
+            </button>
+
             <div class="history-table-container">
                 <table class="history-table" id="slotHistoryTable">
                     <thead>
@@ -552,7 +1049,7 @@
                             <th>Slot</th>
                             <th>Timestamp</th>
                             <th>Status</th>
-                            <th>Size</th>
+                            <th>Size Class</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -560,12 +1057,15 @@
             </div>
         </div>
 
-        <div id="error-message"></div>
+        <div id="error-message">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <span id="error-text">No data to export</span>
+        </div>
 
         <div class="tour-overlay" id="tourOverlay"></div>
         <div class="tour-tooltip" id="tourTooltip" style="display: none;">
-            <h3 id="tooltipTitle"></h3>
-            <p id="tooltipText"></p>
+            <h3 id="tooltipTitle">Guided Tour</h3>
+            <p id="tooltipText">Follow these tooltips to learn the dashboard workflow.</p>
             <div class="tour-buttons">
                 <button class="next-btn" id="tourNextBtn">Next</button>
                 <button class="close-btn" id="tourCloseBtn">Close</button>
@@ -574,15 +1074,11 @@
     </main>
 
     <script>
-        // === AUTH & FIREBASE ===
-        class User {
-            constructor(username, email, password, idWorker, profilePic = '/assets/user.JPG') {
-                this.username = username; this.email = email; this.password = password;
-                this.idWorker = idWorker; this.profilePic = profilePic;
-            }
-        }
+        // === AUTH SYSTEM ===
         class AuthSystem {
-            constructor() { this.users = JSON.parse(localStorage.getItem('users')) || []; }
+            constructor() { 
+                this.users = JSON.parse(localStorage.getItem('users')) || []; 
+            }
             login(email, password) {
                 const user = this.users.find(u => u.email === email && u.password === password);
                 if (user) return user;
@@ -591,6 +1087,7 @@
         }
         const auth = new AuthSystem();
 
+        // === FIREBASE INITIALIZATION ===
         const firebaseConfig = {
             apiKey: "AIzaSyAef3SJwvVVTunr6CWki79aenfpXlgYc0s",
             authDomain: "digitaltwinparkingbrin.firebaseapp.com",
@@ -606,15 +1103,21 @@
 
         let historyDataArray = [];
 
-        // === ERROR MESSAGE ===
+        // === CUSTOM PREMIUM TOAST NOTIFICATION ===
+        let toastTimeout;
         function showError(message) {
             const errorElement = document.getElementById('error-message');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-            setTimeout(() => errorElement.style.display = 'none', 5000);
+            const errorText = document.getElementById('error-text');
+            errorText.textContent = message;
+            errorElement.classList.add('show');
+            
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                errorElement.classList.remove('show');
+            }, 4000);
         }
 
-        // === RENDER TABLE ===
+        // === TABLE AND MOBILE CARD RENDERER ===
         function renderHistoryTable() {
             const tbody = document.getElementById("slotHistoryTable").getElementsByTagName('tbody')[0];
             tbody.innerHTML = "";
@@ -631,29 +1134,48 @@
             });
 
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="padding: 20px; text-align: center; color: white;">No matching data</td></tr>';
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                td.colSpan = 4;
+                td.style.padding = '40px 20px';
+                td.style.textAlign = 'center';
+                td.style.color = 'var(--text-secondary)';
+                td.textContent = 'No matching slot records found';
+                tr.appendChild(td);
+                tbody.appendChild(tr);
                 return;
             }
 
             filtered.forEach(entry => {
                 const row = tbody.insertRow();
-                row.insertCell(0).textContent = entry.slot;
+                
+                // Slot cell
+                const cellSlot = row.insertCell(0);
+                cellSlot.textContent = `Slot ${entry.slot}`;
+                cellSlot.style.fontWeight = '700';
+                cellSlot.style.fontFamily = "'Plus Jakarta Sans', sans-serif";
+
+                // Timestamp cell
                 row.insertCell(1).textContent = entry.timestamp;
+                
+                // Status badge cell
                 const statusCell = row.insertCell(2);
-                statusCell.textContent = entry.status;
-                statusCell.className = entry.status === 'terisi' ? 'status in' : 'status out';
+                const isTerisi = entry.status === 'terisi';
+                statusCell.innerHTML = `<span class="status-badge ${isTerisi ? 'in' : 'out'}">${isTerisi ? 'Occupied' : 'Vacant'}</span>`;
+                
+                // Vehicle Size cell
                 const sizeCell = row.insertCell(3);
-                sizeCell.textContent = entry.size;
-                sizeCell.setAttribute('data-size', entry.size.toLowerCase());
+                sizeCell.innerHTML = `<span class="size-badge" data-size="${entry.size.toLowerCase()}">${entry.size}</span>`;
             });
         }
 
-        // === EXPORT TO EXCEL ===
+        // === ADVANCED EXPORT TO EXCEL SYSTEM ===
         function exportToExcel() {
+            const filterSlot = document.getElementById('filterSlot').value.trim();
+            const filterDate = document.getElementById('filterDate').value;
+            const filterStatus = document.getElementById('filterStatus').value;
+
             const filtered = historyDataArray.filter(entry => {
-                const filterSlot = document.getElementById('filterSlot').value.trim();
-                const filterDate = document.getElementById('filterDate').value;
-                const filterStatus = document.getElementById('filterStatus').value;
                 if (filterSlot && entry.slot !== filterSlot) return false;
                 if (filterDate && entry.timestamp.split(' ')[0] !== filterDate) return false;
                 if (filterStatus && entry.status !== filterStatus) return false;
@@ -661,36 +1183,51 @@
             });
 
             if (filtered.length === 0) {
-                showError("No data to export.");
+                showError("Export failed: No filtered data exists in the active view.");
                 return;
             }
 
             const data = filtered.map(e => ({
-                Slot: e.slot,
-                Timestamp: e.timestamp,
-                Status: e.status,
-                Size: e.size
+                "Slot Number": `Slot ${e.slot}`,
+                "Logged Timestamp": e.timestamp,
+                "Status": e.status === 'terisi' ? 'Occupied (Terisi)' : 'Vacant (Kosong)',
+                "Vehicle Category": e.size
             }));
 
             const ws = XLSX.utils.json_to_sheet(data);
+            
+            // Apply professional sizing/widths for Excel sheet
+            const columnWidths = [
+                { wch: 15 }, // Slot Number
+                { wch: 22 }, // Logged Timestamp
+                { wch: 20 }, // Status
+                { wch: 18 }  // Vehicle Category
+            ];
+            ws['!cols'] = columnWidths;
+
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Slot History");
-            XLSX.writeFile(wb, `BRIN_Slot_History_${new Date().toISOString().split('T')[0]}.xlsx`);
+            XLSX.utils.book_append_sheet(wb, ws, "Slot Logs");
+            
+            const fileDate = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `BRIN_Slot_History_${fileDate}.xlsx`);
         }
 
-        // === TOUR SYSTEM ===
+        // === COMPREHENSIVE MULTI-DEVICE TOUR SYSTEM ===
         const tourSteps = [
-            { element: 'header', title: "Petunjuk Website", text: "Klik logo BRIN untuk membuka toolbar samping...", position: 'bottom' },
-            { element: '.history', title: "Export Data", text: "Lihat riwayat slot, filter data, dan ekspor ke Excel.", position: 'right' },
-            { element: '.history-filters', title: "Filter Data", text: "Gunakan filter untuk memilih slot, tanggal, atau status.", position: 'top' },
-            { element: '#exportBtn', title: "Ekspor ke Excel", text: "Klik tombol ini untuk mengunduh data dalam format Excel.", position: 'top' }
+            { element: '#toggleToolbar', title: "Toggle Navigation", text: "Click the BRIN logo inside the header bar to slide open the main system utility workspace.", position: 'bottom' },
+            { element: '.history', title: "Analytics History Logs", text: "This card holds the historical slot events stored in real-time within the database logs.", position: 'right' },
+            { element: '.history-filters', title: "Granular Query Filters", text: "Narrow down database queries dynamically by choosing precise Slot Numbers, Target Dates, or Occupancy Status.", position: 'top' },
+            { element: '#exportBtn', title: "Instant Spreadsheet Export", text: "Compile the filtered records instantly into a structured Excel (.xlsx) file downloaded straight to your storage.", position: 'top' }
         ];
+        
         let currentTourStep = 0;
         let hasSeenTour = false;
 
         function startTour() {
             if (hasSeenTour) return;
-            document.getElementById('tourOverlay').style.display = 'block';
+            const overlay = document.getElementById('tourOverlay');
+            overlay.classList.add('active');
+            overlay.style.display = 'block';
             showTooltip(currentTourStep);
         }
 
@@ -700,73 +1237,122 @@
             const text = document.getElementById('tooltipText');
             const nextBtn = document.getElementById('tourNextBtn');
             const target = document.querySelector(tourSteps[step].element);
+            
             if (!target) { endTour(); return; }
+
+            // Clear previous highlight markers
+            document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+            target.classList.add('tour-highlight');
 
             title.textContent = tourSteps[step].title;
             text.textContent = tourSteps[step].text;
             tooltip.style.display = 'block';
-            tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
-
+            
             const rect = target.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
-            let left, top;
             const isMobile = window.innerWidth <= 768;
 
             if (isMobile) {
-                left = (window.innerWidth - tooltipRect.width) / 2;
-                top = rect.bottom + 10;
+                // Fixed centered layout for pure mobile responsive tour comfort
                 tooltip.className = 'tour-tooltip bottom';
+                tooltip.style.left = '5%';
+                tooltip.style.right = '5%';
+                tooltip.style.top = '50%';
+                tooltip.style.transform = 'translateY(-50%)';
             } else {
+                tooltip.className = 'tour-tooltip ' + tourSteps[step].position;
+                tooltip.style.transform = 'none';
+                
+                // Exact desktop alignments based on position vectors
+                let left, top;
+                const gap = 16;
+                
+                // Allow dynamic tooltip dimensions for coordinates calculations
+                const tooltipWidth = 320;
+                const tooltipHeight = tooltip.offsetHeight || 160;
+
                 switch (tourSteps[step].position) {
-                    case 'right': left = rect.right + 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
-                    case 'left': left = rect.left - tooltipRect.width - 10; top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); break;
-                    case 'top': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.top - tooltipRect.height - 10; break;
-                    case 'bottom': left = rect.left + (rect.width / 2) - (tooltipRect.width / 2); top = rect.bottom + 10; break;
+                    case 'right': 
+                        left = rect.right + gap; 
+                        top = rect.top + (rect.height / 2) - (tooltipHeight / 2); 
+                        break;
+                    case 'left': 
+                        left = rect.left - tooltipWidth - gap; 
+                        top = rect.top + (rect.height / 2) - (tooltipHeight / 2); 
+                        break;
+                    case 'top': 
+                        left = rect.left + (rect.width / 2) - (tooltipWidth / 2); 
+                        top = rect.top - tooltipHeight - gap; 
+                        break;
+                    case 'bottom': 
+                        left = rect.left + (rect.width / 2) - (tooltipWidth / 2); 
+                        top = rect.bottom + gap; 
+                        break;
                 }
+                
+                // Clamp horizontal position inside browser bounds
+                left = Math.max(gap, Math.min(left, window.innerWidth - tooltipWidth - gap));
+                top = Math.max(gap + 72, Math.min(top, window.innerHeight - tooltipHeight - gap));
+
+                tooltip.style.left = `${left}px`;
+                tooltip.style.top = `${top}px`;
             }
 
-            tooltip.style.left = `${left}px`;
-            tooltip.style.top = `${top}px`;
             nextBtn.textContent = step === tourSteps.length - 1 ? 'Finish' : 'Next';
         }
 
         function endTour() {
-            document.getElementById('tourOverlay').style.display = 'none';
+            const overlay = document.getElementById('tourOverlay');
+            overlay.classList.remove('active');
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+            
             document.getElementById('tourTooltip').style.display = 'none';
+            document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+            
             currentTourStep = 0;
             hasSeenTour = true;
             localStorage.setItem('tourCompleted_export', 'true');
         }
 
-        // === DOM LOADED ===
+        // === DOM EVENT BINDING & REAL-TIME REPLICATOR ===
         document.addEventListener("DOMContentLoaded", () => {
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             if (!currentUser) {
-                alert('Silakan login terlebih dahulu!');
+                alert('Session expired. Silakan login terlebih dahulu!');
                 window.location.replace('/login.html');
                 return;
             }
 
             hasSeenTour = localStorage.getItem('tourCompleted_export') === 'true';
 
+            // Load user profile details
             document.getElementById('userName').textContent = currentUser.username;
-            document.getElementById('profilePic').src = currentUser.profilePic || '/assets/user.JPG';
+            if (currentUser.profilePic) {
+                document.getElementById('profilePic').src = currentUser.profilePic;
+            }
 
+            // Log Out handler
             document.querySelector('.logout').addEventListener('click', () => {
                 localStorage.removeItem('currentUser');
                 alert('Berhasil logout!');
                 window.location.replace('/login.html');
             });
 
+            // Toggle Sidebar / Drawer System
             const toggleToolbar = document.getElementById('toggleToolbar');
             const toolbar = document.getElementById('toolbar');
             const mainContent = document.getElementById('mainContent');
-            toggleToolbar.addEventListener('click', () => {
-                const isActive = toolbar.classList.toggle('active');
-                mainContent.classList.toggle('with-toolbar', isActive);
-            });
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-            // Firebase Listener
+            function toggleMenu() {
+                const isActive = toolbar.classList.toggle('active');
+                sidebarOverlay.classList.toggle('active', isActive);
+                mainContent.classList.toggle('with-toolbar', isActive && window.innerWidth > 992);
+            }
+
+            toggleToolbar.addEventListener('click', toggleMenu);
+            sidebarOverlay.addEventListener('click', toggleMenu);
+
+            // Firebase Live Database Replicator Listener
             slotHistoryRef.on("value", (snapshot) => {
                 const data = snapshot.val();
                 historyDataArray = [];
@@ -780,29 +1366,35 @@
                             historyDataArray.push({ slot: slotNum, timestamp: ts, status, size });
                         });
                     });
+                    
+                    // Sort descending by timestamp
                     historyDataArray.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
                 }
                 renderHistoryTable();
             });
 
-            // Filters
+            // Dynamic Real-time Input Filters
             document.getElementById('filterSlot').addEventListener('input', renderHistoryTable);
             document.getElementById('filterDate').addEventListener('change', renderHistoryTable);
             document.getElementById('filterStatus').addEventListener('change', renderHistoryTable);
 
-            // Export
+            // Trigger spreadsheet compilation
             document.getElementById('exportBtn').addEventListener('click', exportToExcel);
 
-            // Tour
+            // Tour Event triggers
             document.getElementById('tourNextBtn').addEventListener('click', () => {
                 currentTourStep++;
-                if (currentTourStep < tourSteps.length) showTooltip(currentTourStep);
-                else endTour();
+                if (currentTourStep < tourSteps.length) {
+                    showTooltip(currentTourStep);
+                } else {
+                    endTour();
+                }
             });
             document.getElementById('tourCloseBtn').addEventListener('click', endTour);
 
+            // Start system intro guided tour
             if (!hasSeenTour) {
-                setTimeout(startTour, 800);
+                setTimeout(startTour, 1000);
             }
         });
     </script>
