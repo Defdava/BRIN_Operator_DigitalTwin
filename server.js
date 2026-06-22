@@ -36,7 +36,7 @@ try {
 
 // 🏠 Serve halaman utama
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "liveoverview.html"));
 });
 
 // Jalankan server (untuk local)
