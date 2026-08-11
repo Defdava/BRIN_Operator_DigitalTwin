@@ -13,6 +13,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Cesium.js Styles -->
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
     <style>
         :root {
             --primary-blue: #0B192C;
@@ -383,7 +385,7 @@
         }
 
         /* Premium Glass Cards styling */
-        .overview, .history, .park-condition, .park-condition-2d {
+        .overview, .history, .park-condition, .park-condition-2d, .park-cesium {
             background: var(--glass-bg);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
@@ -397,7 +399,7 @@
             flex-direction: column;
         }
 
-        .overview h1, .history h2, .park-condition h2, .park-condition-2d h2 {
+        .overview h1, .history h2, .park-condition h2, .park-condition-2d h2, .park-cesium h2 {
             margin: 0 0 22px;
             font-size: 20px;
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -608,6 +610,49 @@
             font-weight: 600;
         }
 
+        /* Cesium Container */
+        #cesiumContainer {
+            width: 100%;
+            height: 350px;
+            display: none;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #020617;
+        }
+
+        #cesiumError {
+            display: none;
+            color: var(--accent-red);
+            text-align: center;
+            padding: 40px 20px;
+            font-weight: 600;
+        }
+
+        /* Street View Container */
+        #streetviewContainer {
+            width: 100%;
+            height: 350px;
+            display: none;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #020617;
+        }
+
+        #streetviewContainer iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        #streetviewError {
+            display: none;
+            color: var(--accent-red);
+            text-align: center;
+            padding: 40px 20px;
+            font-weight: 600;
+        }
+
         /* Modern 3D Floating Controls */
         #controls { 
             position: absolute; 
@@ -652,6 +697,31 @@
             border-color: var(--accent-red);
         }
 
+        /* View Mode Toggle Button */
+        .view-mode-toggle {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: rgba(11, 25, 44, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 8px 12px;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 101;
+            display: none;
+            transition: all 0.3s ease;
+        }
+
+        .view-mode-toggle:hover {
+            background: rgba(11, 25, 44, 0.95);
+            border-color: var(--accent-red);
+            transform: translateY(-1px);
+        }
+
         /* 3D Action buttons */
         #toggleCameraBtn, #fullscreenBtn {
             background: linear-gradient(135deg, var(--accent-red) 0%, #D62828 100%);
@@ -694,12 +764,6 @@
         }
 
         /* ============ FULLSCREEN (NATIVE + PSEUDO) FIT-TO-SCREEN ============ */
-        /* Both fullscreen modes turn #cameraContainer into a 100vw x 100vh
-           wrapper that the 3D canvas (#threeContainer) fills completely —
-           same behavior as the rest of the site, just scaled to the full
-           screen instead of the card size. */
-
-        /* Native Fullscreen API target */
         #cameraContainer:fullscreen,
         #cameraContainer:-webkit-full-screen,
         #cameraContainer:-moz-full-screen,
@@ -712,18 +776,26 @@
             border: none;
             background: #020617;
             padding: 0;
+            display: flex;
         }
 
         #cameraContainer:fullscreen #threeContainer,
         #cameraContainer:-webkit-full-screen #threeContainer,
         #cameraContainer:-moz-full-screen #threeContainer,
-        #cameraContainer:-ms-fullscreen #threeContainer {
+        #cameraContainer:-ms-fullscreen #threeContainer,
+        #cameraContainer:fullscreen #cesiumContainer,
+        #cameraContainer:-webkit-full-screen #cesiumContainer,
+        #cameraContainer:-moz-full-screen #cesiumContainer,
+        #cameraContainer:-ms-fullscreen #cesiumContainer,
+        #cameraContainer:fullscreen #streetviewContainer,
+        #cameraContainer:-webkit-full-screen #streetviewContainer,
+        #cameraContainer:-moz-full-screen #streetviewContainer,
+        #cameraContainer:-ms-fullscreen #streetviewContainer {
             width: 100% !important;
             height: 100% !important;
+            flex: 1 1 auto;
         }
 
-        /* Manual/pseudo fullscreen fallback (used on browsers like iOS Safari
-           that don't support the Fullscreen API on arbitrary elements) */
         #cameraContainer.pseudo-fullscreen {
             position: fixed !important;
             top: 0 !important;
@@ -740,11 +812,15 @@
             border-radius: 0 !important;
             border: none !important;
             z-index: 9999 !important;
+            display: flex;
         }
 
-        #cameraContainer.pseudo-fullscreen #threeContainer {
+        #cameraContainer.pseudo-fullscreen #threeContainer,
+        #cameraContainer.pseudo-fullscreen #cesiumContainer,
+        #cameraContainer.pseudo-fullscreen #streetviewContainer {
             width: 100% !important;
             height: 100% !important;
+            flex: 1 1 auto;
         }
 
         #cameraContainer.pseudo-fullscreen #controls {
@@ -757,43 +833,22 @@
             left: max(16px, env(safe-area-inset-left));
         }
 
+        #cameraContainer.pseudo-fullscreen .view-mode-toggle {
+            top: max(16px, env(safe-area-inset-top));
+            left: max(16px, env(safe-area-inset-left));
+        }
+
         #cameraContainer:fullscreen #toggleCameraBtn,
         #cameraContainer:-webkit-full-screen #toggleCameraBtn,
         #cameraContainer.pseudo-fullscreen #toggleCameraBtn {
             display: none !important;
         }
 
-        /* ============ DESKTOP FULLSCREEN: LOCK TO 16:9 (1920x1080 RATIO) ============ */
-        /* Only applies above the mobile/tablet breakpoint. Mobile keeps the
-           simple 100vw x 100vh full-fill behavior above. On desktop, the 3D
-           canvas is locked to a 16:9 ratio (same proportions as 1920x1080),
-           centered and scaled (letterboxed) to fit whatever monitor size
-           the user has, instead of stretching to an arbitrary shape. */
-        @media (min-width: 993px) {
-            #cameraContainer:fullscreen,
-            #cameraContainer:-webkit-full-screen,
-            #cameraContainer:-moz-full-screen,
-            #cameraContainer:-ms-fullscreen,
-            #cameraContainer.pseudo-fullscreen {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: #000000;
-            }
-
-            #cameraContainer:fullscreen #threeContainer,
-            #cameraContainer:-webkit-full-screen #threeContainer,
-            #cameraContainer:-moz-full-screen #threeContainer,
-            #cameraContainer:-ms-fullscreen #threeContainer,
-            #cameraContainer.pseudo-fullscreen #threeContainer {
-                aspect-ratio: 16 / 9;
-                width: min(100vw, calc(100vh * 16 / 9)) !important;
-                height: min(100vh, calc(100vw * 9 / 16)) !important;
-                max-width: 100vw !important;
-                max-height: 100vh !important;
-                margin: auto;
-            }
-        }
+        /* NOTE: previously this block forced a centered 16:9 letterboxed box on desktop
+           (width/height clamped via aspect-ratio), which is why fullscreen only filled
+           roughly half the screen with black bars around it. It has been removed so the
+           3D / satellite / street view containers always stretch to fill the entire
+           available fullscreen area edge-to-edge on every screen size. */
 
         #loading, #error-message { 
             position: absolute; 
@@ -868,7 +923,6 @@
             background: rgba(255, 255, 255, 0.06);
         }
 
-        /* When Occupied / Empty */
         .slot.occupied { 
             border: 1.5px solid rgba(59, 130, 246, 0.4);
             background: rgba(59, 130, 246, 0.15); 
@@ -896,6 +950,26 @@
         @keyframes carEnter { 
             from { transform: translate(-50%,-50%) scale(0.6); opacity: 0; } 
             to { transform: translate(-50%,-50%) scale(1); opacity: 1; } 
+        }
+
+        /* Location Info Card */
+        .location-info {
+            background: rgba(11, 25, 44, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .location-info p {
+            margin: 4px 0;
+            line-height: 1.4;
+        }
+
+        .location-info strong {
+            color: var(--text-primary);
         }
 
         /* Guided Tour Tooltips styling */
@@ -991,18 +1065,6 @@
             color: white;
         }
 
-        .tour-tooltip::after {
-            content: "";
-            position: absolute;
-            border: 8px solid transparent;
-            pointer-events: none;
-        }
-
-        .tour-tooltip.right::after { border-right-color: var(--accent-red); left: -16px; top: 50%; transform: translateY(-50%); }
-        .tour-tooltip.left::after { border-left-color: var(--accent-red); right: -16px; top: 50%; transform: translateY(-50%); }
-        .tour-tooltip.top::after { border-top-color: var(--accent-red); bottom: -16px; left: 50%; transform: translateX(-50%); }
-        .tour-tooltip.bottom::after { border-bottom-color: var(--accent-red); top: -16px; left: 50%; transform: translateX(-50%); }
-
         .tour-highlight {
             position: relative;
             z-index: 2002 !important;
@@ -1057,7 +1119,7 @@
             }
 
             .logo-subtitle {
-                display: none; /* Hide subtitle to preserve header layout space */
+                display: none;
             }
 
             .header-right {
@@ -1069,7 +1131,6 @@
                 letter-spacing: 0.5px;
             }
 
-            /* Responsive Slide-out Sidebar Drawer */
             .toolbar {
                 top: 64px;
                 height: calc(100vh - 64px);
@@ -1090,17 +1151,16 @@
                 padding: 88px 16px 32px;
             }
 
-            .overview, .history, .park-condition, .park-condition-2d {
+            .overview, .history, .park-condition, .park-condition-2d, .park-cesium {
                 padding: 20px 16px;
                 border-radius: 16px;
             }
 
-            .overview h1, .history h2, .park-condition h2, .park-condition-2d h2 {
+            .overview h1, .history h2, .park-condition h2, .park-condition-2d h2, .park-cesium h2 {
                 font-size: 17px;
                 margin-bottom: 18px;
             }
 
-            /* Stack stats grid properly on small screens */
             .stats {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
@@ -1120,7 +1180,6 @@
                 font-size: 16px;
             }
 
-            /* Filters inputs grid formatting */
             .history-filters {
                 grid-template-columns: 1fr;
                 gap: 10px;
@@ -1130,11 +1189,10 @@
             .history-filters input, 
             .history-filters select {
                 padding: 11px 14px;
-                font-size: 14px; /* Essential touch target size & iOS zoom prevention */
+                font-size: 14px;
                 border-radius: 8px;
             }
 
-            /* Responsive Table Card Layout transformation on mobile screens */
             .history-table-container {
                 background: transparent;
                 border: none;
@@ -1146,7 +1204,7 @@
             }
 
             .history-table thead {
-                display: none; /* Hide header rows */
+                display: none;
             }
 
             .history-table tbody {
@@ -1176,7 +1234,6 @@
                 font-size: 13px;
             }
 
-            /* Micro labels insertion */
             .history-table td::before {
                 font-size: 9px;
                 color: var(--text-secondary);
@@ -1204,7 +1261,6 @@
                 align-self: flex-end;
             }
 
-            /* Responsive 2D lot scrollable wrap */
             .parking-lot {
                 align-items: flex-start;
                 padding: 12px;
@@ -1227,12 +1283,10 @@
                 border-radius: 4px;
             }
 
-            /* 3D view height scaling */
-            #threeContainer {
+            #threeContainer, #cesiumContainer, #streetviewContainer {
                 height: 280px;
             }
 
-            /* Tour Tooltip Mobile positioning centering */
             .tour-tooltip {
                 max-width: 90%;
                 left: 5% !important;
@@ -1242,11 +1296,6 @@
                 position: fixed;
             }
 
-            .tour-tooltip::after {
-                display: none; /* Hide arrows on mobile standard overlay */
-            }
-
-            /* Fullscreen 3D controls scale down a bit on small screens */
             #cameraContainer.pseudo-fullscreen #controls,
             #cameraContainer:fullscreen #controls {
                 top: max(10px, env(safe-area-inset-top));
@@ -1267,6 +1316,16 @@
                 padding: 7px 12px;
                 font-size: 11px;
             }
+
+            .view-mode-toggle {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+        }
+
+        /* Override Cesium default styles */
+        .cesium-widget-credits {
+            display: none !important;
         }
     </style>
 </head>
@@ -1382,7 +1441,12 @@
                 <h2>Park Condition (3D Visualizer)</h2>
                 <div id="cameraContainer">
                     <div id="threeContainer"></div>
+                    <div id="cesiumContainer"></div>
+                    <div id="streetviewContainer"><iframe id="streetviewFrame" title="Street View BRIN Parking" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div>
                     <div id="threeError">3D WebGL visualization failed to load.</div>
+                    <div id="cesiumError">Cesium visualization failed to load.</div>
+                    <div id="streetviewError">Street View is not available for this location.</div>
+                    <button class="view-mode-toggle" id="viewModeToggle">Switch to Satellite</button>
                     <button id="toggleCameraBtn">Click to Expand 3D View</button>
                     <div id="controls">
                         <div>Camera Controls</div>
@@ -1398,6 +1462,11 @@
 
             <div class="park-condition-2d">
                 <h2>Park Condition (2D Grid Layout)</h2>
+                <div class="location-info">
+                    <p><strong>Location:</strong> Jl. Sangkuriang, Dago, Kecamatan Coblong, Kota Bandung, Jawa Barat 40135</p>
+                    <p><strong>Building:</strong> Di Depan Masjid Baitul Ilmi BRIN Bandung</p>
+                    <p><strong>Total Slots:</strong> 20 Parking Spaces</p>
+                </div>
                 <div class="parking-lot">
                     <div class="column top">
                         <div class="slot" data-slot="20"><span>20</span><div class="car"></div></div>
@@ -1438,12 +1507,79 @@
         </div>
     </main>
 
-    <!-- ThreeJS & Firebase Core Libraries -->
+    <!-- ThreeJS, Firebase & Cesium Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Cesium.js"></script>
 
     <script>
+        // BRIN Parking Location - Jl. Sangkuriang, Dago, Kec. Coblong, Kota Bandung
+        // Koordinat diambil langsung dari titik "Masjid Baitul Ilmi BRIN Bandung" di Google Maps
+        const BRIN_LOCATION = {
+            latitude: -6.8820692,
+            longitude: 107.6107097,
+            height: 790, // perkiraan elevasi permukaan tanah kawasan Dago (mdpl), dipakai sebagai fallback saat CLAMP_TO_GROUND belum siap
+            name: "BRIN Parking - Depan Masjid Baitul Ilmi BRIN, Jl. Sangkuriang, Dago"
+        };
+
+        // === TATA LETAK 20 SLOT DI CITRA SATELIT (mengikuti titik merah yang ditandai user) ===
+        // Semua nilai di bawah ini dalam METER lokal relatif terhadap BRIN_LOCATION, lalu dikonversi
+        // ke lat/lon. Kalau posisinya masih meleset dari lahan parkir asli di citra satelit, tinggal
+        // ubah 3 angka pengaturan ini tanpa perlu sentuh logic lain:
+        const PARKING_LOT_CENTER_OFFSET = { east: 32, north: -9.5 };  // digeser ke area yang dilingkari merah pada screenshot terbaru (lahan terbuka di sisi timur bangunan)
+        const PARKING_LOT_BEARING_DEG   = 0;                       // rotasi pola (derajat, searah jarum jam) — 0 karena kamera Cesium defaultnya sudah utara-di-atas
+        const PARKING_LOT_SCALE         = 1;                       // faktor skala pola (1 = ukuran asli hasil digitasi) — naikkan/turunkan kalau pola terlalu kecil/besar dibanding lahan asli
+
+        // Offset lokal (meter, sebelum dikali PARKING_LOT_SCALE) untuk slot 1..20 — didigitasi LANGSUNG
+        // dari titik-titik merah yang kamu tandai di screenshot citra satelit (pola 2 kolom mengikuti
+        // bentuk & kemiringan lahan parkir asli). Slot 1-11 = KOLOM KANAN (atas ke bawah),
+        // Slot 12-20 = KOLOM KIRI (atas ke bawah) — posisi titiknya persis sama seperti yang ditandai,
+        // hanya urutan penomorannya yang dibalik sesuai permintaan.
+        const PARKING_SLOT_BASE_OFFSETS_M = [
+            // --- Slot 1-11: kolom kanan ---
+            { east:  7.0, north:  8.9 },
+            { east:  6.4, north:  6.7 },
+            { east:  5.6, north:  4.1 },
+            { east:  4.8, north:  1.7 },
+            { east:  4.6, north: -1.1 },
+            { east:  4.6, north: -3.3 },
+            { east:  4.0, north: -5.5 },
+            { east:  4.0, north: -7.1 },
+            { east:  3.8, north: -9.1 },
+            { east:  2.4, north: -11.3 },
+            { east:  1.2, north: -13.7 },
+            // --- Slot 12-20: kolom kiri ---
+            { east: -1.2, north: 13.5 },
+            { east: -2.8, north: 11.1 },
+            { east: -4.2, north:  8.5 },
+            { east: -5.0, north:  6.3 },
+            { east: -5.4, north:  3.9 },
+            { east: -6.2, north:  1.1 },
+            { east: -6.8, north: -2.3 },
+            { east: -7.8, north: -4.7 },
+            { east: -9.0, north: -7.7 }
+        ];
+
+        // Konversi offset meter (east/north) di sekitar BRIN_LOCATION menjadi lat/lon presisi
+        function metersToLatLon(eastMeters, northMeters) {
+            const bearingRad = PARKING_LOT_BEARING_DEG * Math.PI / 180;
+            const rotatedEast  = eastMeters * Math.cos(bearingRad) - northMeters * Math.sin(bearingRad);
+            const rotatedNorth = eastMeters * Math.sin(bearingRad) + northMeters * Math.cos(bearingRad);
+            const latPerMeter = 1 / 111320;
+            const lonPerMeter = 1 / (111320 * Math.cos(BRIN_LOCATION.latitude * Math.PI / 180));
+            return {
+                lat: BRIN_LOCATION.latitude + (PARKING_LOT_CENTER_OFFSET.north + rotatedNorth) * latPerMeter,
+                lon: BRIN_LOCATION.longitude + (PARKING_LOT_CENTER_OFFSET.east + rotatedEast) * lonPerMeter
+            };
+        }
+
+        // Ambil posisi lokal (meter) slot ke-N sesuai pola hasil digitasi titik merah
+        function getParkingSlotLocalOffset(slotNumber) {
+            const base = PARKING_SLOT_BASE_OFFSETS_M[slotNumber - 1] || { east: 0, north: 0 };
+            return { east: base.east * PARKING_LOT_SCALE, north: base.north * PARKING_LOT_SCALE };
+        }
+
         // === CORE CLASS ARCHITECTURES ===
         class Vehicle {
             constructor(size = 'none') { this.size = size.toLowerCase(); }
@@ -1482,6 +1618,8 @@
         const slotHistoryRef = firebase.database().ref("slot_history");
 
         let scene, camera, renderer, cars = [], allSlots = [], animationFrame;
+        let cesiumViewer = null;
+        let currentViewMode = 'threejs'; // 'threejs', 'cesium', or 'streetview'
         let slotStatuses = {}, slotSizes = {};
         const loadingElement = document.getElementById('loading');
         const errorElement = document.getElementById('error-message');
@@ -1495,7 +1633,7 @@
             toastTimeout = setTimeout(() => errorElement.style.display = 'none', 5000); 
         }
 
-        // === 3D GRAPHICS LAYOUT GENERATOR (THREE.JS) ===
+        // === 3D GRAPHICS LAYOUT GENERATOR (THREE.JS) — basic box/cube assets, tidak pakai model 3D custom ===
         function initScene() {
             const container = document.getElementById('threeContainer');
             scene = new THREE.Scene();
@@ -1551,6 +1689,7 @@
         }
 
         function createCars() {
+            // Mobil tetap direpresentasikan sebagai kotak (BoxGeometry) berwarna sesuai kelas kendaraan — basic 3D asset, sesuai permintaan.
             const carGeo = new THREE.BoxGeometry(2.1, 1.8, 4.2);
             allSlots.forEach((slotData, i) => {
                 const key = `slot_${slotData.slotNumber}`;
@@ -1592,37 +1731,36 @@
 
         function animate() {
             animationFrame = requestAnimationFrame(animate);
-            updateSunPosition();
-            const t = Date.now() * 0.0015;
-            cars.forEach(car => {
-                if (car.isAnimating) {
-                    const opDiff = car.targetOpacity - car.currentOpacity;
-                    const scDiff = car.targetScale - car.currentScale;
-                    if (Math.abs(opDiff) < 0.01 && Math.abs(scDiff) < 0.01) {
-                        car.isAnimating = false;
-                        car.currentOpacity = car.targetOpacity;
-                        car.currentScale = car.targetScale;
-                    } else {
-                        car.currentOpacity += opDiff * 0.06;
-                        car.currentScale += scDiff * 0.06;
+            if (currentViewMode === 'threejs' && scene) {
+                updateSunPosition();
+                const t = Date.now() * 0.0015;
+                cars.forEach(car => {
+                    if (car.isAnimating) {
+                        const opDiff = car.targetOpacity - car.currentOpacity;
+                        const scDiff = car.targetScale - car.currentScale;
+                        if (Math.abs(opDiff) < 0.01 && Math.abs(scDiff) < 0.01) {
+                            car.isAnimating = false;
+                            car.currentOpacity = car.targetOpacity;
+                            car.currentScale = car.targetScale;
+                        } else {
+                            car.currentOpacity += opDiff * 0.06;
+                            car.currentScale += scDiff * 0.06;
+                        }
+                        car.material.opacity = car.currentOpacity;
+                        car.mesh.scale.set(car.currentScale, car.currentScale, car.currentScale);
                     }
-                    car.material.opacity = car.currentOpacity;
-                    car.mesh.scale.set(car.currentScale, car.currentScale, car.currentScale);
-                }
-                if (car.currentOpacity > 0.1) {
-                    car.mesh.position.y = car.originalY + Math.sin(t * 1.5 + car.bobOffset) * 0.06;
-                }
-            });
-            renderer.render(scene, camera);
+                    if (car.currentOpacity > 0.1) {
+                        car.mesh.position.y = car.originalY + Math.sin(t * 1.5 + car.bobOffset) * 0.06;
+                    }
+                });
+                renderer.render(scene, camera);
+            }
         }
 
         window.resetCamera = () => { camera.position.set(0, 24, 44); camera.lookAt(0, 0, 0); };
         window.topView = () => { camera.position.set(0, 52, 0); camera.lookAt(0, 0, 0); };
         window.sideView = () => { camera.position.set(65, 16, 0); camera.lookAt(0, 0, 0); };
 
-        // Recalculates renderer size & camera aspect based on the actual
-        // current size of #threeContainer. Called on init, resize, orientation
-        // change, and whenever we enter/exit fullscreen (native or pseudo).
         function resizeThreeRenderer() {
             if (!renderer || !camera) return;
             const container = document.getElementById('threeContainer');
@@ -1632,6 +1770,155 @@
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
             renderer.setSize(w, h);
+        }
+
+        // Cesium's Viewer/CesiumWidget listens to window resize itself, but its internal
+        // canvas can end up stale right after a fullscreen transition (the container size
+        // changes without a real 'resize' window event on some browsers). Forcing a manual
+        // resize() + render keeps the satellite view filling the whole container instead of
+        // staying stuck at its pre-fullscreen dimensions.
+        function resizeCesiumViewer() {
+            if (!cesiumViewer || cesiumViewer.isDestroyed()) return;
+            try {
+                cesiumViewer.resize();
+                cesiumViewer.scene.requestRender();
+            } catch (e) {
+                console.warn('Cesium resize failed:', e);
+            }
+        }
+
+        // Central helper: resize whichever view is currently active. Called after every
+        // fullscreen enter/exit, orientation change, and window resize so the active
+        // renderer (Three.js canvas or Cesium canvas) always matches the container's
+        // real, current pixel size instead of leaving stale black space.
+        function resizeActiveView() {
+            if (currentViewMode === 'threejs') {
+                resizeThreeRenderer();
+            } else if (currentViewMode === 'cesium') {
+                resizeCesiumViewer();
+            }
+            // streetview is a plain 100%/100% iframe, no manual resize needed
+        }
+
+        // === CESIUM.JS INITIALIZATION — citra satelit lokasi asli sesuai Google Maps ===
+        async function initCesium() {
+            try {
+                if (typeof Cesium === 'undefined') {
+                    throw new Error('Cesium library failed to load from CDN (check network/ad-blocker access to cesium.com).');
+                }
+                const container = document.getElementById('cesiumContainer');
+
+                // CATATAN: Cesium.Terrain.fromWorldTerrain() sengaja TIDAK dipakai karena itu adalah
+                // asset milik Cesium ion yang wajib pakai access token ion yang valid (token lama sudah
+                // expired 5 Jan 2025 sehingga viewer gagal dibuat -> "Cesium visualization failed to load").
+                // Solusinya: pakai EllipsoidTerrainProvider bawaan (tanpa token/tanpa akun ion sama sekali),
+                // sementara citra satelitnya tetap dari ArcGIS World Imagery yang pakai key gratis bawaan
+                // Cesium, jadi tidak bergantung ke ion sama sekali.
+                cesiumViewer = new Cesium.Viewer(container, {
+                    terrainProvider: new Cesium.EllipsoidTerrainProvider(),
+                    imageryProvider: await Cesium.ArcGisMapServerImageryProvider.fromUrl(
+                        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
+                    ),
+                    // skyAtmosphere DIMATIKAN: opsi ini memicu bug dikenal di CesiumJS
+                    // "setDynamicAtmosphereColor is not a function" saat scene.light tidak
+                    // mendukung dynamic atmosphere lighting pada build CDN ini. Untuk tampilan
+                    // satelit lokal seperti ini efeknya tidak signifikan, jadi aman dimatikan.
+                    skyAtmosphere: false,
+                    homeButton: false,
+                    sceneModePicker: true,
+                    navigationHelpButton: false,
+                    animation: true,
+                    timeline: true,
+                    creditsDisplay: false,
+                    infoBox: false
+                });
+
+                // Pengaman tambahan: matikan dynamic atmosphere lighting di globe juga,
+                // supaya jalur kode yang memicu bug "setDynamicAtmosphereColor is not a function"
+                // benar-benar tidak bisa terpicu dari sisi manapun.
+                cesiumViewer.scene.globe.dynamicAtmosphereLighting = false;
+                cesiumViewer.scene.globe.enableLighting = false;
+
+                // Set initial camera ke lokasi BRIN Parking (depan Masjid Baitul Ilmi BRIN Bandung),
+                // zoom dekat supaya langsung terlihat kotak lahan parkirnya (bukan pemandangan luas)
+                cesiumViewer.camera.flyTo({
+                    destination: Cesium.Cartesian3.fromDegrees(BRIN_LOCATION.longitude, BRIN_LOCATION.latitude, 90),
+                    duration: 3
+                });
+
+                // Marker gedung/lokasi parkir — clamp ke permukaan tanah supaya presisi terhadap terrain asli
+                cesiumViewer.entities.add({
+                    position: Cesium.Cartesian3.fromDegrees(BRIN_LOCATION.longitude, BRIN_LOCATION.latitude),
+                    point: {
+                        pixelSize: 15,
+                        color: Cesium.Color.RED,
+                        outlineColor: Cesium.Color.WHITE,
+                        outlineWidth: 2,
+                        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                    },
+                    label: {
+                        text: 'BRIN Parking\nDepan Masjid Baitul Ilmi\nJl. Sangkuriang, Dago',
+                        font: '12px Inter, Arial',
+                        fillColor: Cesium.Color.WHITE,
+                        outlineColor: Cesium.Color.BLACK,
+                        outlineWidth: 2,
+                        style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+                        verticalOrigin: Cesium.VerticalOrigin.TOP,
+                        pixelOffset: new Cesium.Cartesian2(0, 20),
+                        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                    }
+                });
+
+                // 20 slot parkir sebagai entity — sekarang memakai grid rapi 5x4 yang menempel pas
+                // pada area parkir asli (bukan sebaran acak seperti sebelumnya), clamp ke tanah
+                for (let i = 1; i <= 20; i++) {
+                    const key = `slot_${i}`;
+                    const isOccupied = slotStatuses[key] || false;
+                    const size = slotSizes[key] || 'none';
+
+                    const { east, north } = getParkingSlotLocalOffset(i);
+                    const { lat, lon } = metersToLatLon(east, north);
+
+                    cesiumViewer.entities.add({
+                        position: Cesium.Cartesian3.fromDegrees(lon, lat),
+                        point: {
+                            pixelSize: isOccupied ? 12 : 8,
+                            color: isOccupied ? getSlotColor(size) : Cesium.Color.GREEN,
+                            outlineColor: Cesium.Color.WHITE,
+                            outlineWidth: 1,
+                            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                        },
+                        label: {
+                            text: `Slot ${i}`,
+                            font: '10px Inter, Arial',
+                            fillColor: Cesium.Color.WHITE,
+                            style: Cesium.LabelStyle.FILL,
+                            verticalOrigin: Cesium.VerticalOrigin.TOP,
+                            pixelOffset: new Cesium.Cartesian2(0, 10),
+                            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+                        }
+                    });
+                }
+
+                document.getElementById('cesiumError').style.display = 'none';
+                // Make sure the freshly created Cesium canvas matches the container's
+                // current real size immediately (important when Cesium is created while
+                // already in fullscreen / pseudo-fullscreen mode).
+                setTimeout(resizeCesiumViewer, 100);
+            } catch (e) {
+                console.error('Cesium init error:', e);
+                document.getElementById('cesiumError').style.display = 'block';
+                showError("Cesium visualization failed to load.");
+            }
+        }
+
+        function getSlotColor(size) {
+            switch(size) {
+                case 'small': return Cesium.Color.LIGHTBLUE;
+                case 'medium': return Cesium.Color.ORANGE;
+                case 'big': return Cesium.Color.RED;
+                default: return Cesium.Color.GRAY;
+            }
         }
 
         function initThree() {
@@ -1651,6 +1938,37 @@
             cars = [];
             allSlots = [];
             document.getElementById('controls').style.display = 'none';
+        }
+
+        function cleanupCesium() {
+            if (cesiumViewer) {
+                cesiumViewer.destroy();
+                cesiumViewer = null;
+            }
+        }
+
+        // === STREET VIEW — pakai embed Google Street View (tanpa API key) tepat di titik BRIN_LOCATION ===
+        let streetviewLoaded = false;
+        function initStreetview() {
+            try {
+                const frame = document.getElementById('streetviewFrame');
+                // Format embed klasik Google Street View ("output=svembed") tidak butuh API key,
+                // cukup lat,lng di parameter cbll. cbp mengatur heading/pitch awal kamera.
+                const url = `https://maps.google.com/maps?layer=c&cbll=${BRIN_LOCATION.latitude},${BRIN_LOCATION.longitude}&cbp=11,0,0,0,0&output=svembed`;
+                frame.src = url;
+                streetviewLoaded = true;
+                document.getElementById('streetviewError').style.display = 'none';
+            } catch (e) {
+                console.error('Street View init error:', e);
+                document.getElementById('streetviewError').style.display = 'block';
+                showError('Street View visualization failed to load.');
+            }
+        }
+
+        function cleanupStreetview() {
+            const frame = document.getElementById('streetviewFrame');
+            if (frame) frame.src = 'about:blank';
+            streetviewLoaded = false;
         }
 
         function setupFirebaseListener() {
@@ -1679,7 +1997,7 @@
                         el.querySelector(".car").style.display = status ? "block" : "none";
                     }
 
-                    if (cars[i-1]) {
+                    if (cars.length > 0 && cars[i-1]) {
                         const v = createVehicle(size);
                         cars[i-1].mesh.material.color.set(v.getColor());
                         cars[i-1].targetOpacity = status ? 1 : 0;
@@ -1698,7 +2016,7 @@
             { element: '#toggleToolbar', title: "Toggle Navigation Menu", text: "Tap the BRIN logo in the top bar to slide open/close the administration workspace drawer.", position: 'bottom' },
             { element: '.overview', title: "Live Analytics Overview", text: "View real-time statistic metrics detailing active occupancy ratios, system time, and daily customer metrics.", position: 'right' },
             { element: '.history', title: "Slot Events History", text: "Review chronologically categorized vehicle entries and exits, filtered directly by slot numbers or specific dates.", position: 'left' },
-            { element: '.park-condition', title: "3D Virtual Digital Twin", text: "Interact with a physics-based, real-time 3D simulation of all active spaces.", position: 'right' },
+            { element: '.park-condition', title: "3D Virtual Digital Twin & Satellite View", text: "Interact with a physics-based, real-time 3D simulation or satellite view of all active spaces at BRIN Bandung.", position: 'right' },
             { element: '.park-condition-2d', title: "2D Visual Space Map", text: "Get an instantaneous birds-eye look at the exact layouts color-coded by vehicle classifications.", position: 'left' }
         ];
         let currentTourStep = 0;
@@ -1723,7 +2041,6 @@
             const el = document.querySelector(tourSteps[step].element);
             if (!el) { endTour(); return; }
 
-            // Clear previous highlight markers
             document.querySelectorAll('.tour-highlight').forEach(e => e.classList.remove('tour-highlight'));
             el.classList.add('tour-highlight');
 
@@ -1740,7 +2057,6 @@
                 t.className = 'tour-tooltip ' + tourSteps[step].position;
                 t.style.transform = 'none';
                 
-                const tRect = t.getBoundingClientRect();
                 let left = rect.left + (rect.width / 2) - (320 / 2);
                 let top = rect.bottom + 12;
 
@@ -1781,7 +2097,6 @@
 
             document.querySelector('.logout').onclick = () => { localStorage.removeItem('currentUser'); alert('Logout berhasil'); window.location.replace('/login.html'); };
 
-            // Toggle Sidebar Navigation and backdrop mask
             const toggleToolbar = document.getElementById('toggleToolbar');
             const toolbar = document.getElementById('toolbar');
             const mainContent = document.getElementById('mainContent');
@@ -1867,36 +2182,79 @@
             document.getElementById('filterStatus').onchange = renderHistory;
 
             const threeContainer = document.getElementById('threeContainer');
+            const cesiumContainer = document.getElementById('cesiumContainer');
+            const streetviewContainer = document.getElementById('streetviewContainer');
             const cameraContainer = document.getElementById('cameraContainer');
             const fullscreenBtn = document.getElementById('fullscreenBtn');
             const toggleCameraBtnEl = document.getElementById('toggleCameraBtn');
+            const viewModeToggle = document.getElementById('viewModeToggle');
             let isExpanded = false;
 
-            // Fully collapses the 3D card back to its normal, non-expanded
-            // state on the Live Overview page (hides the canvas, tears down
-            // the three.js scene, resets button labels).
             function collapseThreeView() {
                 isExpanded = false;
                 toggleCameraBtnEl.textContent = 'Click to Expand 3D View';
                 threeContainer.style.display = 'none';
+                cesiumContainer.style.display = 'none';
+                streetviewContainer.style.display = 'none';
                 fullscreenBtn.style.display = 'none';
+                viewModeToggle.style.display = 'none';
                 cleanupThree();
+                cleanupCesium();
+                cleanupStreetview();
+                currentViewMode = null;
             }
 
             toggleCameraBtnEl.onclick = () => {
                 isExpanded = !isExpanded;
                 toggleCameraBtnEl.textContent = isExpanded ? 'Click to Collapse 3D View' : 'Click to Expand 3D View';
-                threeContainer.style.display = isExpanded ? 'block' : 'none';
-                fullscreenBtn.style.display = isExpanded ? 'block' : 'none';
-                if (isExpanded && !scene) initThree();
-                else if (!isExpanded) {
-                    cleanupThree();
-                    // Make sure we're not stuck in fullscreen when collapsing
+                
+                if (isExpanded) {
+                    currentViewMode = 'threejs';
+                    threeContainer.style.display = 'block';
+                    cesiumContainer.style.display = 'none';
+                    streetviewContainer.style.display = 'none';
+                    fullscreenBtn.style.display = 'block';
+                    viewModeToggle.style.display = 'block';
+                    viewModeToggle.textContent = 'Switch to Satellite';
+                    if (!scene) initThree();
+                    setTimeout(resizeThreeRenderer, 100);
+                } else {
+                    collapseThreeView();
                     exitFullscreenMode(true);
                 }
             };
 
-            // === FULLSCREEN HANDLING (fits the whole screen on mobile & desktop) ===
+            // Siklus 3 tampilan: 3D Digital Twin -> Citra Satelit (Cesium) -> Street View -> kembali ke 3D
+            viewModeToggle.onclick = () => {
+                if (currentViewMode === 'threejs') {
+                    currentViewMode = 'cesium';
+                    threeContainer.style.display = 'none';
+                    cesiumContainer.style.display = 'block';
+                    streetviewContainer.style.display = 'none';
+                    viewModeToggle.textContent = 'Switch to Street View';
+                    cleanupThree();
+                    if (!cesiumViewer) initCesium();
+                    else setTimeout(resizeCesiumViewer, 100);
+                } else if (currentViewMode === 'cesium') {
+                    currentViewMode = 'streetview';
+                    threeContainer.style.display = 'none';
+                    cesiumContainer.style.display = 'none';
+                    streetviewContainer.style.display = 'block';
+                    viewModeToggle.textContent = 'Switch to 3D';
+                    cleanupCesium();
+                    if (!streetviewLoaded) initStreetview();
+                } else {
+                    currentViewMode = 'threejs';
+                    threeContainer.style.display = 'block';
+                    cesiumContainer.style.display = 'none';
+                    streetviewContainer.style.display = 'none';
+                    viewModeToggle.textContent = 'Switch to Satellite';
+                    cleanupStreetview();
+                    if (!scene) initThree();
+                    setTimeout(resizeThreeRenderer, 100);
+                }
+            };
+
             function enterFullscreenMode() {
                 const req = cameraContainer.requestFullscreen
                     || cameraContainer.webkitRequestFullscreen
@@ -1906,14 +2264,12 @@
                 if (req) {
                     const result = req.call(cameraContainer);
                     if (result && typeof result.then === 'function') {
-                        result.then(() => setTimeout(resizeThreeRenderer, 150))
+                        result.then(() => setTimeout(resizeActiveView, 150))
                               .catch(() => activatePseudoFullscreen());
                     } else {
-                        // Older APIs don't return a promise; assume it worked
-                        setTimeout(resizeThreeRenderer, 150);
+                        setTimeout(resizeActiveView, 150);
                     }
                 } else {
-                    // Fullscreen API unsupported (e.g. iOS Safari) - use manual fallback
                     activatePseudoFullscreen();
                 }
             }
@@ -1922,11 +2278,9 @@
                 cameraContainer.classList.add('pseudo-fullscreen');
                 fullscreenBtn.textContent = 'Exit Full Screen';
                 document.body.style.overflow = 'hidden';
-                setTimeout(resizeThreeRenderer, 150);
+                setTimeout(resizeActiveView, 150);
             }
 
-            // skipCollapse: internal flag used when collapseThreeView() itself
-            // calls this — avoids infinite recursion between the two functions
             function exitFullscreenMode(skipCollapse) {
                 const fsElement = document.fullscreenElement || document.webkitFullscreenElement
                     || document.mozFullScreenElement || document.msFullscreenElement;
@@ -1938,10 +2292,8 @@
                 cameraContainer.classList.remove('pseudo-fullscreen');
                 fullscreenBtn.textContent = 'Full Screen';
                 document.body.style.overflow = '';
-                setTimeout(resizeThreeRenderer, 150);
+                setTimeout(resizeActiveView, 150);
 
-                // Exiting fullscreen (via button or ESC) should drop straight
-                // back to the normal, collapsed Live Overview layout
                 if (!skipCollapse) collapseThreeView();
             }
 
@@ -1957,20 +2309,14 @@
                 }
             };
 
-            // Keep the 3D renderer perfectly fit whenever the browser's native
-            // fullscreen state changes (e.g. user hits ESC to exit) — and if
-            // the user just exited (no fullscreen element left), collapse
-            // straight back to the normal Live Overview view.
             ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
                 document.addEventListener(evt, () => {
                     const fsElement = document.fullscreenElement || document.webkitFullscreenElement
                         || document.mozFullScreenElement || document.msFullscreenElement;
                     if (fsElement) {
                         fullscreenBtn.textContent = 'Exit Full Screen';
-                        setTimeout(resizeThreeRenderer, 150);
+                        setTimeout(resizeActiveView, 150);
                     } else {
-                        // User pressed ESC (or browser UI) to leave native
-                        // fullscreen — snap straight back to normal view
                         fullscreenBtn.textContent = 'Full Screen';
                         document.body.style.overflow = '';
                         if (isExpanded) collapseThreeView();
@@ -1978,18 +2324,15 @@
                 });
             });
 
-            // Escape key support for the manual/pseudo fullscreen fallback
             document.addEventListener('keydown', e => {
                 if (e.key === 'Escape' && cameraContainer.classList.contains('pseudo-fullscreen')) {
                     exitFullscreenMode();
                 }
             });
 
-            // Keep the renderer sized correctly across rotations / resizes
-            window.addEventListener('resize', () => setTimeout(resizeThreeRenderer, 100));
-            window.addEventListener('orientationchange', () => setTimeout(resizeThreeRenderer, 300));
+            window.addEventListener('resize', () => setTimeout(resizeActiveView, 100));
+            window.addEventListener('orientationchange', () => setTimeout(resizeActiveView, 300));
 
-            // Touch & Mouse Drag 3D Rotator Controls
             let mouseDown = false, mouseX = 0, mouseY = 0;
             threeContainer.addEventListener('mousedown', e => { mouseDown = true; mouseX = e.clientX; mouseY = e.clientY; });
             threeContainer.addEventListener('mouseup', () => mouseDown = false);
