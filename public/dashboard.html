@@ -1514,19 +1514,6 @@
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Cesium.js"></script>
 
     <script>
-        // === PERBAIKAN: SELALU KEMBALI KE TAMPILAN UTAMA SAAT HALAMAN DIBUKA/LOGIN LAGI ===
-        // Browser (terutama di HP) kadang me-restore halaman ini dari bfcache (back-forward
-        // cache) saat kamu login lagi / menekan tombol back, sehingga tampilan sebelumnya
-        // (misal 3D expanded, fullscreen, atau sidebar masih terbuka) ikut "nempel" tanpa
-        // JavaScript-nya jalan ulang dari awal. Untuk memastikan halaman SELALU mendarat di
-        // tampilan utama (Live Overview standar), kita paksa reload penuh setiap kali
-        // event 'pageshow' terdeteksi berasal dari cache (event.persisted === true).
-        window.addEventListener('pageshow', function (event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-
         // BRIN Parking Location - Jl. Sangkuriang, Dago, Kec. Coblong, Kota Bandung
         // Koordinat diambil langsung dari titik "Masjid Baitul Ilmi BRIN Bandung" di Google Maps
         const BRIN_LOCATION = {
@@ -2102,23 +2089,11 @@
         // === INITIALIZER HANDLER ===
         document.addEventListener("DOMContentLoaded", () => {
             const user = JSON.parse(localStorage.getItem('currentUser'));
-            if (!user) { alert('Silakan login terlebih dahulu!'); window.location.replace('/login.html'); return; }
+            if (!user) { alert('Silakan login terlebih dahulu!'); window.location.replace('/index.html'); return; }
             document.getElementById('userName').textContent = user.username;
             if (user.profilePic) {
                 document.getElementById('profilePic').src = user.profilePic;
             }
-
-            // === PERBAIKAN: paksa tampilan awal selalu bersih setiap kali halaman ini dibuka lagi ===
-            // Sidebar ditutup, container 3D/satelit/street view disembunyikan, dan setiap sisa class
-            // fullscreen dari sesi sebelumnya dilepas — supaya operator selalu mendarat di tampilan
-            // utama (Live Overview) alih-alih tampilan terakhir yang sempat dibuka.
-            (function resetToDefaultView() {
-                document.getElementById('toolbar').classList.remove('active');
-                document.getElementById('sidebarOverlay').classList.remove('active');
-                document.getElementById('mainContent').classList.remove('with-toolbar');
-                document.getElementById('cameraContainer').classList.remove('pseudo-fullscreen');
-                document.body.style.overflow = '';
-            })();
 
             document.querySelector('.logout').onclick = () => { localStorage.removeItem('currentUser'); alert('Logout berhasil'); window.location.replace('/login.html'); };
 
@@ -2214,16 +2189,6 @@
             const toggleCameraBtnEl = document.getElementById('toggleCameraBtn');
             const viewModeToggle = document.getElementById('viewModeToggle');
             let isExpanded = false;
-
-            // Pastikan state awal tombol/kontainer 3D benar-benar dalam kondisi "collapsed"
-            // (tidak expanded) begitu halaman ini pertama kali dirender.
-            toggleCameraBtnEl.textContent = 'Click to Expand 3D View';
-            threeContainer.style.display = 'none';
-            cesiumContainer.style.display = 'none';
-            streetviewContainer.style.display = 'none';
-            fullscreenBtn.style.display = 'none';
-            viewModeToggle.style.display = 'none';
-            currentViewMode = null;
 
             function collapseThreeView() {
                 isExpanded = false;

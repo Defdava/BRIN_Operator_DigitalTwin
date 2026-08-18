@@ -34,7 +34,7 @@ try {
   console.error("⚠️ Firebase Admin initialization failed:", error.message);
 }
 
-// 🏠 Serve halaman utama
+// 🏠 Serve satu-satunya halaman (index.html) yang mencakup Login & Dashboard
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
@@ -44,4 +44,4 @@ if (process.env.NODE_ENV !== "production") {
   app.listen(port, () => console.log(`🚀 Running at http://localhost:${port}`));
 }
 
-export default app; // <-- penting untuk Vercel!
+export default app;
