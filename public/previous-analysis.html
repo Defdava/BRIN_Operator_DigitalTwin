@@ -1189,23 +1189,23 @@
         </div>
         <div class="feature-box">
             <h3>Management Suite</h3>
-            <button class="live-overview" onclick="window.location.href='/index.html'">
+            <button class="live-overview" onclick="goToPage('/dashboard.html')">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8.47 1.318a1 1 0 0 0-.94 0l-6 3A1 1 0 0 0 1 5.2v8.8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5.2a1 1 0 0 0-.53-.882zM7.5 3v10.5H2V5.7l5.5-2.75zm1 0 5.5 2.75V13.5H8.5z"/></svg>
                 Live Overview
             </button>
-            <button class="prev-analysis" onclick="window.location.href='/previous-analysis.html'">
+            <button class="prev-analysis" onclick="goToPage('/previous-analysis.html')">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M9.283 4.002H7.971L6.072 7.61h-.024l-1.9-3.608H2.784L5.275 8.72 2.748 13.5h1.312l2.007-3.956h.024L8.136 13.5h1.313L6.92 8.728z"/></svg>
                 Previous Analysis
             </button>
-            <button class="export-data" onclick="window.location.href='/exportdata.html'">
+            <button class="export-data" onclick="goToPage('/exportdata.html')">
                 <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                 Export Data
             </button>
-            <button class="helpdesk" onclick="window.location.href='/helpdesk.html'">
+            <button class="helpdesk" onclick="goToPage('/helpdesk.html')">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.03-.94-.584 0-1.01.388-1.01.94"/></svg>
                 Helpdesk
             </button>
-            <button class="parking-analysis" onclick="window.location.href='/parkiranalysis.html'">
+            <button class="parking-analysis" onclick="goToPage('/parkiranalysis.html')">
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 11.5a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v7.5a.5.5 0 0 1-.5.5H4.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v10.5a.5.5 0 0 1-.5.5H8.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v13.5a.5.5 0 0 1-.5.5h-1.4a.5.5 0 0 1-.5-.5z"/></svg>
                 Parking Analysis
             </button>
@@ -1298,6 +1298,30 @@
     </main>
 
     <script>
+        // ==========================================================
+        // FIX: Paksa reload halaman jika diambil dari bfcache
+        // (mencegah tampilan "beku"/lama saat menekan tombol back
+        // atau berpindah antar halaman dashboard <-> previous-analysis)
+        // ==========================================================
+        window.addEventListener('pageshow', function (event) {
+            const navEntries = window.performance && window.performance.getEntriesByType
+                ? window.performance.getEntriesByType('navigation')
+                : [];
+            const isBackForward = navEntries.length > 0 && navEntries[0].type === 'back_forward';
+
+            if (event.persisted || isBackForward) {
+                window.location.reload();
+            }
+        });
+
+        // Helper navigasi antar halaman dengan cache-busting
+        // supaya halaman tujuan (dashboard.html, dsb) selalu memuat
+        // versi/data terbaru, bukan versi cache lama.
+        window.goToPage = function (path) {
+            const separator = path.includes('?') ? '&' : '?';
+            window.location.href = `${path}${separator}_=${Date.now()}`;
+        };
+
         // === Firebase Config ===
         const firebaseConfig = {
             apiKey: "AIzaSyAef3SJwvVVTunr6CWki79aenfpXlgYc0s",
