@@ -298,6 +298,17 @@
             box-shadow: 0 0 8px var(--accent-red);
         }
 
+        .toolbar button.tegra-link {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.4);
+            color: #60A5FA;
+        }
+
+        .toolbar button.tegra-link:hover {
+            background: rgba(59, 130, 246, 0.3);
+            color: white;
+        }
+
         /* User Profile Widget */
         .toolbar .user-info {
             text-align: center;
@@ -602,6 +613,14 @@
             background: #020617; 
         }
 
+        /* Agar canvas 3D meregang pas saat full screen */
+        #threeContainer canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover;
+        }
+
         #threeError { 
             display: none; 
             color: var(--accent-red); 
@@ -776,6 +795,7 @@
             border: none;
             background: #020617;
             padding: 0;
+            margin: 0;
             display: flex;
         }
 
@@ -791,8 +811,8 @@
         #cameraContainer:-webkit-full-screen #streetviewContainer,
         #cameraContainer:-moz-full-screen #streetviewContainer,
         #cameraContainer:-ms-fullscreen #streetviewContainer {
-            width: 100% !important;
-            height: 100% !important;
+            width: 100vw !important;
+            height: 100vh !important;
             flex: 1 1 auto;
         }
 
@@ -818,8 +838,8 @@
         #cameraContainer.pseudo-fullscreen #threeContainer,
         #cameraContainer.pseudo-fullscreen #cesiumContainer,
         #cameraContainer.pseudo-fullscreen #streetviewContainer {
-            width: 100% !important;
-            height: 100% !important;
+            width: 100vw !important;
+            height: 100vh !important;
             flex: 1 1 auto;
         }
 
@@ -843,12 +863,6 @@
         #cameraContainer.pseudo-fullscreen #toggleCameraBtn {
             display: none !important;
         }
-
-        /* NOTE: previously this block forced a centered 16:9 letterboxed box on desktop
-           (width/height clamped via aspect-ratio), which is why fullscreen only filled
-           roughly half the screen with black bars around it. It has been removed so the
-           3D / satellite / street view containers always stretch to fill the entire
-           available fullscreen area edge-to-edge on every screen size. */
 
         #loading, #error-message { 
             position: absolute; 
@@ -1385,6 +1399,10 @@
                 <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 11.5a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v7.5a.5.5 0 0 1-.5.5H4.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v10.5a.5.5 0 0 1-.5.5H8.5a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h1.4a.5.5 0 0 1 .5.5v13.5a.5.5 0 0 1-.5.5h-1.4a.5.5 0 0 1-.5-.5z"/></svg>
                 Parking Analysis
             </button>
+            <button class="tegra-link" onclick="window.open('https://tegra-ubuntu.tailc69e7c.ts.net/', '_blank')">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM2.5 8a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0z"/></svg>
+                Tegra Server Node
+            </button>
         </div>
     </aside>
 
@@ -1396,7 +1414,6 @@
                     <div><span>Occupied Cars</span><span id="occupiedSlots">0 / 20</span></div>
                     <div><span>Available Slots</span><span id="emptySlots">20 / 20</span></div>
                     <div><span>Current Time</span><span id="currentTime">--:--:--</span></div>
-                    <div><span>Loyalty Customers</span><span>3 Members</span></div>
                     <div><span>Total Cars In</span><span id="totalCarsIn">0 Today</span></div>
                     <div><span>Total Cars Out</span><span id="totalCarsOut">0 Today</span></div>
                 </div>
@@ -1633,7 +1650,7 @@
             toastTimeout = setTimeout(() => errorElement.style.display = 'none', 5000); 
         }
 
-        // === 3D GRAPHICS LAYOUT GENERATOR (THREE.JS) — basic box/cube assets, tidak pakai model 3D custom ===
+        // === 3D GRAPHICS LAYOUT GENERATOR (THREE.JS) ===
         function initScene() {
             const container = document.getElementById('threeContainer');
             scene = new THREE.Scene();
@@ -1689,7 +1706,6 @@
         }
 
         function createCars() {
-            // Mobil tetap direpresentasikan sebagai kotak (BoxGeometry) berwarna sesuai kelas kendaraan — basic 3D asset, sesuai permintaan.
             const carGeo = new THREE.BoxGeometry(2.1, 1.8, 4.2);
             allSlots.forEach((slotData, i) => {
                 const key = `slot_${slotData.slotNumber}`;
@@ -1764,19 +1780,16 @@
         function resizeThreeRenderer() {
             if (!renderer || !camera) return;
             const container = document.getElementById('threeContainer');
-            const w = container.clientWidth;
-            const h = container.clientHeight;
+            // Gunakan getBoundingClientRect untuk memastikan dimensi 100% akurat di layar penuh
+            const rect = container.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
             if (!w || !h) return;
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
             renderer.setSize(w, h);
         }
 
-        // Cesium's Viewer/CesiumWidget listens to window resize itself, but its internal
-        // canvas can end up stale right after a fullscreen transition (the container size
-        // changes without a real 'resize' window event on some browsers). Forcing a manual
-        // resize() + render keeps the satellite view filling the whole container instead of
-        // staying stuck at its pre-fullscreen dimensions.
         function resizeCesiumViewer() {
             if (!cesiumViewer || cesiumViewer.isDestroyed()) return;
             try {
@@ -1787,20 +1800,15 @@
             }
         }
 
-        // Central helper: resize whichever view is currently active. Called after every
-        // fullscreen enter/exit, orientation change, and window resize so the active
-        // renderer (Three.js canvas or Cesium canvas) always matches the container's
-        // real, current pixel size instead of leaving stale black space.
         function resizeActiveView() {
             if (currentViewMode === 'threejs') {
                 resizeThreeRenderer();
             } else if (currentViewMode === 'cesium') {
                 resizeCesiumViewer();
             }
-            // streetview is a plain 100%/100% iframe, no manual resize needed
         }
 
-        // === CESIUM.JS INITIALIZATION — citra satelit lokasi asli sesuai Google Maps ===
+        // === CESIUM.JS INITIALIZATION ===
         async function initCesium() {
             try {
                 if (typeof Cesium === 'undefined') {
@@ -1808,21 +1816,11 @@
                 }
                 const container = document.getElementById('cesiumContainer');
 
-                // CATATAN: Cesium.Terrain.fromWorldTerrain() sengaja TIDAK dipakai karena itu adalah
-                // asset milik Cesium ion yang wajib pakai access token ion yang valid (token lama sudah
-                // expired 5 Jan 2025 sehingga viewer gagal dibuat -> "Cesium visualization failed to load").
-                // Solusinya: pakai EllipsoidTerrainProvider bawaan (tanpa token/tanpa akun ion sama sekali),
-                // sementara citra satelitnya tetap dari ArcGIS World Imagery yang pakai key gratis bawaan
-                // Cesium, jadi tidak bergantung ke ion sama sekali.
                 cesiumViewer = new Cesium.Viewer(container, {
                     terrainProvider: new Cesium.EllipsoidTerrainProvider(),
                     imageryProvider: await Cesium.ArcGisMapServerImageryProvider.fromUrl(
                         'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer'
                     ),
-                    // skyAtmosphere DIMATIKAN: opsi ini memicu bug dikenal di CesiumJS
-                    // "setDynamicAtmosphereColor is not a function" saat scene.light tidak
-                    // mendukung dynamic atmosphere lighting pada build CDN ini. Untuk tampilan
-                    // satelit lokal seperti ini efeknya tidak signifikan, jadi aman dimatikan.
                     skyAtmosphere: false,
                     homeButton: false,
                     sceneModePicker: true,
@@ -1833,20 +1831,14 @@
                     infoBox: false
                 });
 
-                // Pengaman tambahan: matikan dynamic atmosphere lighting di globe juga,
-                // supaya jalur kode yang memicu bug "setDynamicAtmosphereColor is not a function"
-                // benar-benar tidak bisa terpicu dari sisi manapun.
                 cesiumViewer.scene.globe.dynamicAtmosphereLighting = false;
                 cesiumViewer.scene.globe.enableLighting = false;
 
-                // Set initial camera ke lokasi BRIN Parking (depan Masjid Baitul Ilmi BRIN Bandung),
-                // zoom dekat supaya langsung terlihat kotak lahan parkirnya (bukan pemandangan luas)
                 cesiumViewer.camera.flyTo({
                     destination: Cesium.Cartesian3.fromDegrees(BRIN_LOCATION.longitude, BRIN_LOCATION.latitude, 90),
                     duration: 3
                 });
 
-                // Marker gedung/lokasi parkir — clamp ke permukaan tanah supaya presisi terhadap terrain asli
                 cesiumViewer.entities.add({
                     position: Cesium.Cartesian3.fromDegrees(BRIN_LOCATION.longitude, BRIN_LOCATION.latitude),
                     point: {
@@ -1869,8 +1861,6 @@
                     }
                 });
 
-                // 20 slot parkir sebagai entity — sekarang memakai grid rapi 5x4 yang menempel pas
-                // pada area parkir asli (bukan sebaran acak seperti sebelumnya), clamp ke tanah
                 for (let i = 1; i <= 20; i++) {
                     const key = `slot_${i}`;
                     const isOccupied = slotStatuses[key] || false;
@@ -1901,9 +1891,6 @@
                 }
 
                 document.getElementById('cesiumError').style.display = 'none';
-                // Make sure the freshly created Cesium canvas matches the container's
-                // current real size immediately (important when Cesium is created while
-                // already in fullscreen / pseudo-fullscreen mode).
                 setTimeout(resizeCesiumViewer, 100);
             } catch (e) {
                 console.error('Cesium init error:', e);
@@ -1947,13 +1934,11 @@
             }
         }
 
-        // === STREET VIEW — pakai embed Google Street View (tanpa API key) tepat di titik BRIN_LOCATION ===
+        // === STREET VIEW ===
         let streetviewLoaded = false;
         function initStreetview() {
             try {
                 const frame = document.getElementById('streetviewFrame');
-                // Format embed klasik Google Street View ("output=svembed") tidak butuh API key,
-                // cukup lat,lng di parameter cbll. cbp mengatur heading/pitch awal kamera.
                 const url = `https://maps.google.com/maps?layer=c&cbll=${BRIN_LOCATION.latitude},${BRIN_LOCATION.longitude}&cbp=11,0,0,0,0&output=svembed`;
                 frame.src = url;
                 streetviewLoaded = true;
@@ -2014,7 +1999,7 @@
         // === COMPREHENSIVE TOUR SYSTEM ===
         const tourSteps = [
             { element: '#toggleToolbar', title: "Toggle Navigation Menu", text: "Tap the BRIN logo in the top bar to slide open/close the administration workspace drawer.", position: 'bottom' },
-            { element: '.overview', title: "Live Analytics Overview", text: "View real-time statistic metrics detailing active occupancy ratios, system time, and daily customer metrics.", position: 'right' },
+            { element: '.overview', title: "Live Analytics Overview", text: "View real-time statistic metrics detailing active occupancy ratios, system time, and daily metrics.", position: 'right' },
             { element: '.history', title: "Slot Events History", text: "Review chronologically categorized vehicle entries and exits, filtered directly by slot numbers or specific dates.", position: 'left' },
             { element: '.park-condition', title: "3D Virtual Digital Twin & Satellite View", text: "Interact with a physics-based, real-time 3D simulation or satellite view of all active spaces at BRIN Bandung.", position: 'right' },
             { element: '.park-condition-2d', title: "2D Visual Space Map", text: "Get an instantaneous birds-eye look at the exact layouts color-coded by vehicle classifications.", position: 'left' }
@@ -2224,7 +2209,6 @@
                 }
             };
 
-            // Siklus 3 tampilan: 3D Digital Twin -> Citra Satelit (Cesium) -> Street View -> kembali ke 3D
             viewModeToggle.onclick = () => {
                 if (currentViewMode === 'threejs') {
                     currentViewMode = 'cesium';
