@@ -377,7 +377,7 @@
             margin-left: 280px;
         }
 
-        /* Grid System for Workspace Dashboard */
+        /* Grid System for Workspace Dashboard (NEW LAYOUT) */
         .main-content-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -385,7 +385,7 @@
         }
 
         /* Premium Glass Cards styling */
-        .overview, .history, .park-condition, .park-condition-2d, .park-cesium {
+        .history, .park-condition, .park-condition-2d {
             background: var(--glass-bg);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
@@ -399,7 +399,12 @@
             flex-direction: column;
         }
 
-        .overview h1, .history h2, .park-condition h2, .park-condition-2d h2, .park-cesium h2 {
+        /* 3D Visualizer diperbesar (Full Width Grid) */
+        .park-condition {
+            grid-column: 1 / -1; 
+        }
+
+        .history h2, .park-condition h2, .park-condition-2d h2 {
             margin: 0 0 22px;
             font-size: 20px;
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -409,75 +414,6 @@
             background: linear-gradient(90deg, #FFFFFF 30%, var(--text-secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        /* Stat Boxes layout grid */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            flex-grow: 1;
-        }
-        
-        .stats div {
-            background-color: rgba(11, 25, 44, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 18px 12px;
-            border-radius: 14px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .stats div:hover {
-            transform: translateY(-2px);
-            border-color: rgba(230, 57, 70, 0.2);
-        }
-
-        .stats span:first-child {
-            display: block;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .stats span:last-child {
-            font-size: 20px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 800;
-            color: white;
-        }
-
-        /* TEGRA SERVER NODE BUTTON IN OVERVIEW */
-        .tegra-link-main {
-            margin-top: 20px;
-            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 15px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-            width: 100%;
-        }
-
-        .tegra-link-main:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-            background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
         }
 
         /* Filters Layout styling */
@@ -531,12 +467,13 @@
 
         /* Scrollable Logs Container styling */
         .history-table-container {
-            max-height: 310px;
+            max-height: 400px;
             overflow-y: auto;
             border-radius: 12px;
             background: rgba(11, 25, 44, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.05);
             box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+            flex-grow: 1;
         }
 
         /* Custom Scrollbars */
@@ -610,7 +547,7 @@
         td:nth-child(4)[data-size="big"] { color: var(--car-big); font-weight: 600; }
         td:nth-child(4)[data-size="none"] { color: var(--text-secondary); font-weight: 600; }
 
-        /* 3D Visualization layout */
+        /* 3D Visualization layout - DIPERBESAR */
         #cameraContainer { 
             position: relative; 
             border-radius: 14px;
@@ -619,13 +556,23 @@
             background: #020617;
             display: flex;
             flex-direction: column;
+            width: 100%;
+            height: 550px; /* Ukuran diperbesar */
         }
 
-        #threeContainer { 
+        #threeContainer, #cesiumContainer, #streetviewContainer { 
             width: 100%; 
-            height: 350px; 
-            display: none; 
+            height: 100%; 
+            position: absolute;
+            top: 0; left: 0;
             background: #020617; 
+        }
+
+        #threeContainer {
+            display: block; /* Selalu tampil dari awal */
+        }
+        #cesiumContainer, #streetviewContainer {
+            display: none;
         }
 
         #threeContainer canvas {
@@ -635,59 +582,21 @@
             object-fit: cover;
         }
 
-        #threeError { 
+        #cesiumContainer iframe, #streetviewContainer iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        #threeError, #cesiumError, #streetviewError { 
             display: none; 
             color: var(--accent-red); 
             text-align: center; 
             padding: 40px 20px;
             font-weight: 600;
-        }
-
-        /* Cesium Container */
-        #cesiumContainer {
-            width: 100%;
-            height: 350px;
-            display: none;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #020617;
-        }
-
-        #cesiumError {
-            display: none;
-            color: var(--accent-red);
-            text-align: center;
-            padding: 40px 20px;
-            font-weight: 600;
-        }
-
-        /* Street View Container */
-        #streetviewContainer {
-            width: 100%;
-            height: 350px;
-            display: none;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #020617;
             position: relative;
-        }
-
-        #streetviewContainer iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        #streetviewError {
-            display: none;
-            color: var(--accent-red);
-            text-align: center;
-            padding: 40px 20px;
-            font-weight: 600;
+            z-index: 10;
         }
 
         /* Modern 3D Floating Controls */
@@ -700,7 +609,7 @@
             -webkit-backdrop-filter: blur(8px);
             padding: 12px; 
             border-radius: 12px; 
-            display: none; 
+            display: block; 
             z-index: 100; 
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
@@ -749,7 +658,7 @@
             font-size: 12px;
             font-weight: 600;
             z-index: 101;
-            display: none;
+            display: block;
             transition: all 0.3s ease;
         }
 
@@ -757,87 +666,6 @@
             background: rgba(11, 25, 44, 0.95);
             border-color: var(--accent-red);
             transform: translateY(-1px);
-        }
-
-        /* 3D Action buttons */
-        #toggleCameraBtn, #fullscreenBtn {
-            background: linear-gradient(135deg, var(--accent-red) 0%, #D62828 100%);
-            color: white; 
-            border: none;
-            padding: 12px 20px; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            font-weight: 700;
-            font-size: 14px;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.25);
-            align-self: center;
-            margin: 16px 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        
-        #toggleCameraBtn:hover, #fullscreenBtn:hover { 
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.35);
-            background: linear-gradient(135deg, #FF4D5A 0%, #E63946 100%);
-        }
-
-        #fullscreenBtn {
-            position: absolute;
-            bottom: 16px;
-            left: 16px;
-            margin: 0;
-            z-index: 101;
-            padding: 8px 14px;
-            font-size: 12px;
-            background: rgba(11, 25, 44, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        #fullscreenBtn:hover {
-            background: rgba(11, 25, 44, 0.95);
-            border-color: var(--accent-red);
-        }
-
-        /* ========================================================
-           DIRECT / SIMPLE FULLSCREEN FIX (100VW & 100VH)
-           ======================================================== */
-        #cameraContainer:fullscreen,
-        #cameraContainer:-webkit-full-screen {
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: 100vw !important;
-            max-height: 100vh !important;
-            border-radius: 0 !important;
-            border: none !important;
-            background: #020617 !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            z-index: 9999 !important;
-        }
-
-        #cameraContainer:fullscreen #threeContainer,
-        #cameraContainer:-webkit-full-screen #threeContainer,
-        #cameraContainer:fullscreen #cesiumContainer,
-        #cameraContainer:-webkit-full-screen #cesiumContainer,
-        #cameraContainer:fullscreen #streetviewContainer,
-        #cameraContainer:-webkit-full-screen #streetviewContainer {
-            width: 100% !important;
-            height: 100% !important;
-            flex-grow: 1 !important; /* Force to take full remaining space */
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        #cameraContainer:fullscreen #toggleCameraBtn,
-        #cameraContainer:-webkit-full-screen #toggleCameraBtn {
-            display: none !important;
         }
 
         #loading, #error-message { 
@@ -882,6 +710,7 @@
             border: 1px solid rgba(255, 255, 255, 0.04);
             overflow-x: auto;
             width: 100%;
+            flex-grow: 1;
         }
 
         .column { 
@@ -1076,98 +905,37 @@
                 margin-left: 0;
             }
             .main-content-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr; /* Jadi satu kolom */
                 gap: 20px;
+            }
+            .park-condition {
+                grid-column: 1 / -1; 
             }
         }
 
         @media (max-width: 768px) {
-            body {
-                font-size: 15px;
-            }
+            body { font-size: 15px; }
+            header { padding: 0 16px; height: 64px; }
+            .logo { gap: 8px; padding: 4px; }
+            .logo img { height: 32px; }
+            .logo-text { font-size: 12px; }
+            .logo-title { font-size: 15px; }
+            .logo-subtitle { display: none; }
+            .header-right { padding-right: 0; }
+            .header-title { font-size: 14px; letter-spacing: 0.5px; }
+            .toolbar { top: 64px; height: calc(100vh - 64px); width: 280px; left: -280px; }
+            .toolbar.active { transform: translateX(280px); }
+            .sidebar-overlay { top: 64px; height: calc(100vh - 64px); }
+            .main-content { padding: 88px 16px 32px; }
 
-            header {
-                padding: 0 16px;
-                height: 64px;
-            }
-
-            .logo {
-                gap: 8px;
-                padding: 4px;
-            }
-
-            .logo img {
-                height: 32px;
-            }
-
-            .logo-text {
-                font-size: 12px;
-            }
-
-            .logo-title {
-                font-size: 15px;
-            }
-
-            .logo-subtitle {
-                display: none;
-            }
-
-            .header-right {
-                padding-right: 0;
-            }
-
-            .header-title {
-                font-size: 14px;
-                letter-spacing: 0.5px;
-            }
-
-            .toolbar {
-                top: 64px;
-                height: calc(100vh - 64px);
-                width: 280px;
-                left: -280px;
-            }
-
-            .toolbar.active {
-                transform: translateX(280px);
-            }
-
-            .sidebar-overlay {
-                top: 64px;
-                height: calc(100vh - 64px);
-            }
-
-            .main-content {
-                padding: 88px 16px 32px;
-            }
-
-            .overview, .history, .park-condition, .park-condition-2d, .park-cesium {
+            .history, .park-condition, .park-condition-2d {
                 padding: 20px 16px;
                 border-radius: 16px;
             }
 
-            .overview h1, .history h2, .park-condition h2, .park-condition-2d h2, .park-cesium h2 {
+            .history h2, .park-condition h2, .park-condition-2d h2 {
                 font-size: 17px;
                 margin-bottom: 18px;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-
-            .stats div {
-                padding: 12px 8px;
-                border-radius: 10px;
-            }
-
-            .stats span:first-child {
-                font-size: 10px;
-                margin-bottom: 4px;
-            }
-
-            .stats span:last-child {
-                font-size: 16px;
             }
 
             .history-filters {
@@ -1189,20 +957,10 @@
                 box-shadow: none;
             }
 
-            .history-table {
-                display: block;
-            }
-
-            .history-table thead {
-                display: none;
-            }
-
-            .history-table tbody {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
-
+            .history-table { display: block; }
+            .history-table thead { display: none; }
+            .history-table tbody { display: flex; flex-direction: column; gap: 10px; }
+            
             .history-table tbody tr {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
@@ -1251,31 +1009,13 @@
                 align-self: flex-end;
             }
 
-            .parking-lot {
-                align-items: flex-start;
-                padding: 12px;
-            }
+            .parking-lot { align-items: flex-start; padding: 12px; }
+            .column { gap: 8px; }
+            .slot { width: 44px; height: 32px; font-size: 11px; border-radius: 6px; }
+            .slot .car { width: 32px; height: 18px; border-radius: 4px; }
 
-            .column {
-                gap: 8px;
-            }
-
-            .slot {
-                width: 44px;
-                height: 32px;
-                font-size: 11px;
-                border-radius: 6px;
-            }
-
-            .slot .car {
-                width: 32px;
-                height: 18px;
-                border-radius: 4px;
-            }
-
-            #threeContainer, #cesiumContainer, #streetviewContainer {
-                height: 280px;
-            }
+            /* Penyesuaian 3D pada mobile */
+            #cameraContainer { height: 350px; }
 
             .tour-tooltip {
                 max-width: 90%;
@@ -1286,37 +1026,11 @@
                 position: fixed;
             }
 
-            #cameraContainer:fullscreen #controls,
-            #cameraContainer:-webkit-full-screen #controls {
-                top: 10px;
-                right: 10px;
-                padding: 8px;
-            }
-
-            #cameraContainer:fullscreen #controls button,
-            #cameraContainer:-webkit-full-screen #controls button {
-                padding: 5px 9px;
-                font-size: 11px;
-            }
-
-            #cameraContainer:fullscreen #fullscreenBtn,
-            #cameraContainer:-webkit-full-screen #fullscreenBtn {
-                bottom: 10px;
-                left: 10px;
-                padding: 7px 12px;
-                font-size: 11px;
-            }
-
-            .view-mode-toggle {
-                padding: 6px 10px;
-                font-size: 11px;
-            }
+            .view-mode-toggle { padding: 6px 10px; font-size: 11px; }
         }
 
         /* Override Cesium default styles */
-        .cesium-widget-credits {
-            display: none !important;
-        }
+        .cesium-widget-credits { display: none !important; }
     </style>
 </head>
 <body>
@@ -1331,9 +1045,7 @@
             </div>
         </div>
         <div class="header-right">
-            <div class="header-title">
-                Parking System
-            </div>
+            <div class="header-title">Parking System</div>
         </div>
     </header>
 
@@ -1380,21 +1092,69 @@
 
     <main class="main-content" id="mainContent">
         <div class="main-content-grid">
-            <div class="overview">
-                <h1>Live Overview</h1>
-                <div class="stats">
-                    <div><span>Occupied Cars</span><span id="occupiedSlots">0 / 20</span></div>
-                    <div><span>Available Slots</span><span id="emptySlots">20 / 20</span></div>
-                    <div><span>Current Time</span><span id="currentTime">--:--:--</span></div>
-                    <div><span>Total Cars In</span><span id="totalCarsIn">0 Today</span></div>
-                    <div><span>Total Cars Out</span><span id="totalCarsOut">0 Today</span></div>
+            
+            <!-- 1. 3D Visualizer (Full Width - 100% Membentang) -->
+            <div class="park-condition">
+                <h2>Park Condition (3D Visualizer)</h2>
+                <div id="cameraContainer">
+                    <div id="threeContainer"></div>
+                    <div id="cesiumContainer"></div>
+                    <div id="streetviewContainer"><iframe id="streetviewFrame" title="Street View BRIN Parking" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+                    <div id="threeError">3D WebGL visualization failed to load.</div>
+                    <div id="cesiumError">Cesium visualization failed to load.</div>
+                    <div id="streetviewError">Street View is not available for this location.</div>
+                    
+                    <button class="view-mode-toggle" id="viewModeToggle">Switch to Satellite</button>
+                    
+                    <div id="controls">
+                        <div>Camera Controls</div>
+                        <button onclick="resetCamera()">Reset View</button>
+                        <button onclick="topView()">Top View</button>
+                        <button onclick="sideView()">Side View</button>
+                    </div>
+                    
+                    <div id="loading">Loading real-time 3D parking layout...</div>
+                    <div id="error-message"></div>
                 </div>
-                <button class="tegra-link-main" onclick="window.open('https://tegra-ubuntu.tailc69e7c.ts.net/', '_blank')">
-                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM2.5 8a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0z"/></svg>
-                    Access Tegra Server Node
-                </button>
             </div>
 
+            <!-- 2. 2D Grid Layout (Bagian Kiri) -->
+            <div class="park-condition-2d">
+                <h2>Park Condition (2D Grid Layout)</h2>
+                <div class="location-info">
+                    <p><strong>Location:</strong> Jl. Sangkuriang, Dago, Kecamatan Coblong, Kota Bandung, Jawa Barat 40135</p>
+                    <p><strong>Building:</strong> Di Depan Masjid Baitul Ilmi BRIN Bandung</p>
+                    <p><strong>Total Slots:</strong> 20 Parking Spaces</p>
+                </div>
+                <div class="parking-lot">
+                    <div class="column top">
+                        <div class="slot" data-slot="20"><span>20</span><div class="car"></div></div>
+                        <div class="slot" data-slot="19"><span>19</span><div class="car"></div></div>
+                        <div class="slot" data-slot="18"><span>18</span><div class="car"></div></div>
+                        <div class="slot" data-slot="17"><span>17</span><div class="car"></div></div>
+                        <div class="slot" data-slot="16"><span>16</span><div class="car"></div></div>
+                        <div class="slot" data-slot="15"><span>15</span><div class="car"></div></div>
+                        <div class="slot" data-slot="14"><span>14</span><div class="car"></div></div>
+                        <div class="slot" data-slot="13"><span>13</span><div class="car"></div></div>
+                        <div class="slot" data-slot="12"><span>12</span><div class="car"></div></div>
+                    </div>
+                    <div class="column bottom">
+                        <div class="slot" data-slot="11"><span>11</span><div class="car"></div></div>
+                        <div class="slot" data-slot="10"><span>10</span><div class="car"></div></div>
+                        <div class="slot" data-slot="9"><span>9</span><div class="car"></div></div>
+                        <div class="slot" data-slot="8"><span>8</span><div class="car"></div></div>
+                        <div class="slot" data-slot="7"><span>7</span><div class="car"></div></div>
+                        <div class="slot" data-slot="6"><span>6</span><div class="car"></div></div>
+                        <div class="slot" data-slot="5"><span>5</span><div class="car"></div></div>
+                        <div class="slot" data-slot="4"><span>4</span><div class="car"></div></div>
+                        <div class="slot" data-slot="3"><span>3</span><div class="car"></div></div>
+                        <div class="slot" data-slot="2"><span>2</span><div class="car"></div></div>
+                        <div class="slot" data-slot="1"><span>1</span><div class="car"></div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 3. Slot History (Bagian Kanan) -->
             <div class="history">
                 <h2>Slot History</h2>
                 <div class="history-filters">
@@ -1430,63 +1190,6 @@
                 </div>
             </div>
 
-            <div class="park-condition">
-                <h2>Park Condition (3D Visualizer)</h2>
-                <div id="cameraContainer">
-                    <div id="threeContainer"></div>
-                    <div id="cesiumContainer"></div>
-                    <div id="streetviewContainer"><iframe id="streetviewFrame" title="Street View BRIN Parking" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div>
-                    <div id="threeError">3D WebGL visualization failed to load.</div>
-                    <div id="cesiumError">Cesium visualization failed to load.</div>
-                    <div id="streetviewError">Street View is not available for this location.</div>
-                    <button class="view-mode-toggle" id="viewModeToggle">Switch to Satellite</button>
-                    <button id="toggleCameraBtn">Click to Expand 3D View</button>
-                    <div id="controls">
-                        <div>Camera Controls</div>
-                        <button onclick="resetCamera()">Reset View</button>
-                        <button onclick="topView()">Top View</button>
-                        <button onclick="sideView()">Side View</button>
-                    </div>
-                    <div id="loading">Loading real-time 3D parking layout...</div>
-                    <div id="error-message"></div>
-                    <button id="fullscreenBtn" style="display:none;">Full Screen</button>
-                </div>
-            </div>
-
-            <div class="park-condition-2d">
-                <h2>Park Condition (2D Grid Layout)</h2>
-                <div class="location-info">
-                    <p><strong>Location:</strong> Jl. Sangkuriang, Dago, Kecamatan Coblong, Kota Bandung, Jawa Barat 40135</p>
-                    <p><strong>Building:</strong> Di Depan Masjid Baitul Ilmi BRIN Bandung</p>
-                    <p><strong>Total Slots:</strong> 20 Parking Spaces</p>
-                </div>
-                <div class="parking-lot">
-                    <div class="column top">
-                        <div class="slot" data-slot="20"><span>20</span><div class="car"></div></div>
-                        <div class="slot" data-slot="19"><span>19</span><div class="car"></div></div>
-                        <div class="slot" data-slot="18"><span>18</span><div class="car"></div></div>
-                        <div class="slot" data-slot="17"><span>17</span><div class="car"></div></div>
-                        <div class="slot" data-slot="16"><span>16</span><div class="car"></div></div>
-                        <div class="slot" data-slot="15"><span>15</span><div class="car"></div></div>
-                        <div class="slot" data-slot="14"><span>14</span><div class="car"></div></div>
-                        <div class="slot" data-slot="13"><span>13</span><div class="car"></div></div>
-                        <div class="slot" data-slot="12"><span>12</span><div class="car"></div></div>
-                    </div>
-                    <div class="column bottom">
-                        <div class="slot" data-slot="11"><span>11</span><div class="car"></div></div>
-                        <div class="slot" data-slot="10"><span>10</span><div class="car"></div></div>
-                        <div class="slot" data-slot="9"><span>9</span><div class="car"></div></div>
-                        <div class="slot" data-slot="8"><span>8</span><div class="car"></div></div>
-                        <div class="slot" data-slot="7"><span>7</span><div class="car"></div></div>
-                        <div class="slot" data-slot="6"><span>6</span><div class="car"></div></div>
-                        <div class="slot" data-slot="5"><span>5</span><div class="car"></div></div>
-                        <div class="slot" data-slot="4"><span>4</span><div class="car"></div></div>
-                        <div class="slot" data-slot="3"><span>3</span><div class="car"></div></div>
-                        <div class="slot" data-slot="2"><span>2</span><div class="car"></div></div>
-                        <div class="slot" data-slot="1"><span>1</span><div class="car"></div></div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="tour-overlay" id="tourOverlay"></div>
@@ -1610,14 +1313,16 @@
         }
 
         function initScene() {
-            const container = document.getElementById('threeContainer');
+            const container = document.getElementById('cameraContainer');
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, container.clientWidth / (container.clientHeight || 300), 0.1, 1000);
+            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
             renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight || 300);
+            renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            container.appendChild(renderer.domElement);
+            
+            const threeContainer = document.getElementById('threeContainer');
+            threeContainer.appendChild(renderer.domElement);
 
             ambientLight = new THREE.AmbientLight(0xffffff, 0.45); scene.add(ambientLight);
             directionalLight = new THREE.DirectionalLight(0xffffbb, 1.25);
@@ -1684,11 +1389,6 @@
             });
         }
 
-        function updateLiveOverview(occ, emp, total) {
-            document.getElementById('occupiedSlots').textContent = `${occ} / ${total}`;
-            document.getElementById('emptySlots').textContent = `${emp} / ${total}`;
-        }
-
         function updateSunPosition() {
             const now = new Date();
             const h = now.getHours() + now.getMinutes() / 60;
@@ -1737,10 +1437,9 @@
 
         function resizeThreeRenderer() {
             if (!renderer || !camera) return;
-            const container = document.getElementById('threeContainer');
+            const container = document.getElementById('cameraContainer');
             const w = container.clientWidth;
             const h = container.clientHeight;
-            // Cegah ukuran renderer 0 saat transisi fullscreen
             if (w === 0 || h === 0) return;
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
@@ -1867,7 +1566,6 @@
         function initThree() {
             try {
                 initScene(); createParkingSlots(); createCars(); resetCamera(); animate();
-                setupFirebaseListener();
                 document.getElementById('threeError').style.display = 'none';
                 document.getElementById('controls').style.display = 'block';
             } catch (e) { console.error(e); document.getElementById('threeError').style.display = 'block'; showError("3D Graphics Pipeline instantiation failed."); }
@@ -1880,7 +1578,6 @@
             scene = null;
             cars = [];
             allSlots = [];
-            document.getElementById('controls').style.display = 'none';
         }
 
         function cleanupCesium() {
@@ -1916,7 +1613,7 @@
             dbRef.on("value", snap => {
                 loadingElement.style.display = 'none';
                 const data = snap.val() || {};
-                let occupied = 0;
+                
                 for (let i = 1; i <= 20; i++) {
                     const key = `slot_${i}`;
                     const d = data[key] || { occupied: false, size: 'none' };
@@ -1929,7 +1626,6 @@
                         if (status) { 
                             el.classList.add("occupied"); 
                             el.querySelector(".car").style.backgroundColor = size === 'small' ? "#38BDF8" : size === 'medium' ? "#F59E0B" : size === 'big' ? "#EF4444" : "#808080"; 
-                            occupied++; 
                         }
                         else { 
                             el.classList.remove("occupied"); 
@@ -1947,16 +1643,14 @@
                         }
                     }
                 }
-                updateLiveOverview(occupied, 20 - occupied, 20);
             });
         }
 
         const tourSteps = [
             { element: '#toggleToolbar', title: "Toggle Navigation Menu", text: "Tap the BRIN logo in the top bar to slide open/close the administration workspace drawer.", position: 'bottom' },
-            { element: '.overview', title: "Live Analytics Overview", text: "View real-time statistic metrics detailing active occupancy ratios, system time, and daily customer metrics.", position: 'right' },
-            { element: '.history', title: "Slot Events History", text: "Review chronologically categorized vehicle entries and exits, filtered directly by slot numbers or specific dates.", position: 'left' },
-            { element: '.park-condition', title: "3D Virtual Digital Twin & Satellite View", text: "Interact with a physics-based, real-time 3D simulation or satellite view of all active spaces at BRIN Bandung.", position: 'right' },
-            { element: '.park-condition-2d', title: "2D Visual Space Map", text: "Get an instantaneous birds-eye look at the exact layouts color-coded by vehicle classifications.", position: 'left' }
+            { element: '.park-condition', title: "3D Virtual Digital Twin & Satellite View", text: "Interact with a physics-based, real-time 3D simulation or satellite view of all active spaces.", position: 'bottom' },
+            { element: '.park-condition-2d', title: "2D Visual Space Map", text: "Get an instantaneous birds-eye look at the exact layouts color-coded by vehicle classifications.", position: 'right' },
+            { element: '.history', title: "Slot Events History", text: "Review chronologically categorized vehicle entries and exits, filtered directly by slot numbers or specific dates.", position: 'left' }
         ];
         let currentTourStep = 0;
         let hasSeenTour = localStorage.getItem('tourCompleted') === 'true';
@@ -2044,16 +1738,11 @@
                 const isActive = toolbar.classList.toggle('active');
                 sidebarOverlay.classList.toggle('active', isActive);
                 mainContent.classList.toggle('with-toolbar', isActive && window.innerWidth > 992);
+                setTimeout(resizeActiveView, 400); // Trigger resize saat drawer menu digeser
             }
 
             toggleToolbar.addEventListener('click', toggleMenu);
             sidebarOverlay.addEventListener('click', toggleMenu);
-
-            const updateClock = () => {
-                const opts = { timeZone: 'Asia/Jakarta', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false };
-                document.getElementById('currentTime').textContent = new Intl.DateTimeFormat('en-US', opts).format(new Date()) + ' WIB';
-            };
-            updateClock(); setInterval(updateClock, 1000);
 
             let historyData = [];
             slotHistoryRef.on("value", snap => {
@@ -2068,12 +1757,6 @@
                     });
                 });
                 historyData.sort((a,b) => b.timestamp.localeCompare(a.timestamp));
-                
-                const today = new Date().toISOString().split('T')[0];
-                const inToday = historyData.filter(x => x.timestamp.startsWith(today) && x.status === 'terisi').length;
-                const outToday = historyData.filter(x => x.timestamp.startsWith(today) && x.status === 'kosong').length;
-                document.getElementById('totalCarsIn').textContent = `${inToday} Today`;
-                document.getElementById('totalCarsOut').textContent = `${outToday} Today`;
                 renderHistory();
             });
 
@@ -2122,45 +1805,12 @@
             const threeContainer = document.getElementById('threeContainer');
             const cesiumContainer = document.getElementById('cesiumContainer');
             const streetviewContainer = document.getElementById('streetviewContainer');
-            const cameraContainer = document.getElementById('cameraContainer');
-            const fullscreenBtn = document.getElementById('fullscreenBtn');
-            const toggleCameraBtnEl = document.getElementById('toggleCameraBtn');
             const viewModeToggle = document.getElementById('viewModeToggle');
-            let isExpanded = false;
-
-            function collapseThreeView() {
-                isExpanded = false;
-                toggleCameraBtnEl.textContent = 'Click to Expand 3D View';
-                threeContainer.style.display = 'none';
-                cesiumContainer.style.display = 'none';
-                streetviewContainer.style.display = 'none';
-                fullscreenBtn.style.display = 'none';
-                viewModeToggle.style.display = 'none';
-                cleanupThree();
-                cleanupCesium();
-                cleanupStreetview();
-                currentViewMode = null;
-            }
-
-            toggleCameraBtnEl.onclick = () => {
-                isExpanded = !isExpanded;
-                toggleCameraBtnEl.textContent = isExpanded ? 'Click to Collapse 3D View' : 'Click to Expand 3D View';
-                
-                if (isExpanded) {
-                    currentViewMode = 'threejs';
-                    threeContainer.style.display = 'block';
-                    cesiumContainer.style.display = 'none';
-                    streetviewContainer.style.display = 'none';
-                    fullscreenBtn.style.display = 'block';
-                    viewModeToggle.style.display = 'block';
-                    viewModeToggle.textContent = 'Switch to Satellite';
-                    if (!scene) initThree();
-                    setTimeout(resizeThreeRenderer, 150);
-                } else {
-                    collapseThreeView();
-                    exitFullscreenMode(true);
-                }
-            };
+            
+            // Initialization for 3D View as Default Screen
+            currentViewMode = 'threejs';
+            initThree();
+            setupFirebaseListener(); // Mulai membaca Firebase setelah inisiasi 3D
 
             viewModeToggle.onclick = () => {
                 if (currentViewMode === 'threejs') {
@@ -2192,71 +1842,16 @@
                 }
             };
 
-            function enterFullscreenMode() {
-                const req = cameraContainer.requestFullscreen
-                    || cameraContainer.webkitRequestFullscreen
-                    || cameraContainer.mozRequestFullScreen
-                    || cameraContainer.msRequestFullscreen;
-
-                if (req) {
-                    req.call(cameraContainer).then(() => {
-                        // Kasih waktu agak panjang supaya browser selesai menyesuaikan ukuran layar
-                        setTimeout(resizeActiveView, 250); 
-                    }).catch(err => {
-                        console.log("Error attempting to enable fullscreen:", err);
-                    });
-                }
-            }
-
-            function exitFullscreenMode(skipCollapse) {
-                const exit = document.exitFullscreen || document.webkitExitFullscreen
-                    || document.mozCancelFullScreen || document.msExitFullscreen;
-                
-                if (exit && (document.fullscreenElement || document.webkitFullscreenElement)) {
-                    exit.call(document);
-                }
-                fullscreenBtn.textContent = 'Full Screen';
-                setTimeout(resizeActiveView, 250);
-
-                if (!skipCollapse) collapseThreeView();
-            }
-
-            fullscreenBtn.onclick = () => {
-                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                    exitFullscreenMode();
-                } else {
-                    enterFullscreenMode();
-                }
-            };
-
-            ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
-                document.addEventListener(evt, () => {
-                    const fsElement = document.fullscreenElement || document.webkitFullscreenElement
-                        || document.mozFullScreenElement || document.msFullscreenElement;
-                    if (fsElement) {
-                        fullscreenBtn.textContent = 'Exit Full Screen';
-                        setTimeout(resizeActiveView, 250);
-                    } else {
-                        fullscreenBtn.textContent = 'Full Screen';
-                        if (isExpanded) collapseThreeView();
-                    }
-                });
-            });
-
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape' && document.fullscreenElement) {
-                    exitFullscreenMode();
-                }
-            });
-
             window.addEventListener('resize', () => setTimeout(resizeActiveView, 150));
             window.addEventListener('orientationchange', () => setTimeout(resizeActiveView, 300));
 
+            // Setup Mouse / Touch Controls untuk 3D Viewer
             let mouseDown = false, mouseX = 0, mouseY = 0;
-            threeContainer.addEventListener('mousedown', e => { mouseDown = true; mouseX = e.clientX; mouseY = e.clientY; });
-            threeContainer.addEventListener('mouseup', () => mouseDown = false);
-            threeContainer.addEventListener('mouseleave', () => mouseDown = false);
-            threeContainer.addEventListener('mousemove', e => {
+            const camContainer = document.getElementById('cameraContainer');
+            camContainer.addEventListener('mousedown', e => { mouseDown = true; mouseX = e.clientX; mouseY = e.clientY; });
+            camContainer.addEventListener('mouseup', () => mouseDown = false);
+            camContainer.addEventListener('mouseleave', () => mouseDown = false);
+            camContainer.addEventListener('mousemove', e => {
                 if (!mouseDown || !scene) return;
                 const dx = e.clientX - mouseX;
                 const dy = e.clientY - mouseY;
@@ -2270,7 +1865,7 @@
                 mouseX = e.clientX; mouseY = e.clientY;
             });
             
-            threeContainer.addEventListener('wheel', e => {
+            camContainer.addEventListener('wheel', e => {
                 if (!scene) return;
                 const zoom = e.deltaY > 0 ? 1.08 : 0.92;
                 camera.position.multiplyScalar(zoom);
@@ -2281,7 +1876,7 @@
             }, { passive: false });
 
             let touchStartX = 0, touchStartY = 0, lastPinch = 0;
-            threeContainer.addEventListener('touchstart', e => {
+            camContainer.addEventListener('touchstart', e => {
                 if (e.touches.length === 1) { 
                     touchStartX = e.touches[0].clientX; 
                     touchStartY = e.touches[0].clientY; 
@@ -2292,7 +1887,7 @@
                 }
             }, { passive: true });
             
-            threeContainer.addEventListener('touchmove', e => {
+            camContainer.addEventListener('touchmove', e => {
                 if (!scene) return;
                 if (e.touches.length === 1 && !lastPinch) {
                     const dx = e.touches[0].clientX - touchStartX;
@@ -2318,7 +1913,7 @@
                 }
             }, { passive: true });
             
-            threeContainer.addEventListener('touchend', () => { lastPinch = 0; });
+            camContainer.addEventListener('touchend', () => { lastPinch = 0; });
 
             document.getElementById('tourNextBtn').onclick = () => { 
                 currentTourStep++; 
