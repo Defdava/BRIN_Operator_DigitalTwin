@@ -453,7 +453,7 @@
             color: white;
         }
 
-        /* NEW TEGRA SERVER NODE BUTTON IN OVERVIEW */
+        /* TEGRA SERVER NODE BUTTON IN OVERVIEW */
         .tegra-link-main {
             margin-top: 20px;
             background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
@@ -629,7 +629,6 @@
             background: #020617; 
         }
 
-        /* Agar canvas 3D meregang pas saat full screen */
         #threeContainer canvas {
             display: block;
             width: 100% !important;
@@ -802,7 +801,9 @@
             border-color: var(--accent-red);
         }
 
-        /* ============ FULLSCREEN (NATIVE + PSEUDO) FIT-TO-SCREEN ============ */
+        /* ========================================================
+           FULLSCREEN FIX (100vw x 100vh) - MENYELURUH & TIDAK SETENGAH
+           ======================================================== */
         #cameraContainer:fullscreen,
         #cameraContainer:-webkit-full-screen,
         #cameraContainer:-moz-full-screen,
@@ -816,13 +817,14 @@
             background: #020617 !important;
             padding: 0 !important;
             margin: 0 !important;
-            display: block !important; /* Force block to prevent flex items shrinking */
+            display: block !important;
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
             z-index: 9999 !important;
         }
 
+        /* Memastikan anak kontainer (tiga jenis view) mengisi 100% ukuran fullscreen */
         #cameraContainer:fullscreen #threeContainer,
         #cameraContainer:-webkit-full-screen #threeContainer,
         #cameraContainer:-moz-full-screen #threeContainer,
@@ -835,15 +837,16 @@
         #cameraContainer:-webkit-full-screen #streetviewContainer,
         #cameraContainer:-moz-full-screen #streetviewContainer,
         #cameraContainer:-ms-fullscreen #streetviewContainer {
-            width: 100% !important;
-            height: 100% !important;
-            max-width: 100% !important;
-            max-height: 100% !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
             position: absolute !important;
             top: 0 !important;
             left: 0 !important;
             margin: 0 !important;
             padding: 0 !important;
+            display: block !important;
         }
 
         #cameraContainer.pseudo-fullscreen {
@@ -862,22 +865,23 @@
             border-radius: 0 !important;
             border: none !important;
             z-index: 9999 !important;
-            display: block !important; /* Force block */
+            display: block !important;
             background: #020617 !important;
         }
 
         #cameraContainer.pseudo-fullscreen #threeContainer,
         #cameraContainer.pseudo-fullscreen #cesiumContainer,
         #cameraContainer.pseudo-fullscreen #streetviewContainer {
-            width: 100% !important;
-            height: 100% !important;
-            max-width: 100% !important;
-            max-height: 100% !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
             position: absolute !important;
             top: 0 !important;
             left: 0 !important;
             margin: 0 !important;
             padding: 0 !important;
+            display: block !important;
         }
 
         #cameraContainer.pseudo-fullscreen #controls {
@@ -1450,7 +1454,6 @@
                     <div><span>Total Cars In</span><span id="totalCarsIn">0 Today</span></div>
                     <div><span>Total Cars Out</span><span id="totalCarsOut">0 Today</span></div>
                 </div>
-                <!-- TOMBOL TEGRA DIPINDAH KESINI -->
                 <button class="tegra-link-main" onclick="window.open('https://tegra-ubuntu.tailc69e7c.ts.net/', '_blank')">
                     <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM2.5 8a5.5 5.5 0 1 1 11 0 5.5 5.5 0 0 1-11 0z"/></svg>
                     Access Tegra Server Node
@@ -1569,30 +1572,18 @@
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Cesium.js"></script>
 
     <script>
-        // BRIN Parking Location - Jl. Sangkuriang, Dago, Kec. Coblong, Kota Bandung
-        // Koordinat diambil langsung dari titik "Masjid Baitul Ilmi BRIN Bandung" di Google Maps
         const BRIN_LOCATION = {
             latitude: -6.8820692,
             longitude: 107.6107097,
-            height: 790, // perkiraan elevasi permukaan tanah kawasan Dago (mdpl), dipakai sebagai fallback saat CLAMP_TO_GROUND belum siap
+            height: 790,
             name: "BRIN Parking - Depan Masjid Baitul Ilmi BRIN, Jl. Sangkuriang, Dago"
         };
 
-        // === TATA LETAK 20 SLOT DI CITRA SATELIT (mengikuti titik merah yang ditandai user) ===
-        // Semua nilai di bawah ini dalam METER lokal relatif terhadap BRIN_LOCATION, lalu dikonversi
-        // ke lat/lon. Kalau posisinya masih meleset dari lahan parkir asli di citra satelit, tinggal
-        // ubah 3 angka pengaturan ini tanpa perlu sentuh logic lain:
-        const PARKING_LOT_CENTER_OFFSET = { east: 32, north: -9.5 };  // digeser ke area yang dilingkari merah pada screenshot terbaru (lahan terbuka di sisi timur bangunan)
-        const PARKING_LOT_BEARING_DEG   = 0;                       // rotasi pola (derajat, searah jarum jam) — 0 karena kamera Cesium defaultnya sudah utara-di-atas
-        const PARKING_LOT_SCALE         = 1;                       // faktor skala pola (1 = ukuran asli hasil digitasi) — naikkan/turunkan kalau pola terlalu kecil/besar dibanding lahan asli
+        const PARKING_LOT_CENTER_OFFSET = { east: 32, north: -9.5 };
+        const PARKING_LOT_BEARING_DEG   = 0;
+        const PARKING_LOT_SCALE         = 1;
 
-        // Offset lokal (meter, sebelum dikali PARKING_LOT_SCALE) untuk slot 1..20 — didigitasi LANGSUNG
-        // dari titik-titik merah yang kamu tandai di screenshot citra satelit (pola 2 kolom mengikuti
-        // bentuk & kemiringan lahan parkir asli). Slot 1-11 = KOLOM KANAN (atas ke bawah),
-        // Slot 12-20 = KOLOM KIRI (atas ke bawah) — posisi titiknya persis sama seperti yang ditandai,
-        // hanya urutan penomorannya yang dibalik sesuai permintaan.
         const PARKING_SLOT_BASE_OFFSETS_M = [
-            // --- Slot 1-11: kolom kanan ---
             { east:  7.0, north:  8.9 },
             { east:  6.4, north:  6.7 },
             { east:  5.6, north:  4.1 },
@@ -1604,7 +1595,6 @@
             { east:  3.8, north: -9.1 },
             { east:  2.4, north: -11.3 },
             { east:  1.2, north: -13.7 },
-            // --- Slot 12-20: kolom kiri ---
             { east: -1.2, north: 13.5 },
             { east: -2.8, north: 11.1 },
             { east: -4.2, north:  8.5 },
@@ -1616,7 +1606,6 @@
             { east: -9.0, north: -7.7 }
         ];
 
-        // Konversi offset meter (east/north) di sekitar BRIN_LOCATION menjadi lat/lon presisi
         function metersToLatLon(eastMeters, northMeters) {
             const bearingRad = PARKING_LOT_BEARING_DEG * Math.PI / 180;
             const rotatedEast  = eastMeters * Math.cos(bearingRad) - northMeters * Math.sin(bearingRad);
@@ -1629,13 +1618,11 @@
             };
         }
 
-        // Ambil posisi lokal (meter) slot ke-N sesuai pola hasil digitasi titik merah
         function getParkingSlotLocalOffset(slotNumber) {
             const base = PARKING_SLOT_BASE_OFFSETS_M[slotNumber - 1] || { east: 0, north: 0 };
             return { east: base.east * PARKING_LOT_SCALE, north: base.north * PARKING_LOT_SCALE };
         }
 
-        // === CORE CLASS ARCHITECTURES ===
         class Vehicle {
             constructor(size = 'none') { this.size = size.toLowerCase(); }
             getColor() { return 0x808080; }
@@ -1658,7 +1645,6 @@
         class AuthSystem { constructor() { this.users = JSON.parse(localStorage.getItem('users')) || []; } login(email, password) { const user = this.users.find(u => u.email === email && u.password === password); if (user) return user; throw new Error('Invalid credentials'); } }
         const auth = new AuthSystem();
 
-        // === FIREBASE LIVE SYNCRONIZATION ===
         const firebaseConfig = {
             apiKey: "AIzaSyAef3SJwvVVTunr6CWki79aenfpXlgYc0s",
             authDomain: "digitaltwinparkingbrin.firebaseapp.com",
@@ -1674,7 +1660,7 @@
 
         let scene, camera, renderer, cars = [], allSlots = [], animationFrame;
         let cesiumViewer = null;
-        let currentViewMode = 'threejs'; // 'threejs', 'cesium', or 'streetview'
+        let currentViewMode = 'threejs';
         let slotStatuses = {}, slotSizes = {};
         const loadingElement = document.getElementById('loading');
         const errorElement = document.getElementById('error-message');
@@ -1688,7 +1674,6 @@
             toastTimeout = setTimeout(() => errorElement.style.display = 'none', 5000); 
         }
 
-        // === 3D GRAPHICS LAYOUT GENERATOR (THREE.JS) — basic box/cube assets, tidak pakai model 3D custom ===
         function initScene() {
             const container = document.getElementById('threeContainer');
             scene = new THREE.Scene();
@@ -1744,7 +1729,6 @@
         }
 
         function createCars() {
-            // Mobil tetap direpresentasikan sebagai kotak (BoxGeometry) berwarna sesuai kelas kendaraan — basic 3D asset, sesuai permintaan.
             const carGeo = new THREE.BoxGeometry(2.1, 1.8, 4.2);
             allSlots.forEach((slotData, i) => {
                 const key = `slot_${slotData.slotNumber}`;
@@ -1844,14 +1828,12 @@
             } else if (currentViewMode === 'cesium') {
                 resizeCesiumViewer();
             }
-            // streetview is a plain 100%/100% iframe, no manual resize needed
         }
 
-        // === CESIUM.JS INITIALIZATION — citra satelit lokasi asli sesuai Google Maps ===
         async function initCesium() {
             try {
                 if (typeof Cesium === 'undefined') {
-                    throw new Error('Cesium library failed to load from CDN (check network/ad-blocker access to cesium.com).');
+                    throw new Error('Cesium library failed to load from CDN.');
                 }
                 const container = document.getElementById('cesiumContainer');
 
@@ -1973,7 +1955,6 @@
             }
         }
 
-        // === STREET VIEW — pakai embed Google Street View (tanpa API key) tepat di titik BRIN_LOCATION ===
         let streetviewLoaded = false;
         function initStreetview() {
             try {
@@ -2035,7 +2016,6 @@
             });
         }
 
-        // === COMPREHENSIVE TOUR SYSTEM ===
         const tourSteps = [
             { element: '#toggleToolbar', title: "Toggle Navigation Menu", text: "Tap the BRIN logo in the top bar to slide open/close the administration workspace drawer.", position: 'bottom' },
             { element: '.overview', title: "Live Analytics Overview", text: "View real-time statistic metrics detailing active occupancy ratios, system time, and daily customer metrics.", position: 'right' },
@@ -2110,7 +2090,6 @@
             localStorage.setItem('tourCompleted', 'true');
         }
 
-        // === INITIALIZER HANDLER ===
         document.addEventListener("DOMContentLoaded", () => {
             const user = JSON.parse(localStorage.getItem('currentUser'));
             if (!user) { alert('Silakan login terlebih dahulu!'); window.location.replace('/index.html'); return; }
