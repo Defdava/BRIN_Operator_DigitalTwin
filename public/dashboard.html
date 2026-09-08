@@ -605,7 +605,6 @@
             font-size: 12px;
         }
 
-        /* Color classes for vehicle classes */
         td:nth-child(4)[data-size="small"] { color: var(--car-small); font-weight: 600; }
         td:nth-child(4)[data-size="medium"] { color: var(--car-medium); font-weight: 600; }
         td:nth-child(4)[data-size="big"] { color: var(--car-big); font-weight: 600; }
@@ -802,12 +801,10 @@
         }
 
         /* ========================================================
-           FULLSCREEN FIX (100vw x 100vh) - MENYELURUH & TIDAK SETENGAH
+           DIRECT / SIMPLE FULLSCREEN FIX (100VW & 100VH)
            ======================================================== */
         #cameraContainer:fullscreen,
-        #cameraContainer:-webkit-full-screen,
-        #cameraContainer:-moz-full-screen,
-        #cameraContainer:-ms-fullscreen {
+        #cameraContainer:-webkit-full-screen {
             width: 100vw !important;
             height: 100vh !important;
             max-width: 100vw !important;
@@ -817,91 +814,29 @@
             background: #020617 !important;
             padding: 0 !important;
             margin: 0 !important;
-            display: block !important;
+            display: flex !important;
+            flex-direction: column !important;
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
             z-index: 9999 !important;
         }
 
-        /* Memastikan anak kontainer (tiga jenis view) mengisi 100% ukuran fullscreen */
         #cameraContainer:fullscreen #threeContainer,
         #cameraContainer:-webkit-full-screen #threeContainer,
-        #cameraContainer:-moz-full-screen #threeContainer,
-        #cameraContainer:-ms-fullscreen #threeContainer,
         #cameraContainer:fullscreen #cesiumContainer,
         #cameraContainer:-webkit-full-screen #cesiumContainer,
-        #cameraContainer:-moz-full-screen #cesiumContainer,
-        #cameraContainer:-ms-fullscreen #cesiumContainer,
         #cameraContainer:fullscreen #streetviewContainer,
-        #cameraContainer:-webkit-full-screen #streetviewContainer,
-        #cameraContainer:-moz-full-screen #streetviewContainer,
-        #cameraContainer:-ms-fullscreen #streetviewContainer {
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: 100vw !important;
-            max-height: 100vh !important;
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
+        #cameraContainer:-webkit-full-screen #streetviewContainer {
+            width: 100% !important;
+            height: 100% !important;
+            flex-grow: 1 !important; /* Force to take full remaining space */
             margin: 0 !important;
             padding: 0 !important;
-            display: block !important;
-        }
-
-        #cameraContainer.pseudo-fullscreen {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            height: 100dvh !important;
-            max-width: 100vw !important;
-            max-height: 100vh !important;
-            max-height: 100dvh !important;
-            margin: 0 !important;
-            border-radius: 0 !important;
-            border: none !important;
-            z-index: 9999 !important;
-            display: block !important;
-            background: #020617 !important;
-        }
-
-        #cameraContainer.pseudo-fullscreen #threeContainer,
-        #cameraContainer.pseudo-fullscreen #cesiumContainer,
-        #cameraContainer.pseudo-fullscreen #streetviewContainer {
-            width: 100vw !important;
-            height: 100vh !important;
-            max-width: 100vw !important;
-            max-height: 100vh !important;
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            display: block !important;
-        }
-
-        #cameraContainer.pseudo-fullscreen #controls {
-            top: max(16px, env(safe-area-inset-top));
-            right: max(16px, env(safe-area-inset-right));
-        }
-
-        #cameraContainer.pseudo-fullscreen #fullscreenBtn {
-            bottom: max(16px, env(safe-area-inset-bottom));
-            left: max(16px, env(safe-area-inset-left));
-        }
-
-        #cameraContainer.pseudo-fullscreen .view-mode-toggle {
-            top: max(16px, env(safe-area-inset-top));
-            left: max(16px, env(safe-area-inset-left));
         }
 
         #cameraContainer:fullscreen #toggleCameraBtn,
-        #cameraContainer:-webkit-full-screen #toggleCameraBtn,
-        #cameraContainer.pseudo-fullscreen #toggleCameraBtn {
+        #cameraContainer:-webkit-full-screen #toggleCameraBtn {
             display: none !important;
         }
 
@@ -1351,23 +1286,23 @@
                 position: fixed;
             }
 
-            #cameraContainer.pseudo-fullscreen #controls,
-            #cameraContainer:fullscreen #controls {
-                top: max(10px, env(safe-area-inset-top));
-                right: max(10px, env(safe-area-inset-right));
+            #cameraContainer:fullscreen #controls,
+            #cameraContainer:-webkit-full-screen #controls {
+                top: 10px;
+                right: 10px;
                 padding: 8px;
             }
 
-            #cameraContainer.pseudo-fullscreen #controls button,
-            #cameraContainer:fullscreen #controls button {
+            #cameraContainer:fullscreen #controls button,
+            #cameraContainer:-webkit-full-screen #controls button {
                 padding: 5px 9px;
                 font-size: 11px;
             }
 
-            #cameraContainer.pseudo-fullscreen #fullscreenBtn,
-            #cameraContainer:fullscreen #fullscreenBtn {
-                bottom: max(10px, env(safe-area-inset-bottom));
-                left: max(10px, env(safe-area-inset-left));
+            #cameraContainer:fullscreen #fullscreenBtn,
+            #cameraContainer:-webkit-full-screen #fullscreenBtn {
+                bottom: 10px;
+                left: 10px;
                 padding: 7px 12px;
                 font-size: 11px;
             }
@@ -1803,10 +1738,10 @@
         function resizeThreeRenderer() {
             if (!renderer || !camera) return;
             const container = document.getElementById('threeContainer');
-            const rect = container.getBoundingClientRect();
-            const w = rect.width;
-            const h = rect.height;
-            if (!w || !h) return;
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+            // Cegah ukuran renderer 0 saat transisi fullscreen
+            if (w === 0 || h === 0) return;
             camera.aspect = w / h;
             camera.updateProjectionMatrix();
             renderer.setSize(w, h);
@@ -2220,7 +2155,7 @@
                     viewModeToggle.style.display = 'block';
                     viewModeToggle.textContent = 'Switch to Satellite';
                     if (!scene) initThree();
-                    setTimeout(resizeThreeRenderer, 100);
+                    setTimeout(resizeThreeRenderer, 150);
                 } else {
                     collapseThreeView();
                     exitFullscreenMode(true);
@@ -2236,7 +2171,7 @@
                     viewModeToggle.textContent = 'Switch to Street View';
                     cleanupThree();
                     if (!cesiumViewer) initCesium();
-                    else setTimeout(resizeCesiumViewer, 100);
+                    else setTimeout(resizeCesiumViewer, 150);
                 } else if (currentViewMode === 'cesium') {
                     currentViewMode = 'streetview';
                     threeContainer.style.display = 'none';
@@ -2253,7 +2188,7 @@
                     viewModeToggle.textContent = 'Switch to Satellite';
                     cleanupStreetview();
                     if (!scene) initThree();
-                    setTimeout(resizeThreeRenderer, 100);
+                    setTimeout(resizeThreeRenderer, 150);
                 }
             };
 
@@ -2264,47 +2199,30 @@
                     || cameraContainer.msRequestFullscreen;
 
                 if (req) {
-                    const result = req.call(cameraContainer);
-                    if (result && typeof result.then === 'function') {
-                        result.then(() => setTimeout(resizeActiveView, 150))
-                              .catch(() => activatePseudoFullscreen());
-                    } else {
-                        setTimeout(resizeActiveView, 150);
-                    }
-                } else {
-                    activatePseudoFullscreen();
+                    req.call(cameraContainer).then(() => {
+                        // Kasih waktu agak panjang supaya browser selesai menyesuaikan ukuran layar
+                        setTimeout(resizeActiveView, 250); 
+                    }).catch(err => {
+                        console.log("Error attempting to enable fullscreen:", err);
+                    });
                 }
-            }
-
-            function activatePseudoFullscreen() {
-                cameraContainer.classList.add('pseudo-fullscreen');
-                fullscreenBtn.textContent = 'Exit Full Screen';
-                document.body.style.overflow = 'hidden';
-                setTimeout(resizeActiveView, 150);
             }
 
             function exitFullscreenMode(skipCollapse) {
-                const fsElement = document.fullscreenElement || document.webkitFullscreenElement
-                    || document.mozFullScreenElement || document.msFullscreenElement;
-                if (fsElement) {
-                    const exit = document.exitFullscreen || document.webkitExitFullscreen
-                        || document.mozCancelFullScreen || document.msExitFullscreen;
-                    if (exit) exit.call(document);
+                const exit = document.exitFullscreen || document.webkitExitFullscreen
+                    || document.mozCancelFullScreen || document.msExitFullscreen;
+                
+                if (exit && (document.fullscreenElement || document.webkitFullscreenElement)) {
+                    exit.call(document);
                 }
-                cameraContainer.classList.remove('pseudo-fullscreen');
                 fullscreenBtn.textContent = 'Full Screen';
-                document.body.style.overflow = '';
-                setTimeout(resizeActiveView, 150);
+                setTimeout(resizeActiveView, 250);
 
                 if (!skipCollapse) collapseThreeView();
             }
 
             fullscreenBtn.onclick = () => {
-                const isNativeFullscreen = document.fullscreenElement || document.webkitFullscreenElement
-                    || document.mozFullScreenElement || document.msFullscreenElement;
-                const isPseudo = cameraContainer.classList.contains('pseudo-fullscreen');
-
-                if (isNativeFullscreen || isPseudo) {
+                if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
                     exitFullscreenMode();
                 } else {
                     enterFullscreenMode();
@@ -2317,22 +2235,21 @@
                         || document.mozFullScreenElement || document.msFullscreenElement;
                     if (fsElement) {
                         fullscreenBtn.textContent = 'Exit Full Screen';
-                        setTimeout(resizeActiveView, 150);
+                        setTimeout(resizeActiveView, 250);
                     } else {
                         fullscreenBtn.textContent = 'Full Screen';
-                        document.body.style.overflow = '';
                         if (isExpanded) collapseThreeView();
                     }
                 });
             });
 
             document.addEventListener('keydown', e => {
-                if (e.key === 'Escape' && cameraContainer.classList.contains('pseudo-fullscreen')) {
+                if (e.key === 'Escape' && document.fullscreenElement) {
                     exitFullscreenMode();
                 }
             });
 
-            window.addEventListener('resize', () => setTimeout(resizeActiveView, 100));
+            window.addEventListener('resize', () => setTimeout(resizeActiveView, 150));
             window.addEventListener('orientationchange', () => setTimeout(resizeActiveView, 300));
 
             let mouseDown = false, mouseX = 0, mouseY = 0;
