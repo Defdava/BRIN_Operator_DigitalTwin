@@ -1,4 +1,4 @@
-const CACHE_NAME = 'brin-parking-cache-v1';
+const CACHE_NAME = 'brin-parking-cache-v2';
 
 const urlsToCache = [
   '/',
@@ -24,46 +24,74 @@ const urlsToCache = [
   '/assets/icons/icon-512.png'
 ];
 
+// Install event: Menyimpan aset ke cache baru dan langsung aktifkan
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
+      .then(() => self.skipWaiting())
   );
 });
 
+// Activate event: Menghapus cache lama versi v1 yang bermasalah
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Menghapus cache lama:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Fetch event: Network-First untuk halaman HTML agar selalu memuat file terbaru
 self.addEventListener('fetch', event => {
-  // Skip caching untuk chrome-extension, devtools, dll.
   if (!event.request.url.startsWith('http') && !event.request.url.startsWith('https')) {
     event.respondWith(fetch(event.request));
     return;
   }
 
+  // Jika yang diminta adalah file HTML, gunakan strategi Network-First (Cari ke server dulu)
+  if (event.request.headers.get('accept') && event.request.headers.get('accept').includes('text/html')) {
+    event.respondWith(
+      fetch(event.request)
+        .then(networkResponse => {
+          return caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          });
+        })
+        .catch(() => {
+          // Jika offline, ambil dari cache
+          return caches.match(event.request);
+        })
+    );
+    return;
+  }
+
+  // Untuk aset selain HTML (gambar, css, js), gunakan Cache-First
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Cache hit - return response
         if (response) {
           return response;
         }
-
-        // Clone request karena fetch hanya bisa dipakai sekali
         const fetchRequest = event.request.clone();
-
         return fetch(fetchRequest).then(
           networkResponse => {
-            // Check apakah response valid
             if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
               return networkResponse;
             }
-
-            // Clone response untuk cache
             const responseToCache = networkResponse.clone();
-
             caches.open(CACHE_NAME)
               .then(cache => {
                 cache.put(event.request, responseToCache);
               });
-
             return networkResponse;
           }
         );
