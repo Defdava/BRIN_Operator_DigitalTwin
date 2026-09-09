@@ -34,9 +34,21 @@ try {
   console.error("⚠️ Firebase Admin initialization failed:", error.message);
 }
 
-// 🏠 Serve satu-satunya halaman (index.html) yang mencakup Login & Dashboard
+// 🏠 Rute Eksplisit untuk File HTML Utama
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.get("/forgotpassword.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "forgotpassword.html"));
+});
+
+app.get("/register.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "register.html"));
+});
+
+app.get("/dashboard.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "dashboard.html"));
 });
 
 // Jalankan server (untuk local)
