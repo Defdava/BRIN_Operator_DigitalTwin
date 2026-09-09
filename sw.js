@@ -2,9 +2,10 @@ const CACHE_NAME = 'brin-parking-cache-v1';
 
 const urlsToCache = [
   '/',
+  '/forgotpassword.html',
   '/index.html',
   '/register.html',
-  '/login.html',
+  '/dashboard.html',
   '/previous-analysis.html',
   '/exportdata.html',
   '/parkiranalysis.html',
