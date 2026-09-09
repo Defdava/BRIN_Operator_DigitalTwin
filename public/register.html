@@ -192,7 +192,6 @@
         </form>
 
         <div class="links">
-            <!-- Jalur sudah diubah menjadi relatif (index.html) -->
             <a href="index.html">Sudah punya akun? Masuk di sini</a>
         </div>
     </div>
@@ -213,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const serviceSupabase = supabase.createClient(
         "https://uqnfychfsloouxjthokp.supabase.co",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTQ0NDM1MywiZXhwIjoyMDg3MDIwMzUzfQ.CLbPdh_ecNS8SdGtXTUDqJ1QOd0IO_dbIJ_AKfqk78I"
+        serviceRoleKey
     );
 
     const messageEl = document.getElementById("message");
@@ -273,16 +272,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (profileError) throw profileError;
 
-            const { error: signInError } = await anonSupabase.auth.signInWithPassword({ email, password });
-            if (signInError) throw signInError;
-
-            localStorage.setItem('currentUser', JSON.stringify({
-                id: userId, username, email, id_pegawai: idWorker, profilePic: '/assets/user.JPG'
-            }));
-
-            showMessage("Registrasi berhasil! Membuka dashboard sistem...", true);
-            // Jalur redirect dashboard juga diubah menjadi relatif (dashboard.html)
-            setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+            // PENTING: Dihapus bagian auto login (signInWithPassword dan localStorage)
+            // agar setelah mendaftar sistem 100% memaksa pengguna menuju ke form login (index.html).
+            
+            showMessage("Registrasi berhasil! Mengalihkan ke halaman login...", true);
+            
+            // Redirect dikembalikan ke index.html (Halaman Login)
+            setTimeout(() => { window.location.href = "index.html"; }, 1500);
 
         } catch (err) {
             console.error(err);
