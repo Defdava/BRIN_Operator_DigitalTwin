@@ -192,7 +192,8 @@
         </form>
 
         <div class="links">
-            <a href="/index.html">Sudah punya akun? Masuk di sini</a>
+            <!-- Jalur sudah diubah menjadi relatif (index.html) -->
+            <a href="index.html">Sudah punya akun? Masuk di sini</a>
         </div>
     </div>
 </div>
@@ -212,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const serviceSupabase = supabase.createClient(
         "https://uqnfychfsloouxjthokp.supabase.co",
-        serviceRoleKey
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxbmZ5Y2hmc2xvb3V4anRob2twIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTQ0NDM1MywiZXhwIjoyMDg3MDIwMzUzfQ.CLbPdh_ecNS8SdGtXTUDqJ1QOd0IO_dbIJ_AKfqk78I"
     );
 
     const messageEl = document.getElementById("message");
@@ -280,7 +281,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }));
 
             showMessage("Registrasi berhasil! Membuka dashboard sistem...", true);
-            setTimeout(() => { window.location.href = "/dashboard.html"; }, 1500);
+            // Jalur redirect dashboard juga diubah menjadi relatif (dashboard.html)
+            setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
 
         } catch (err) {
             console.error(err);
