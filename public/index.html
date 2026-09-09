@@ -187,6 +187,7 @@
 
     <div class="login-card">
         <h2>LOGIN OPERATOR</h2>
+        <!-- Perhatikan: form menggunakan id "loginForm" dan tombol submit menggunakan type="submit" -->
         <form id="loginForm">
             <div class="form-group">
                 <input type="email" id="loginEmail" placeholder="Email Anda" required autocomplete="email">
@@ -199,6 +200,7 @@
 
         <div class="links">
             <a href="register.html">Belum punya akun? Daftar Sekarang</a>
+            <!-- Tautan biasa tanpa handler JavaScript agar tidak memicu submit form -->
             <a href="forgotpassword.html">Lupa Kata Sandi?</a>
         </div>
     </div>
@@ -227,6 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => messageEl.classList.remove("show"), 5000);
     }
 
+    // Event listener hanya dipasang secara spesifik ke dalam elemen <form>
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
