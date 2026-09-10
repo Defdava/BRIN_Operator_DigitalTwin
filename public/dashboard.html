@@ -57,6 +57,10 @@
             line-height: 1.5;
         }
 
+        body.no-scroll {
+            overflow: hidden;
+        }
+
         /* Ambient Glow Highlights */
         .ambient-glow {
             position: fixed;
@@ -205,6 +209,7 @@
             padding: 24px 20px;
             z-index: 999;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 10px 0 30px rgba(0, 0, 0, 0.25);
         }
@@ -272,6 +277,7 @@
             align-items: center;
             gap: 12px;
             transition: all 0.25s ease;
+            min-height: 44px;
         }
 
         .toolbar button:hover {
@@ -435,6 +441,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
             width: 100%;
+            min-height: 48px;
         }
 
         .tegra-link-main:hover {
@@ -496,6 +503,7 @@
         .history-table-container {
             max-height: 400px;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             border-radius: 12px;
             background: rgba(11, 25, 44, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -640,6 +648,7 @@
             z-index: 100; 
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            max-width: 46%;
         }
 
         #controls div {
@@ -687,6 +696,10 @@
             z-index: 101;
             display: block;
             transition: all 0.3s ease;
+            max-width: 46%;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.3;
         }
 
         .view-mode-toggle:hover {
@@ -709,6 +722,8 @@
             font-size: 13.5px;
             font-weight: 600;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            max-width: 88%;
+            text-align: center;
         }
 
         #loading {
@@ -736,6 +751,7 @@
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.04);
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
             width: 100%;
             flex-grow: 1;
         }
@@ -762,6 +778,7 @@
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 13px;
+            flex-shrink: 0;
         }
 
         .slot:hover {
@@ -942,27 +959,36 @@
 
         @media (max-width: 768px) {
             body { font-size: 15px; }
-            header { padding: 0 16px; height: 64px; }
-            .logo { gap: 8px; padding: 4px; }
-            .logo img { height: 32px; }
+
+            header { padding: 0 14px; height: 60px; }
+            .logo { gap: 8px; padding: 6px 8px; }
+            .logo img { height: 30px; }
             .logo-text { font-size: 12px; }
-            .logo-title { font-size: 15px; }
+            .logo-title { font-size: 14px; }
             .logo-subtitle { display: none; }
-            .header-right { padding-right: 0; }
-            .header-title { font-size: 14px; letter-spacing: 0.5px; }
-            .toolbar { top: 64px; height: calc(100vh - 64px); width: 280px; left: -280px; }
-            .toolbar.active { transform: translateX(280px); }
-            .sidebar-overlay { top: 64px; height: calc(100vh - 64px); }
-            .main-content { padding: 88px 16px 32px; }
+            .header-right { padding-right: 0; max-width: 55%; overflow: hidden; }
+            .header-title {
+                font-size: 12.5px;
+                letter-spacing: 0.3px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .toolbar { top: 60px; height: calc(100vh - 60px); width: 82vw; max-width: 300px; left: -300px; padding: 20px 16px; }
+            .toolbar.active { transform: translateX(300px); }
+            .sidebar-overlay { top: 60px; height: calc(100vh - 60px); }
+            .main-content { padding: 76px 14px 28px; }
+
+            .main-content-grid { gap: 16px; }
 
             .history, .park-condition, .park-condition-2d {
-                padding: 20px 16px;
+                padding: 18px 14px;
                 border-radius: 16px;
             }
 
             .history h2, .park-condition h2, .park-condition-2d h2 {
-                font-size: 17px;
-                margin-bottom: 18px;
+                font-size: 16px;
+                margin-bottom: 14px;
             }
 
             .history-filters {
@@ -974,7 +1000,7 @@
             .history-filters input, 
             .history-filters select {
                 padding: 11px 14px;
-                font-size: 14px;
+                font-size: 16px; /* prevents iOS auto-zoom on focus */
                 border-radius: 8px;
             }
 
@@ -982,6 +1008,7 @@
                 background: transparent;
                 border: none;
                 box-shadow: none;
+                max-height: 380px;
             }
 
             .history-table { display: block; }
@@ -1025,7 +1052,7 @@
 
             .history-table td:nth-child(1) { grid-order: 1; }
             .history-table td:nth-child(3) { grid-order: 2; align-items: flex-end; }
-            .history-table td:nth-child(2) { grid-order: 3; grid-column: span 2; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 8px; margin-top: 4px; }
+            .history-table td:nth-child(2) { grid-order: 3; grid-column: span 2; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 8px; margin-top: 4px; word-break: break-word; }
             .history-table td:nth-child(4) { grid-order: 4; grid-column: span 2; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 8px; }
             
             .history-table td:nth-child(4)::before {
@@ -1036,12 +1063,24 @@
                 align-self: flex-end;
             }
 
-            .parking-lot { align-items: flex-start; padding: 12px; }
-            .column { gap: 8px; }
-            .slot { width: 44px; height: 32px; font-size: 11px; border-radius: 6px; }
-            .slot .car { width: 32px; height: 18px; border-radius: 4px; }
+            .location-info { font-size: 11.5px; padding: 12px; }
 
-            #cameraContainer { height: 350px; }
+            .parking-lot { align-items: flex-start; padding: 14px 10px; gap: 14px; }
+            .column { gap: 7px; }
+            .slot { width: 42px; height: 32px; font-size: 11px; border-radius: 6px; }
+            .slot .car { width: 30px; height: 18px; border-radius: 4px; }
+
+            #cameraContainer { height: 300px; border-radius: 12px; }
+
+            #controls { top: 10px; right: 10px; padding: 8px; max-width: 42%; }
+            #controls div { font-size: 9px; margin-bottom: 6px; }
+            #controls button { padding: 5px 8px; margin: 2px 1px; font-size: 10.5px; }
+
+            .view-mode-toggle { top: 10px; left: 10px; padding: 7px 10px; font-size: 10.5px; max-width: 42%; }
+
+            #loading, #error-message { font-size: 12px; padding: 10px 16px; }
+
+            .tegra-link-main { font-size: 13.5px; padding: 12px 18px; margin-top: 14px; }
 
             .tour-tooltip {
                 max-width: 90%;
@@ -1050,9 +1089,46 @@
                 top: 50% !important;
                 transform: translateY(-50%) !important;
                 position: fixed;
+                padding: 16px;
             }
 
-            .view-mode-toggle { padding: 6px 10px; font-size: 11px; }
+            .tour-tooltip h3 { font-size: 14.5px; }
+            .tour-tooltip p { font-size: 12.5px; }
+        }
+
+        @media (max-width: 480px) {
+            header { padding: 0 10px; height: 56px; }
+            .logo img { height: 26px; }
+            .logo-title { font-size: 13px; }
+            .header-title { font-size: 10.5px; }
+
+            .toolbar { top: 56px; height: calc(100vh - 56px); width: 88vw; left: -88vw; }
+            .toolbar.active { transform: translateX(88vw); }
+            .sidebar-overlay { top: 56px; height: calc(100vh - 56px); }
+
+            .main-content { padding: 70px 10px 24px; }
+
+            .history, .park-condition, .park-condition-2d {
+                padding: 14px 10px;
+            }
+
+            .history h2, .park-condition h2, .park-condition-2d h2 { font-size: 15px; }
+
+            #cameraContainer { height: 250px; }
+
+            #controls { top: 8px; right: 8px; padding: 6px; max-width: 48%; }
+            #controls div { font-size: 8.5px; margin-bottom: 4px; }
+            #controls button { padding: 4px 6px; font-size: 9.5px; margin: 1px; }
+
+            .view-mode-toggle { top: 8px; left: 8px; padding: 6px 8px; font-size: 9.5px; max-width: 48%; line-height: 1.2; }
+
+            .slot { width: 36px; height: 28px; font-size: 10px; }
+            .slot .car { width: 26px; height: 15px; }
+            .column { gap: 5px; }
+
+            .location-info { font-size: 11px; }
+
+            .history-table tbody tr { padding: 12px; }
         }
 
         /* Override Cesium default styles */
@@ -1769,6 +1845,7 @@
                 const isActive = toolbar.classList.toggle('active');
                 sidebarOverlay.classList.toggle('active', isActive);
                 mainContent.classList.toggle('with-toolbar', isActive && window.innerWidth > 992);
+                document.body.classList.toggle('no-scroll', isActive && window.innerWidth <= 992);
                 setTimeout(resizeActiveView, 400);
             }
 
